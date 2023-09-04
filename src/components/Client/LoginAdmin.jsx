@@ -11,11 +11,11 @@ const LoginAdmin = () => {
   const [lastName, setLastName] = useState('');
   const [idNumber, setIdNumber] = useState('');
 
-  
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
 
   };
   const handleShowPasswordToggle = () => {
@@ -92,25 +92,25 @@ const LoginAdmin = () => {
                 <option value="Cédula Extranjera">Cédula Extranjera </option>
               </select>
               <div>
-              <label htmlFor="name" className='block text-black font-bold content-center '>
-                Tipo de Documento
-              </label>
-              <input
-                id=""
-                type="text"
-                placeholder="Numero de Documento"
-                className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
-                value={idNumber}
-                onChange={(e) => setIdNumber(e.target.value)}
-                required
-              />
-            </div>
+                <label htmlFor="name" className='block text-black font-bold content-center '>
+                  Tipo de Documento
+                </label>
+                <input
+                  id=""
+                  type="text"
+                  placeholder="Numero de Documento"
+                  className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
+                  value={idNumber}
+                  onChange={(e) => setIdNumber(e.target.value)}
+                  required
+                />
+              </div>
             </div>
             <div>
-              
+
               <div className=''>
-                <input name = "Sexo" type="radio" />Femenino
-                <input  name ="Sexo "type="radio" />Masculino
+                <input name="Sexo" type="radio" />Femenino
+                <input name="Sexo " type="radio" />Masculino
               </div>
             </div>
 

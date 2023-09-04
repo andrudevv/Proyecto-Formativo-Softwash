@@ -18,9 +18,20 @@ const LoginUsuario = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Realizar la lógica de inicio de sesión, por ejemplo, enviar datos al servidor
+    try {
+      const response = await Axios.post('/User/validar', {
+        email: email,
+        password: password
+      });
+
+      // Aquí puedes manejar la respuesta del servidor
+      console.log('Respuesta del servidor:', response.data);
+    } catch (error) {
+      // Aquí puedes manejar los errores de la solicitud
+      console.error('Error en la solicitud:', error);
+    }
     console.log('Email:', email);
     console.log('Password:', password);
   };
@@ -29,7 +40,7 @@ const LoginUsuario = () => {
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <form onSubmit={handleSubmit} className="bg-gray-100 shadow-md rounded-lg w-full md:w-1/2 p-4">
         <h2 className="text-2xl font-semibold mb-6 text-center">Iniciar sesión como Usuario</h2>
-        
+
         <div className="mb-4">
           <label htmlFor="correo" className="block text-black font-bold">
             Correo Electrónico

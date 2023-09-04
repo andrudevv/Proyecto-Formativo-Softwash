@@ -12,7 +12,7 @@ const Navbar = () => {
   };
 
   return (
-    
+
     <header className="bg-blue-500 p-4 flex justify-between items-center fixed w-full top-0 z-10">
       <div className="flex items-center">
         <img className="text-white rounded-full w-12" src={img} alt="logo" />
