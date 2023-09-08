@@ -32,8 +32,7 @@ const Navbar = () => {
           {menuOpen && (
             <div className="absolute mt-2 w-full bg-custom-pie-pagina p-4 right-0">
               <div className="flex flex-col space-y-2 items-center">
-                <button className="text-white">Inicio</button>
-                <button className="text-white">Registrarse</button>
+                <button className="text-white"><a href="/logout">salir</a></button>
               </div>
             </div>
           )}

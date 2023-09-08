@@ -17,10 +17,11 @@ const service = new UserService();
 
 userRouter.post("/forgot-password", async (req, res, next) => {
   try {
-    const  {email}  = req.body;
-    const rta = await service.findByEmail(email);
-    if(rta){const send = sendEmail(email);
-    console.log(send);
+    const  {Email}  = req.body;
+    const rta = await service.findByEmail(Email);
+    if(rta){const send = sendEmail(Email);
+      return res.status(200).json(send);
+
     }
   } catch (error) {
     next(error);
@@ -58,14 +59,24 @@ userRouter.post(
   validatorHandler(createuserShema, "body"),
   async (req, res, next) => {
     try {
+      
       const body = req.body;
       const newUser = await service.registerUser(body);
+      if (!newUser) {
+        return res.status(500).json({ error: "No se pudo crear el usuario." });
+      }
       const token = await createAccessToken({ id: newUser.documentUser });
 
       res.cookie("token", token);
-      res.status(201).json(newUser);
+      res.status(201).json({message: "Registro exitoso"});
     } catch (error) {
+
       next(error);
+      return res.status(500).json({ message: error.message });
+    }
+    (err,  res) => {
+      // Este middleware manejará los errores generados por el validador
+      res.status(400).json({ error: err.message });
     }
   }
 );

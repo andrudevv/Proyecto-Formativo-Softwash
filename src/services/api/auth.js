@@ -20,7 +20,15 @@ export const verifyTokenRequest = () => Axios.get(`${API}/users/verify`);
 
 
 export const resetPassword = (data) =>
-    Axios.post(`${API}/users/forgot-password`, data  );
+    Axios.post(`${API}/users/forgot-password`, data  )
+    .then((Response)=>{
+      console.log('correo enviado ' , Response)
+      return Response.data;
+    })
+    .catch((error)=>{
+      console.log(error)
+      throw error;
+    });
 
 
 

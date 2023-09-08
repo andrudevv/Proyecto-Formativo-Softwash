@@ -15,32 +15,45 @@ export const AuthUserProvider = ({ children }) => {
 
     const [user, setUser] = useState(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [errors, setErrors] = useState([])
+    const [registerErrors, setRegisterErrors] = useState([]);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
     const [loading, setLoading] = useState(true);
 
 
     useEffect(() => {
-        if (errors.length > 0) {
+        if (registerErrors.length > 0) {
             const timer = setTimeout(() => {
-                setErrors([]);
+                setRegisterErrors([]);
             }, 5000);
             return () => clearTimeout(timer);
         }
-    }, [errors]);
+    }, [registerErrors]);
+
 
     const signup = async (user) => {
-        const res = await registerRequest(user);
-        console.log(res.data);
-        setUser(res.data);
-        setErrors(errors);
-        setIsAuthenticated(true);
+        try {
+            const res = await registerRequest(user);
+            console.log(res);
+            setUser(res.data);
+            // setIsAuthenticated(true);
+            setRegisterErrors([]);
+            setSuccessMessage(res.data.message);
+      setRegistrationSuccess(true);
+        } catch (error) {
+            setRegisterErrors([error])
+
+        }
+
+
     }
 
 
 
     const signin = async (user) => {
 
-        setErrors(errors)
+        
         try {
             const res = await loginRequest(user);
             console.log(res);
@@ -62,7 +75,7 @@ export const AuthUserProvider = ({ children }) => {
     const resetEmail = async (email) => {
         try {
             const res = await resetPassword(email);
-            console.log(res.data);
+            return res
         } catch (error) {
             console.log(error.response);
         }
@@ -93,11 +106,13 @@ export const AuthUserProvider = ({ children }) => {
             signup,
             user,
             isAuthenticated,
-            errors,
+            registerErrors,
             signin,
             logout,
             loading,
-            resetEmail
+            resetEmail,
+            successMessage,
+            registrationSuccess
         }}>
             {children}
         </AuthUserContext.Provider>

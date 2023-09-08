@@ -5,7 +5,15 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'custom-pie-pagina': '#628ca6',
+        'custom-nav-bar': '#164f55',
+        'custom-ventanas': '#7fb9c2',
+        'custom-botones': '#95acb2',
+        'custom-pagina-fondo': '#e7f0ed',
+      }
+    },
   },
   plugins: [],
 }

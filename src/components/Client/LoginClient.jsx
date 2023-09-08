@@ -27,7 +27,7 @@ function LoginUser() {
         ))
       }
       <form onSubmit={onSubmit} className="bg-gray-300 shadow-md rounded-lg w-full md:w-1/2 p-4">
-      <h2 className="text-2xl font-semibold mb-6 text-center">Iniciar sesión como usuario</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-center">Iniciar sesión como lavadero</h2>
         <input type="email" {...register('email', { required: true })} className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md" placeholder="correo" />
         {errors.correo && (
           <p className="text-red-500">email es requerido</p>
@@ -41,7 +41,7 @@ function LoginUser() {
 
 
         <button type="submit" className="bg-custom-botones text-white font-semibold mt-4 py-2 px-4 rounded hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-700 w-full">iniciar sesion</button>
-        <button className="bg-custom-botones text-white font-semibold mt-4 py-2 px-4 rounded hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-700 w-full"><a href="/signinclient">iniciar sesion como lavadero</a></button>
+        <button className="bg-custom-botones text-white font-semibold mt-4 py-2 px-4 rounded hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-700 w-full"><a href="/signinuser">iniciar sesion como usuario</a></button>
 
         {/* <p className="flex gap-x-2 justify-between my-3 ">no tienes una cuenta?  <Link to="/register" className="text-sky-500"> sign up</Link></p> */}
       </form>

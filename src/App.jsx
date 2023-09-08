@@ -3,12 +3,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthUserProvider } from "./context/UserContext";
 // import LoginUsuario from "./Infrastructure/components/User/LoginUsuario";
 import LoginUser from "./components/User/LoginUser";
+import LoginClient from "./components/Client/loginClient";
 import RegisterUsuario from "./components/User/RegisterUsuario";
 import LoginAdmin from "./components/Client/LoginAdmin";
 import RegisterLaundry from "./components/Admin/RegisterLaundry";
 import ProtectedRoute from "./routes/protectedRoutes";
 import Navbar from "./components/Header"
 import UserEmailReset from "./pages/userEmailReset";
+import RegisterClient from "./components/Client/Body"
 function App() {
 
   return (
@@ -20,8 +22,11 @@ function App() {
     <Routes>
       <Route path="/" element={<h1>homepage</h1>} />
       <Route path="/homeUser" element={<h1>iniciado correctamente</h1>} />
-      <Route path="/iniciarsesion" element={<LoginUser/>} />
-      <Route path="/registrousuario" element={<RegisterUsuario/>} />
+      <Route path="/signinuser" element={<LoginUser/>} />
+      <Route path="/signinclient" element={<LoginClient/>} />
+      <Route path="/registeruser" element={<RegisterUsuario/>} />
+      <Route path="/registerclient" element={<RegisterClient/>} />
+      <Route path="/logout" element={<h1>hasta pronto </h1>} />
       
       <Route path="/reset-password" element={<UserEmailReset/>} />
 
