@@ -11,18 +11,13 @@ const token = Joi.string();
 const city = Joi.string();
 const municipality = Joi.string();
 
-
-export const createuserShema = Joi.object({
+const createuserShema = Joi.object({
     documentUser: documentUser.required(),
     name: name.required(),
     lastName: lastName.required(),
     phone: phone.required(),
-    email: email.required().messages({
-        'string.email': 'Debe proporcionar una dirección de correo electrónico válida',
-        'any.required': 'El campo "email" es obligatorio',
-    }),
-    password: password.required().messages({'string.min': 'La contraseña debe tener al menos {#limit} caracteres',
-    'any.required': 'El campo "password" es obligatorio',}),
+    email: email.required(),
+    password: password.required(),
     token: token,
     city: city.required(),
     municipality: municipality.required()
@@ -30,17 +25,17 @@ export const createuserShema = Joi.object({
 
 
 
-export const updateUserShema = Joi.object({
+const updateUserShema = Joi.object({
     email: email,
 })
 
-export const getUserShema =Joi.object({
+const getUserShema =Joi.object({
     email: email.required(),
 });
 
 
-export const loginShema = Joi.object({
+const loginShema = Joi.object({
     email: email.required(),
     password: password.required()
 })
-// module.exports ={createuserShema, updateUserShema, getUserShema}
+export{createuserShema, updateUserShema, getUserShema, loginShema}

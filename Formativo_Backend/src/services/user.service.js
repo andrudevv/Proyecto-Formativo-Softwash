@@ -1,4 +1,5 @@
 // const { Boom } = require('@hapi/boom');
+// import { data } from "autoprefixer";
 import { User } from "../lib/sequelize.js";
 import bcrypt from "bcryptjs";
 
@@ -15,15 +16,10 @@ class UserService {
     const passwordHash = await bcrypt.hash(body.password, 10);
     const newUser = await User.create(
         {
-        documentUser: body.documentUser,
-        name: body.name,
-        lastName: body.lastName,
-        phone: body.phone,
-        email: body.email,
+        ...body,
         password: passwordHash,
-        city: body.city,
-        municipality: body.municipality,
     });
+    delete newUser.dataValues.password;
     return newUser;
   }
 

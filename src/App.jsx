@@ -22,8 +22,8 @@ function App() {
     <Routes>
       <Route path="/" element={<h1>homepage</h1>} />
       <Route path="/homeUser" element={<h1>iniciado correctamente</h1>} />
-      <Route path="/signinuser" element={<LoginUser/>} />
-      <Route path="/signinclient" element={<LoginClient/>} />
+      <Route path="/sign-in-user" element={<LoginUser/>} />
+      <Route path="/sign-in-client" element={<LoginClient/>} />
       <Route path="/registeruser" element={<RegisterUsuario/>} />
       <Route path="/registerclient" element={<RegisterClient/>} />
       <Route path="/logout" element={<h1>hasta pronto </h1>} />

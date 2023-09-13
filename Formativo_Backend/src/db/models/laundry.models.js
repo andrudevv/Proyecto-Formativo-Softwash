@@ -1,15 +1,15 @@
 import { Model, DataTypes } from "sequelize";
+import {DEPARTMENT_TABLE} from './department.models.js'
+const LAUNDRY_TABLE = "laundry";
 
-const USER_TABLE = "users";
-
-const UserSchema = {
+const LaundrySchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  documentUser: {
+  rutLaundry: {
     allowNull: false,
     type: DataTypes.INTEGER,
   },
@@ -17,8 +17,8 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.STRING,
   },
-  lastName: {
-    allowNull: false,
+  address: {
+    allowNull: true,
     type: DataTypes.STRING,
   },
   phone: {
@@ -34,19 +34,30 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.STRING,
   },
-  city: {
-    allowNull: false,
-    type: DataTypes.STRING,
-  },
-  municipality: {
-    allowNull: false,
-    type: DataTypes.STRING,
-  },
   recoveryToken: {
     field: 'recovery_token',
     allowNull: true,
     type: DataTypes.STRING
+  },membership: {
+    allowNull: true,
+    type: DataTypes.BOOLEAN,
+    defaultValue: false 
   },
+  ability: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+  },
+  departmentId: {
+    field: 'department_id',
+    allowNull: true,
+    type: DataTypes.INTEGER,
+    references: {
+      model: DEPARTMENT_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
+  }
   // createAt:{
   //     allowNull: false,
   //     type: DataTypes.DATE,
@@ -55,22 +66,21 @@ const UserSchema = {
   // }
 };
 
-class User extends Model {
+class Laundry extends Model {
   static associate(models) {
-    this.hasMany(models.Vehicle, {
-      as: 'vehicles',
-      foreignKey: 'userId'
-    });
+    this.belongsTo(models.Department, { foreignKey:"departmentId", as: 'Department' });
+    this.hasMany(models.Service,{foreignKey:"laundryId", as: 'services'})
   }
   static config(sequelize) {
     return {
       sequelize,
-      tableName: USER_TABLE,
-      modelName: "User",
+      tableName: LAUNDRY_TABLE,
+      modelName: "laundry",
       timestamps: false,
     };
   }
 }
-export { UserSchema,USER_TABLE, User };
+export { LaundrySchema, LAUNDRY_TABLE,Laundry };
 
 // export default {USER_TABLE, UserShema,User}
+
