@@ -24,7 +24,7 @@ const categoryVehicleSchema = {
 class Category extends Model {
   static associate(models) {
     this.hasMany(models.Vehicle, {
-      as: "vehicles",
+      as: "Vehicles",
       foreignKey: "categoryId",
     });
     this.hasMany(models.Service, {

@@ -1,5 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import {DEPARTMENT_TABLE} from './department.models.js'
+import { MUNICIPALITY_TABLE } from "./municipality.models.js";
 const LAUNDRY_TABLE = "laundry";
 
 const LaundrySchema = {
@@ -44,8 +45,9 @@ const LaundrySchema = {
     defaultValue: false 
   },
   ability: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.INTEGER,
+    defaultValue: 1
   },
   departmentId: {
     field: 'department_id',
@@ -58,6 +60,17 @@ const LaundrySchema = {
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL'
   }
+  // ,municipalityId: {
+  //   field: 'municipality_id',
+  //   allowNull: true,
+  //   type: DataTypes.INTEGER,
+  //   references: {
+  //     model: MUNICIPALITY_TABLE,
+  //     key: 'id'
+  //   },
+  //   onUpdate: 'CASCADE',
+  //   onDelete: 'SET NULL'
+  // }
   // createAt:{
   //     allowNull: false,
   //     type: DataTypes.DATE,
@@ -69,7 +82,9 @@ const LaundrySchema = {
 class Laundry extends Model {
   static associate(models) {
     this.belongsTo(models.Department, { foreignKey:"departmentId", as: 'Department' });
-    this.hasMany(models.Service,{foreignKey:"laundryId", as: 'services'})
+    this.belongsTo(models.Municipality, { foreignKey:"municipalityId", as: 'Municipality' });
+
+    // this.hasMany(models.Service,{foreignKey:"laundryId", as: 'services'})
   }
   static config(sequelize) {
     return {

@@ -1,27 +1,28 @@
-import { models} from "../lib/sequelize.js";
-import { createError } from "http-errors";
-class Municipality {
+import { Municipality } from "../db/models/index.js";
+
+
+class MunicipalityService {
 
     constructor() {}
   
     async find() {
-      const rta = await models.Municipality.findAll({
+      const rta = await Municipality.findAll({
         include: ['Department']
       });
       return rta;
     }
   
-    async findOne(id) {
-      const dep = await models.Municipality.findByPk(id);
+    async findOne(department) {
+      const dep = await Municipality.findAll({where: {departmentId : department}});
       if (!dep) {
-        throw createError(404,'municipio no encontrado');
+        throw new Error('municipio no encontrado');
       }
       return dep;
     }
   
     async create(data) {
       
-      const newMun = await models.Municipality.create(data, {
+      const newMun = await Municipality.create(data, {
         include: ['Department']
       });
       
@@ -42,5 +43,5 @@ class Municipality {
   
   }
   
-export {Municipality};
+export {MunicipalityService};
   

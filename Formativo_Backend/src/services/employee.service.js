@@ -1,5 +1,6 @@
 import { createError } from "http-errors";
-import { models} from "../lib/sequelize.js";
+// import { models} from "../lib/sequelize.js";
+import { Employee } from "../db/models/index.js";
 
 
 class Employee {
@@ -9,33 +10,33 @@ class Employee {
     }
 
     async create(data) {
-        const newEmpleado = await models.Employee.create(data);
+        const newEmpleado = await Employee.create(data);
         return newEmpleado;
       }
     
       async find() {
-        const empleados = await models.Employee.findAll();
+        const empleados = await Employee.findAll();
         return empleados;
       }
     
       async findOneEmpleado(id) {
-        const empleado = await models.Employee.findByPk(id);
+        const empleado = await Employee.findByPk(id);
         return empleado;
       }
     
       async update(id, changes) {
-        const [updated] = await models.Employee.update(changes, {
+        const [updated] = await Employee.update(changes, {
           where: { id }
         });
         if (updated) {
-          const updatedEmpleado = await models.Employee.findByPk(id);
+          const updatedEmpleado = await Employee.findByPk(id);
           return updatedEmpleado;
         }
         throw createError(404,'Empleado no encontrado');
       }
     
       async delete(id) {
-        const deleted = await models.Employee.destroy({
+        const deleted = await Employee.destroy({
           where: { id }
         });
         if (deleted) {

@@ -1,31 +1,32 @@
-import { models } from "../lib/sequelize.js";
+import { Vehicle } from "../db/models/index.js";
+
 import { createError } from "http-errors";
 
 
-class Vehicle {
+class VehicleService {
     constructor() {}
   
     async create(data) {
-      const newVehicle = await models.Vehicle.create(data);
+      const newVehicle = await Vehicle.create(data);
       return newVehicle;
     }
   
     async find() {
-      const rta = await models.Vehicle.findAll({
+      const rta = await Vehicle.findAll({
         include: ['User']
       });
       return rta;
     }
   
     async findByPlate(plate) {
-      const rta = await models.Vehicle.findOne({
+      const rta = await Vehicle.findOne({
         where: { plate }
       });
       return rta;
     }
   
     async findOne(id) {
-      const vehicle = await models.Vehicle.findByPk(id);
+      const vehicle = await Vehicle.findByPk(id);
       if (!vehicle) {
         throw createError(404,'vehiculo no encontrado');
       }
@@ -45,5 +46,5 @@ class Vehicle {
     }
   }
   
-export {Vehicle};
+export {VehicleService};
   

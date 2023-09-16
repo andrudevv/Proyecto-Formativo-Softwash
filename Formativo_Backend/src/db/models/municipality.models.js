@@ -1,7 +1,8 @@
 import { Model, DataTypes } from "sequelize";
 
 
-import {DEPARTMENT_TABLE} from './department.models.js'
+import {DEPARTMENT_TABLE} from './department.models.js';
+
 
 const MUNICIPALITY_TABLE = 'municipalities';
 
@@ -26,7 +27,7 @@ const MunicipalitySchema = {
     },
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL'
-  }
+  }, 
 }
 
 
@@ -34,7 +35,11 @@ class Municipality extends Model {
 
   static associate(models) {
     this.belongsTo(models.Department, { foreignKey: 'departmentId', as: 'Department' });
-  }
+    // this.hasMany(models.laundry, {
+    //   as: "municipalityId",
+    //   foreignKey: "laundryId",
+    // });
+  }  
 
   static config(sequelize) {
     return {

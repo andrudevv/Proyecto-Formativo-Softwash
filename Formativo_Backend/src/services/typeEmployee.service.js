@@ -1,19 +1,20 @@
-import { setUpModels } from "../lib/sequelize.js";
+import { Type } from "../db/models/index.js";
 
-class TypeEmployee {
+
+class TypeEmployeeService {
   constructor() {}
   async create(data) {
-    const newType = await setUpModels.TypeEmployee.create(data);
+    const newType = await Type.create(data);
     return newType;
   }
 
   async find() {
-    const type = await setUpModels.TypeEmployee.findAll();
+    const type = await Type.findAll();
     return type;
   }
 
   async findOne(id) {
-    const type = await setUpModels.TypeEmployee.findByPk(id, {
+    const type = await Type.findByPk(id, {
       include: ["Employee"],
     });
     return type;
@@ -31,4 +32,4 @@ class TypeEmployee {
   }
 }
 
-export { TypeEmployee };
+export { TypeEmployeeService };

@@ -1,25 +1,26 @@
-import { models} from "../lib/sequelize.js";
-import { createError } from "http-errors";
-class Department {
+import { Department } from "../db/models/index.js";
+
+
+class DepartmentService {
 
     constructor() {}
   
     async find() {
-      const rta = await models.Department.findAll();
+      const rta = await Department.findAll();
       return rta;
     }
   
     async findOne(id) {
-      const dep = await models.Department.findByPk(id);
+      const dep = await Department.findByPk(id);
       if (!dep) {
-        throw createError(404,'departamento no encontrado');
+        throw new Error('departamento no encontrado');
       }
       return dep;
     }
   
     async create(data) {
       
-      const newDep = await models.Department.create(data);
+      const newDep = await Department.create(data);
       
       return newDep;
     }
@@ -38,5 +39,5 @@ class Department {
   
   }
   
-export {Department};
+export {DepartmentService};
   

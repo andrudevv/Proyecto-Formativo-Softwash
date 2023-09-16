@@ -1,6 +1,6 @@
 // const { Boom } = require('@hapi/boom');
 // import { data } from "autoprefixer";
-import { User } from "../lib/sequelize.js";
+import { User } from "../db/models/index.js";
 import bcrypt from "bcryptjs";
 
 
@@ -9,7 +9,7 @@ class UserService {
   constructor() {}
 //Ruta registro para el usuario
   async registerUser(body) {
-    const userFound = await User.findByPk(body.email);
+    const userFound = await User.findOne({where : {email: body.email}});
     if (userFound) {
       throw new Error("El correo electrónico ya existe");
     }

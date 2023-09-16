@@ -1,11 +1,12 @@
 import { createError } from "http-errors";
-import { setUpModels } from "../lib/sequelize.js";
+import { Service } from "../db/models/index.js";
+
 
 class Services {
   constructor() {}
 
   async create(data) {
-    const newService = await setUpModels.Service.create(data);
+    const newService = await Service.create(data);
     return newService;
   }
 
@@ -32,12 +33,12 @@ class Services {
         [Op.lte]: price_max,
       };
     }
-    const products = await setUpModels.Service.findAll(options);
+    const products = await Service.findAll(options);
     return products;
   }
 
   async findOne(id) {
-    const service = setUpModels.Service.find((item) => item.id === id);
+    const service = Service.find((item) => item.id === id);
     if (!service) {
       throw createError(404, "servicio no encontrado");
     }
@@ -45,18 +46,18 @@ class Services {
   }
 
   async update(id, changes) {
-    const [updated] = await setUpModels.Service.update(changes, {
+    const [updated] = await Service.update(changes, {
       where: { id },
     });
     if (updated) {
-      const updatedService = await setUpModels.Service.findByPk(id);
+      const updatedService = await Service.findByPk(id);
       return updatedService;
     }
     throw createError(404, "Servicio no encontrado");
   }
 
   async delete(id) {
-    const deleted = await setUpModels.Service.destroy({
+    const deleted = await Service.destroy({
       where: { id },
     });
     if (deleted) {

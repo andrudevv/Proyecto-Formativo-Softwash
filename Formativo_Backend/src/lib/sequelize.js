@@ -1,7 +1,7 @@
 import {Sequelize} from 'sequelize';
 
 // const {config} = require('../config/config');
-import {setUpModels ,User} from '../db/models/index.js';
+import {setUpModels } from '../db/models/index.js';
 
 
 // const USER  = encodeURIComponent(config.dbUser);
@@ -14,7 +14,7 @@ const sequelize = new Sequelize('Proyecto_Softwash','root','zyzz',{
     logging : false,
 })
 
-async function conexionDB() {
+async function conexionDB() { 
   try {
     await setUpModels(sequelize); // Configurar los modelos utilizando la función setUpModels
 
@@ -27,4 +27,4 @@ async function conexionDB() {
 }
 // const sequelize = new Sequelize(config.dbUrl, options);
 
-export { sequelize, conexionDB ,User} ;
+export { sequelize, conexionDB } ;

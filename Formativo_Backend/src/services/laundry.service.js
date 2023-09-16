@@ -1,37 +1,51 @@
 
-import { models} from "../lib/sequelize.js";
-import { createError } from "http-errors";
+import { Laundry } from "../db/models/index.js";
 
-class Laundry{
+
+
+class LaundryService{
     constructor(){
 
     }
 
-    async findOneWhere(dep, mun){
-        const where = await models.Laundry.findAll({
-            where:{dep, mun}
+    async findAllsWhere(dep, mun){
+        const where = await Laundry.findAll({
+            where:{department_id: dep, municipalityId: mun}
         })
+        
         if(!where){
-            throw createError(404,'lavaderos no encontrados')
+            throw new Error('lavaderos no encontrados')
         }
         return where
     }
-    async find(){
-        const rta = await models.Laundry.findAll();
-        return rta
-    }
+    async findOne(id) {
+        const Laundry = await Laundry.findOne(id);
+    
+        if (!Laundry) {
+          
+          throw new Error("correo no encontrado");
+        }
+        return Laundry;
+      }
 
     async findOne(id){
-        const laundry = await models.Laundry.findByPk(id);
+        const laundry = await Laundry.findByPk(id);
         if(!laundry){
-            throw createError(404,'lavadero no encontrado')
+            throw new Error('lavadero no encontrado')
         }
         return laundry;
     }
 
     async create(data){
-        const newLaundry = await models.Laundry.create(data);
+        const userFound = await Laundry.findOne({where : {email: data.email}});
+    if (userFound) {
+      throw new Error("El correo electrónico ya existe");
+    }
+        const newLaundry = await Laundry.create(data);
         return newLaundry;
+
+
+        
     }
 
     async update(id, changes) {
@@ -46,4 +60,4 @@ class Laundry{
       }
 
 }
-export {Laundry}
+export default LaundryService;

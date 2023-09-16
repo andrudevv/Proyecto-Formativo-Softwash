@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-const id = Joi.number().integer();
+// const id = Joi.number().integer();
 const name = Joi.string().min(1).max(15);
 
 const createCategorySchema = Joi.object({
@@ -12,7 +12,7 @@ const updateCategorySchema = Joi.object({
 });
 
 const getCategorySchema = Joi.object({
-  id: id.required(),
+  name: name.required(),
 });
 
 export { createCategorySchema, updateCategorySchema, getCategorySchema }

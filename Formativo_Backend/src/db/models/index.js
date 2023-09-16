@@ -32,6 +32,6 @@ function setUpModels (sequelize){
     Type.associate(sequelize.models);
     Vehicle.associate(sequelize.models);
 
-
+    // ,Appointment, Category, Department, Employee, Laundry, Municipality ,Service, Type, Vehicle
 }
-export {setUpModels, User}
+export {setUpModels, User, Appointment, Category, Department, Employee, Laundry, Municipality ,Service, Type, Vehicle}

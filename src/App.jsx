@@ -5,12 +5,12 @@ import { AuthUserProvider } from "./context/UserContext";
 import LoginUser from "./components/User/LoginUser";
 import LoginClient from "./components/Client/loginClient";
 import RegisterUsuario from "./components/User/RegisterUsuario";
-import LoginAdmin from "./components/Client/LoginAdmin";
+import RegisterClient from "./components/Client/RegisterClient";
 import RegisterLaundry from "./components/Admin/RegisterLaundry";
 import ProtectedRoute from "./routes/protectedRoutes";
 import Navbar from "./components/Header"
 import UserEmailReset from "./pages/userEmailReset";
-import RegisterClient from "./components/Client/Body"
+// import RegisterClient from "./components/Client/Body"
 function App() {
 
   return (
@@ -37,7 +37,7 @@ function App() {
 
 
 
-      <Route path="/iniciarsessionAdministrador" element={<LoginAdmin/>} />
+      <Route path="/iniciarsessionAdministrador" element={<LoginClient/>} />
       <Route path="/registrarlavadero" element={<RegisterLaundry/>} />
       <Route path="/registrarse" element={<h1>homepage</h1>} />
     </Routes>
