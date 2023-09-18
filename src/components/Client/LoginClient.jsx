@@ -5,7 +5,7 @@ import { useEffect } from "react";
 function LoginUser() {
 
   const { register, handleSubmit, formState: { errors } } = useForm()
-  const { signin, errors: loginErrors , isAuthenticated} = useAuth();
+  const { signin, registerErrors , isAuthenticated} = useAuth();
   const navigate = useNavigate();
   const onSubmit = handleSubmit((data) => {
     signin(data);
@@ -20,8 +20,8 @@ function LoginUser() {
   return (
     <div className="flex items-center justify-center h-screen bg-custom-pagina-fondo">
       
-      {loginErrors?.map((error, i) => (
-          <div className='bg-red-500 p-2 text-white' key={i}>
+      {registerErrors?.map((error, i) => (
+          <div className='bg-red-500 p-2 mt-1 rounded-lg text-white' key={i}>
             {error}
           </div>
         ))

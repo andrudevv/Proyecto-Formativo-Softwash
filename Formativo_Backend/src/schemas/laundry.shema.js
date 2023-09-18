@@ -1,5 +1,14 @@
 import Joi from 'joi';
 
+const customMessages = {
+    "string.empty": "Este campo no puede estar vacío",
+    "string.email": "Debes ingresar una dirección de correo electrónico válida",
+    "any.required": "este campo es obligatorio",
+    "number.max": "sobrepasa el maximo",
+    "string.min":"contraseña minima de 6 caracteres",
+    "number.empty":"este campo no puede estar vacio",
+    "number.base":"este campo debe ser un numero"
+  };
 const id = Joi.number().integer();
 const rutLaundry = Joi.number().integer();
 const name = Joi.string();
@@ -23,10 +32,13 @@ const createLaundrySchema = Joi.object({
     password: password.required(),
     ability: ability,
     departmentId : departmentId.required(),
-    municipalityId: municipalityId.required(), 
+    municipalityId: municipalityId.required().messages({
+        "number.empty":"este campo no puede estar vacio",
+        "number.base":"Municipio' este campo debe ser un numero"
+    }), 
     
 
-})
+}).messages(customMessages);
 
 
 

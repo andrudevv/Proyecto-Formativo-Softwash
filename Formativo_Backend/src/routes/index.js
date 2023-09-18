@@ -8,7 +8,7 @@ export function rutas(app) {
     app.use('/api',router);
     
     router.use('/users', userRouter);
-    router.use('/client', categoryRouter);
+    router.use('/clients', categoryRouter);
     router.use('/client', laundryRouter);
     
 }

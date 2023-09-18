@@ -32,7 +32,7 @@ class UserService {
 
   async findByEmail(email) {
     console.log(email);
-    const userFound = await User.findByPk(email);
+    const userFound = await User.findByPk({where: {email: email}});
     if (!userFound) {
       throw new Error("El correo electrónico no existe");
     }
@@ -43,13 +43,17 @@ class UserService {
 
 // servicio de inicio de sesion 
   async login(email, password) {
-    const user = await User.findByPk(email);
-    if (!user) {
-      throw new Error("El correo electrónico no existe");
-    }
+    const user = await User.findOne({where : {email:email}});
+    // en caso de querer mostrar el error en especifico de cada campo se habilitan estos condicionales, la siguiente que esta habilitada es para mayor seguridad sin confirmar el campo erroneo , exigiendo al usuario su atencion en los datos ingresados
+    // if (!user) {
+    //   throw new Error("El correo electrónico no existe");
+    // }
     const isPasswordValid = bcrypt.compareSync(password, user.password);
-    if (!isPasswordValid) {
-      throw new Error("Contraseña incorrecta");
+    // if (!isPasswordValid) {
+    //   throw new Error("Contraseña incorrecta");
+    // }
+    if(!user || !isPasswordValid){
+      throw new Error('Usuario o contraseña incorrectos');
     }
     return user;
   }

@@ -10,15 +10,14 @@ laundryRouter.post("/registerlaundry", validatorHandler(createLaundrySchema, "bo
 async (req, res, next) => {
   try {
     const body = req.body;
-    
     const rta = await Laundry.create(body);
-    
-    res.status(201).json({message: "Registro de lavadero exitoso ", rta});
+    if(rta) return res.status(201).json({message:`registro exitoso ${rta.name}`})
   } catch (error) {
     console.error(error)
+    console.log(error);
 
-    next(error);
-    return res.status(500).json({ message: error.message });
+    // next(error);
+    return res.status(400).json([error.message] );
   }
   (err,  res) => {
     // Este middleware manejará los errores generados por el validador

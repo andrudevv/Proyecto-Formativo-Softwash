@@ -10,11 +10,13 @@ import RegisterLaundry from "./components/Admin/RegisterLaundry";
 import ProtectedRoute from "./routes/protectedRoutes";
 import Navbar from "./components/Header"
 import UserEmailReset from "./pages/userEmailReset";
+import { AuthClientProvider } from "./context/ClientContext";
 // import RegisterClient from "./components/Client/Body"
 function App() {
 
   return (
     <AuthUserProvider>
+      <AuthClientProvider>
 <BrowserRouter>
 <Navbar/>
 <main className=" pt-20
@@ -43,6 +45,7 @@ function App() {
     </Routes>
     </main>
     </BrowserRouter>
+    </AuthClientProvider>
     </AuthUserProvider>
   )
 }

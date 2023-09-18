@@ -23,7 +23,7 @@ const UserSchema = {
   },
   phone: {
     allowNull: false,
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
   },
   email: {
     allowNull: false,

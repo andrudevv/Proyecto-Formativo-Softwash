@@ -12,7 +12,7 @@ const LaundrySchema = {
   },
   rutLaundry: {
     allowNull: false,
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
   },
   name: {
     allowNull: false,
@@ -24,7 +24,7 @@ const LaundrySchema = {
   },
   phone: {
     allowNull: false,
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
   },
   email: {
     allowNull: false,

@@ -40,10 +40,10 @@ export const AuthUserProvider = ({ children }) => {
             // setIsAuthenticated(true);
             setRegisterErrors([]);
             setSuccessMessage(res.data.message);
-      setRegistrationSuccess(true);
+            setRegistrationSuccess(true);
         } catch (error) {
-            setRegisterErrors([error])
-
+            console.log(error);
+            setRegisterErrors(error.response.data);
         }
 
 
@@ -53,7 +53,7 @@ export const AuthUserProvider = ({ children }) => {
 
     const signin = async (user) => {
 
-        
+
         try {
             const res = await loginRequest(user);
             console.log(res);
@@ -63,7 +63,7 @@ export const AuthUserProvider = ({ children }) => {
             // console.log(Response.data);
             // setIsAuthenticated(true);
         } catch (error) {
-            setUser(error.response.data.msg);
+            setRegisterErrors(error.response.data)
 
         }
     }

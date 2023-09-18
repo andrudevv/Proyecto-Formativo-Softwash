@@ -22,7 +22,7 @@ const Navbar = () => {
       </div>
       <div className="flex items-center mt-2 md:mt-0 md:ml-6">
         <div className="hidden md:flex space-x-4">
-          <button className="text-white"><a href="/signinuser">Iniciar Sesión</a></button>
+          <button className="text-white"><a href="/sign-in-user">Iniciar Sesión</a></button>
           <button className="text-white"><a href="/registeruser">Registrarse</a></button>
         </div>
         <div className="md:hidden ml-auto">

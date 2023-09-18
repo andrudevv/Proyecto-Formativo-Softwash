@@ -40,22 +40,21 @@ userRouter.post(
     try {
       const { email, password } = req.body;
       const findUser = await service.login(email, password);
-      if (!findUser) {
-        return res.status(401).send("Correo o contraseña incorrectos");
-      }
       const token = await createAccessToken({
         id: findUser.documentUser,
         username: findUser.name,
       });
-      console.log(token);
       res.cookie("token", token, {
         // httpOnly: process.env.NODE_ENV !== "development",
         secure: true,
         sameSite: "none",
       });
-      res.json(findUser);
+      return res.status(200).json(findUser)
     } catch (error) {
-      next(error);
+      // next(error);
+    console.log(error);
+    return res.status(400).json([error.message] );
+
     }
   }
 );
@@ -124,13 +123,11 @@ userRouter.post(
       
       const body = req.body;
       const newUser = await service.registerUser(body);
-      if (!newUser) {
-        return res.status(500).json({ error: "No se pudo crear el usuario." });
-      }
+      
       const token = await createAccessToken({ id: newUser.documentUser });
 
       res.cookie("token", token);
-      res.status(201).json({message: "Registro exitoso"});
+      if (newUser) return res.status(201).json({message: `Registro exitoso ${newUser.name}`});
     } catch (error) {
 
       next(error);

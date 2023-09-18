@@ -5,15 +5,12 @@ import { clientVerifyTokenRequest } from "../services/api/auth";
 export const AuthClientContext = createContext()
 export const clientAuth = () => {
     const context = useContext(AuthClientContext);
-    if (!context) {
-        // Puedes devolver un valor por defecto o manejarlo de otra manera
-        return { isAuthenticated: false, user: null };
-    }
+    if (!context) throw new Error('No se encuentra el usuario autenticado');
     return { ...context };
 
 }
 
-export const AuthUserProvider = ({ children }) => {
+export const AuthClientProvider = ({ children }) => {
 
     const [user, setUser] = useState(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -43,32 +40,30 @@ export const AuthUserProvider = ({ children }) => {
 
     //     } catch (error) {
     //         setRegisterErrors([error])
-            
+
     //     }
     //     }
 
     const signupClient = async (user) => {
         try {
+
             const res = await registerClientRequest(user);
             console.log(res);
             setUser(res.data);
             // setIsAuthenticated(true);
             setRegisterErrors([]);
             setSuccessMessage(res.data.message);
-      setRegistrationSuccess(true);
+            setRegistrationSuccess(true);
         } catch (error) {
-            setRegisterErrors([error])
-
+            setRegisterErrors(error.response.data);
         }
-
-
     }
 
 
 
     const signin = async (user) => {
 
-        
+
         try {
             const res = await loginClientRequest(user);
             console.log(res);

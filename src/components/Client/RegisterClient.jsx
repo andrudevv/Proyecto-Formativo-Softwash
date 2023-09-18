@@ -1,5 +1,5 @@
-import React from "react";
-import { useState, useEffect } from "react";
+
+import {React, useState, useEffect } from "react";
 import { useForm } from "react-hook-form"
 import { clientAuth } from '../../context/ClientContext';
 // import { getDepartment } from "../../services/api/auth";
@@ -58,8 +58,8 @@ function RegisterClient() {
           Registrarse como lavadero
         </h2>
         {registerErrors?.map((error, i) => (
-          <div className='bg-red-500 p-2 text-white' key={i}>
-            {error.response.data.message}
+          <div className='bg-red-500 p-2 mt-1 rounded-lg text-white' key={i}>
+            {error}
           </div>
         ))}
 
@@ -73,32 +73,38 @@ function RegisterClient() {
         {/* Condición para mostrar el formulario o el mensaje de éxito */}
         {!registrationSuccess ? (
           <form onSubmit={onSubmit}>
-            <input type="number" {...register('rutLaundry', { required: true })} className="w-full mb-2 text-black px-4 py-2 rounded-md" placeholder="Numero de Rut" />{errors.rutLaundry && (
+            <label className="w-full mb-2 font-semibold text-black px-4 py-2 rounded-md">Numero de Rut</label>
+            <input type="number" {...register('rutLaundry', { required: true })} className="w-full mb-2 text-black px-4 border border-gray-300 py-2 rounded-md" placeholder="ingrese rut" />{errors.rutLaundry && (
               <p className="text-red-500">el Rut es requerido</p>
             )}
-            <input type="text" {...register('name', { required: true })} className="w-full mb-2 text-black  px-4 py-2 rounded-md" placeholder="nombre" />
+            <label className="w-full mb-2 font-semibold text-black px-4 py-2 rounded-md">Nombre</label>
+            <input type="text" {...register('name', { required: true })} className="w-full mb-2 text-black  px-4 border border-gray-300px-4 py-2 rounded-md" placeholder="ingrese nombre" />
             {errors.name && (
               <p className="text-red-500">nombre es requerido</p>
             )}
-            <input type="text" {...register('address', { required: true })} className="w-full  mb-2 text-black px-4 py-2 rounded-md" placeholder="direccion" />
+            <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Direccion</label>
+            <input type="text" {...register('address', { required: true })} className="w-full  mb-2 text-black px-4 py-2  border border-gray-300 rounded-md" placeholder="ingrese direccion" />
             {errors.address && (
               <p className="text-red-500">se requiere una direccion</p>
             )}
-            <input type="number" {...register('phone', { required: true })} className="w-full mb-2 text-black px-4 py-2 rounded-md" placeholder="telefono" />
+            <label className="w-full mb-2 font-semibold text-black px-4 py-2 rounded-md">Telefono</label>
+            <input type="number" {...register('phone', { required: true })} className="w-full mb-2 text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="ingrese telefono" />
             {errors.phone && (
               <p className="text-red-500">telefono es requerido</p>
             )}
-            <input type="email" {...register('email', { required: true })} className="w-full mb-2 text-black px-4 py-2 rounded-md" placeholder="correo" />
+            <label className="w-full mb-2 font-semibold text-black px-4 py-2 rounded-md">Correo</label>
+            <input type="email" {...register('email', { required: true })} className="w-full mb-2  border border-gray-300 text-black px-4 py-2 rounded-md" placeholder="ingrese correo" />
             {errors.email && (
               <p className="text-red-500">el correo es requerido</p>
             )}
-            <input type="password" {...register('password', { required: true })} className="w-full mb-2 text-black px-4 py-2 rounded-md" placeholder="contraseña" />
+            <label className="w-full mb-2 font-semibold text-black px-4 py-2 rounded-md">Contraseña</label>
+            <input type="password" {...register('password', { required: true })} className="w-full mb-2  border border-gray-300 text-black px-4 py-2 rounded-md" placeholder="ingrese contraseña" />
             {errors.password && (
               <p className="text-red-500">contraseña es requerida</p>
             )}
 
 
-
+<label className="w-full mb-2 font-semibold text-black px-4 py-2 rounded-md">Departamento</label>
             <select
               {...register('departmentId', { required: true })}
               className="font-Pathway Gothic One w-full p-2 bg-white rounded-md border border-gray-300 focus:ring"
@@ -118,6 +124,7 @@ function RegisterClient() {
               ))}
               ))
             </select>
+            <label className="w-full mb-2 font-semibold text-black px-4 py-2 rounded-md">Municipio</label>
             <select {...register('municipalityId', { required: true })} className="font-Pathway Gothic One w-full p-2 bg-white rounded-md border border-gray-300 focus:ring" placeholder="municipio">
               <option >Municipio</option>
               {municipalities.map((department) => (
@@ -131,17 +138,6 @@ function RegisterClient() {
                 </option>
               ))}
               </select>
-            {/* < type="option" {...register('departmentId', { required: true })} className="w-full mb-2 text-black px-4 py-2 rounded-md" placeholder="ciudad" />
-          {errors.departmentId && (
-            <p className="text-red-500">Departamento es requerida</p>
-          )}
-          <input type="text" {...register('municipalityId', { required: true })} className="w-full mb-2 text-black px-4 py-2 rounded-md" placeholder="municipio" />
-          {errors.municipalityId && (
-            <p className="text-red-500">Municipio es requerido</p>
-          )} */}
-
-
-
             <button type="submit" className="bg-custom-botones text-white font-semibold mt-4 py-2 px-4 rounded hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-700 w-full">registrarse</button>
 
             <button className="bg-custom-botones text-white font-semibold mt-4 py-2 px-4 rounded hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-700 w-full"><a href="/registerUser">registrarse como usuario?</a></button>

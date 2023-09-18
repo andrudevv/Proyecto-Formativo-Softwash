@@ -18,14 +18,14 @@ function RegisterUsuario() {
           Registrarse como usuario
         </h2>
       {registerErrors?.map((error, i) => (
-        <div className='bg-red-500 p-2 text-white' key={i}>
+        <div className='bg-red-500 p-2 mt-1  rounded-lg text-white' key={i}>
           {error.response.data.message }
         </div>
       ))}
 
       {successMessage && (
         <div className='bg-green-500 p-2 text-white'>
-          {successMessage}<a href="/signinuser" className="text-black"> iniciar sesion</a>
+          {successMessage}<a href="/sign-in-user" className="text-black"> iniciar sesion</a>
         </div>
       )}
 
