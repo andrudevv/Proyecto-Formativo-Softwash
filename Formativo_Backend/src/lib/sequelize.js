@@ -1,16 +1,20 @@
 import {Sequelize} from 'sequelize';
-
+import dotenv from "dotenv";
+dotenv.config();
 // const {config} = require('../config/config');
 import {setUpModels } from '../db/models/index.js';
-
+const nameDB = process.env.DB_NAME;
+const userDb = process.env.DB_USER;
+const passwordDb = process.env.DB_PASSWORD;
+const dialectDb = process.env.DB_DIALECT;
 
 // const USER  = encodeURIComponent(config.dbUser);
 // const PASSWORD  = encodeURIComponent(config.dbPassword);
 // const URI  =  `mysql://${USER}:${PASSWORD}@${config.dbHost}:${config.dbHost}/${config.dbName}`
 
 
-const sequelize = new Sequelize('Proyecto_Softwash','root','zyzz',{
-    dialect: 'mysql',
+const sequelize = new Sequelize(nameDB,userDb,passwordDb,{
+    dialect: dialectDb,
     logging : false,
 })
 
