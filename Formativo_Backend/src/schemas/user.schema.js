@@ -14,6 +14,7 @@ const password = Joi.string().min(6);
 const token = Joi.string();
 const city = Joi.string();
 const municipality = Joi.string();
+const role = Joi.string();
 
 const createuserShema = Joi.object({
   documentUser: documentUser.required(),
@@ -25,6 +26,7 @@ const createuserShema = Joi.object({
   token: token,
   city: city.required(),
   municipality: municipality.required(),
+  role: role,
 })
 
 const updateUserShema = Joi.object({

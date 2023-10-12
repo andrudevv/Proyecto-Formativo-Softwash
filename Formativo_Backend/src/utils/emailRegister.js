@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-import crypto from "crypto";
 dotenv.config();
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -10,17 +9,16 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const generateRecoveryToken = () => {
-  return crypto.randomBytes(32).toString("hex");
-};
-export function sendEmail(Email) {
-  const recoveryToken = generateRecoveryToken();
-
+// const generateRecoveryToken = () => {
+//   return crypto.randomBytes(32).toString("hex");
+// };
+export function register(email, name) {
+  return new Promise((resolve, reject) => { 
   // Envía un correo con el token
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: Email,
-    subject: "Recuperación de contraseña",
+    to: email,
+    subject: "Registro exitoso",
     html: `
   <html>
     <head>
@@ -58,11 +56,11 @@ export function sendEmail(Email) {
     <body>
       <div class="container">
         <div class="header">
-          <h1 class="title">Recuperación de contraseña</h1>
+          <h1 class="title">Bienvenido a softwash <strong>${name}</strong></h1>
         </div>
         <div class="content">
           <p>
-            Haga clic en este <a class="link" href="http://localhost:4000/api/users/reset-password/${recoveryToken}">enlace</a> para restablecer su contraseña.
+            Haga clic en este <a class="link" href="http://localhost:4000/">enlace</a> para iniciar session.
           </p>
         </div>
       </div>
@@ -74,14 +72,11 @@ export function sendEmail(Email) {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.error(error);
-      res
-        .status(500)
-        .send("Error al enviar el correo de recuperación de contraseña.");
+      reject(error);
     } else {
-      console.log(
-        "Correo de recuperación de contraseña enviado: " + info.response
-      );
-      res.status(200).send("Correo de recuperación de contraseña enviado.");
+      console.log("registro exitoso: " , info.response );
+      resolve(true);
     }
   });
+} );
 }

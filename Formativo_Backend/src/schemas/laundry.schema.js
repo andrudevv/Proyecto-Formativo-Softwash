@@ -64,6 +64,7 @@ const getLaundrysSchema = Joi.object({
 
 
 const loginLaundrySchema = Joi.object({
+    rutLaundry: rutLaundry.required(),
     email: email.required(),
     password: password.required()
 })

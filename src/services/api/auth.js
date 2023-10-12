@@ -35,7 +35,7 @@ export const resetPassword = (data) =>
 // export const logoutRequest = () => Axios.post(`${API}/logout`);
 
 export const registerClientRequest = (user) =>
-  Axios.post(`${API}/client/registerlaundry`, user)
+  Axios.post(`${API}/client/register-client`, user)
     .then((Response) => {
       return Response;
     })
@@ -46,7 +46,7 @@ export const registerClientRequest = (user) =>
 
 // /validar para usuario
 export const loginClientRequest = (user) =>
-  Axios.post(`${API}/client/register`, user);
+  Axios.post(`${API}/client/login-client`, user);
 
 //verificar token
 
@@ -64,23 +64,23 @@ export const resetPasswordClient = (data) =>
       throw error;
     });
 
-export const getDepartment = () => {
-  Axios.get(`${API}/users/getDepartments`)
-    .then((Response) => {
-      return Response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-      throw error;
-    });
-};
-export const getMunicipalities = (id) => {
-  Axios.get(`${API}/client/getDepartments/${id}`)
-    .then((Response) => {
-      setMunicipalities(Response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-      throw error;
-    });
-};
+// export const getDepartment = () => {
+//   Axios.get(`${API}/users/getDepartments`)
+//     .then((Response) => {
+//       return Response.data;
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//       throw error;
+//     });
+// };
+// export const getMunicipalities = (id) => {
+//   Axios.get(`${API}/client/getDepartments/${id}`)
+//     .then((Response) => {
+//       // setMunicipalities(Response.data);
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//       throw error;
+//     });
+// };

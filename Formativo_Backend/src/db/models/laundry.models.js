@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import {DEPARTMENT_TABLE} from './department.models.js'
-import { MUNICIPALITY_TABLE } from "./municipality.models.js";
+// import { MUNICIPALITY_TABLE } from "./municipality.models.js";
 const LAUNDRY_TABLE = "laundry";
 
 const LaundrySchema = {

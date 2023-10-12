@@ -51,7 +51,7 @@ function RegisterUsuario() {
           <p className="text-red-500">contraseña es requerida</p>
         )}
         
-        <input type="text" {...register('city', { required: true })} className="w-full mb-2 text-black px-4 py-2 rounded-md" placeholder="ciudad" />
+        <input type="text" {...register('city', { required: true })} className="w-full mb-2 text-black px-4 py-2 rounded-md" placeholder="departamento" />
         {errors.City && (
           <p className="text-red-500">Ciudad es requerida</p>
         )}

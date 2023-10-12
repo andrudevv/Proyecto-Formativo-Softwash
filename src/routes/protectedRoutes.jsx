@@ -5,7 +5,7 @@ function protectedRoutes() {
     const {loading , isAuthenticated} = useAuth();
 
     if(loading) return <h1>Loading...</h1>;
-    if(!isAuthenticated && !loading ) return <Navigate to='/iniciarsesion' replace />
+    if(!isAuthenticated && !loading ) return <Navigate to='/sign-in-user' replace />
  return <Outlet/>
 }
 
