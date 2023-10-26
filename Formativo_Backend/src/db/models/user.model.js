@@ -1,4 +1,5 @@
 import { Model, DataTypes } from "sequelize";
+import {DEPARTMENT_TABLE} from './department.models.js'
 
 const USER_TABLE = "users";
 
@@ -34,14 +35,6 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.STRING,
   },
-  city: {
-    allowNull: false,
-    type: DataTypes.STRING,
-  },
-  municipality: {
-    allowNull: false,
-    type: DataTypes.STRING,
-  },
   recoveryToken: {
     field: 'recovery_token',
     allowNull: true,
@@ -52,6 +45,17 @@ const UserSchema = {
     defaultValue: 'user',
     type: DataTypes.STRING
   },
+  departmentId: {
+    field: 'department_id',
+    allowNull: true,
+    type: DataTypes.INTEGER,
+    references: {
+      model: DEPARTMENT_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
+  }
   // createAt:{
   //     allowNull: false,
   //     type: DataTypes.DATE,
@@ -66,6 +70,8 @@ class User extends Model {
       as: 'vehicles',
       foreignKey: 'userId'
     });
+    this.belongsTo(models.Department, { foreignKey:"departmentId", as: 'Department' });
+    this.belongsTo(models.Municipality, { foreignKey:"municipalityId", as: 'Municipality' });
   }
   static config(sequelize) {
     return {

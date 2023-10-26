@@ -47,7 +47,8 @@ laundryRouter.post(
       const { rutLaundry, email, password } = req.body;
       const findLaundry = await Laundry.login(rutLaundry, email, password);
       const token = await createAccessToken({
-        id: findLaundry.rutLaundry,
+        id: findLaundry._id,
+        rut: findLaundry.rutLaundry,
         username: findLaundry.name,
         membership: findLaundry.membership,
       });

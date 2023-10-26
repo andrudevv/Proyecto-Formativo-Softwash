@@ -45,9 +45,8 @@ const LaundrySchema = {
     defaultValue: false 
   },
   ability: {
-    allowNull: true,
+    allowNull: false,
     type: DataTypes.INTEGER,
-    defaultValue: 1
   },
   departmentId: {
     field: 'department_id',
@@ -59,7 +58,15 @@ const LaundrySchema = {
     },
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL'
-  }
+  },
+  aperture: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
+  closing: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
   // ,municipalityId: {
   //   field: 'municipality_id',
   //   allowNull: true,
@@ -84,7 +91,7 @@ class Laundry extends Model {
     this.belongsTo(models.Department, { foreignKey:"departmentId", as: 'Department' });
     this.belongsTo(models.Municipality, { foreignKey:"municipalityId", as: 'Municipality' });
 
-    // this.hasMany(models.Service,{foreignKey:"laundryId", as: 'services'})
+    this.hasMany(models.Service,{foreignKey:"laundryId"})
   }
   static config(sequelize) {
     return {

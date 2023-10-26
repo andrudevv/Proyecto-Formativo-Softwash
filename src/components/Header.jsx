@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FiMenu } from 'react-icons/fi';
-import img from '../components/imginterfaz/SoftWash.jpg';
+import img from '../img/SoftWash.jpg';
 
 
 
@@ -13,7 +13,7 @@ const Navbar = () => {
 
   return (
 
-    <header className="bg-custom-nav-bar p-4 flex justify-between items-center fixed w-full top-0 z-10">
+    <header className="bg-gradient-to-r from-blue-500 via-blue-700 to-blue-700 p-4 flex justify-between items-center fixed w-full top-0 z-10">
       <div className="flex items-center">
         <img className="text-white rounded-full w-12" src={img} alt="logo" />
         <div className="ml-4 md:ml-6">

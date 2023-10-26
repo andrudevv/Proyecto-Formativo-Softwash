@@ -3,7 +3,6 @@ import { Model, DataTypes , Sequelize} from "sequelize";
 
 import { LAUNDRY_TABLE } from "./laundry.models.js";
 
-import { CATEGORY_TABLE } from "./category.vehicle.model.js";
 const SERVICE_TABLE = 'services';
 
 const ServiceSchema = {
@@ -17,7 +16,7 @@ const ServiceSchema = {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  duraction: {
+  duration: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
@@ -46,16 +45,9 @@ const ServiceSchema = {
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL'
   },
-  categoryId: {
-    field: 'categoryId',
-    allowNull: true,
-    type: DataTypes.INTEGER,
-    references: {
-      model: CATEGORY_TABLE,
-      key: 'id'
-    },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+  typeVehicles: {
+    type: DataTypes.STRING,
+    allowNull: false,
   }
 }
 
@@ -63,14 +55,15 @@ const ServiceSchema = {
 class Service extends Model {
 
   static associate(models) {
-    this.belongsTo(models.laundry, { foreignKey: 'laundryId', as: 'laundry' });
-    this.belongsTo(models.CategoryVehicle, { foreignKey: 'categoryId', as: 'CategoryVehicle' });
+    this.belongsTo(models.laundry, { foreignKey: 'laundryId'});
     this.belongsToMany(models.Vehicle, {
-        as: 'Service',
+        as: 'Vehicle',
         through: models.Appointment,
         foreignKey: 'serviceId',
         otherKey: 'vehicleId'
       });
+    // this.hasMany(models.Appointment,{foreignKey: 'serviceId'})
+      
   }
 
   static config(sequelize) {

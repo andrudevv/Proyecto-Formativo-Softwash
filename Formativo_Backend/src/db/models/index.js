@@ -1,6 +1,5 @@
 import {User, UserSchema} from './user.model.js';
 import { Appointment, AppointmentSchema } from './appointment.models.js' 
-import { Category, categoryVehicleSchema } from './category.vehicle.model.js';
 import {Department, DepartamentSchema} from './department.models.js'
 import {Employee, EmployeeSchema} from './employee.model.js'
 import { Laundry, LaundrySchema } from './laundry.models.js';
@@ -11,7 +10,6 @@ import { Vehicle, UserVehicleSchema } from './vehicle.models.js';
 function setUpModels (sequelize){
     User.init(UserSchema, User.config(sequelize));
     Appointment.init(AppointmentSchema, Appointment.config(sequelize));
-    Category.init(categoryVehicleSchema, Category.config(sequelize));
     Department.init(DepartamentSchema, Department.config(sequelize));
     Employee.init(EmployeeSchema, Employee.config(sequelize));
     Laundry.init(LaundrySchema, Laundry.config(sequelize));
@@ -23,7 +21,6 @@ function setUpModels (sequelize){
     // Customer.associate(sequelize.models)
     User.associate(sequelize.models);
     Appointment.associate(sequelize.models);
-    Category.associate(sequelize.models);
     Department.associate(sequelize.models);
     Employee.associate(sequelize.models);
     Laundry.associate(sequelize.models);
@@ -34,4 +31,4 @@ function setUpModels (sequelize){
 
     // ,Appointment, Category, Department, Employee, Laundry, Municipality ,Service, Type, Vehicle
 }
-export {setUpModels, User, Appointment, Category, Department, Employee, Laundry, Municipality ,Service, Type, Vehicle}
+export {setUpModels, User, Appointment, Department, Employee, Laundry, Municipality ,Service, Type, Vehicle}

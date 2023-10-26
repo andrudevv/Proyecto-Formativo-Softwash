@@ -2,10 +2,10 @@ import Joi from 'joi';
 
 
 const plate = Joi.string();
-const model = Joi.string();
-const color = Joi.number().integer();
+const model = Joi.number().integer();
+const color = Joi.string();
 const userId = Joi.number().integer();
-const categoryId = Joi.number().integer();
+const typeVehicle =  Joi.string();
 
 
 const getVehivleSchema = Joi.object({
@@ -17,7 +17,7 @@ const createVehicleShema = Joi.object({
     model: model.required(),
     color: color.required(),
     userId: userId.required(),
-    categoryId: categoryId.required()
+    typeVehicle: typeVehicle.required()
 })
 
 
@@ -26,7 +26,7 @@ const updateVehicleShema = Joi.object({
     plate: plate,
     model: model,
     color: color,
-    categoryId: categoryId
+    typeVehicle: typeVehicle
 })
 
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FiMenu } from 'react-icons/fi';
-import img from '../components/imginterfaz/SoftWash.jpg';
+import img from '../img/SoftWash.jpg';
+
 
 
 
@@ -13,7 +14,7 @@ const Navbar = () => {
 
   return (
 
-    <header className="bg-custom-nav-bar p-4 flex justify-between items-center fixed w-full top-0 z-10">
+    <header className="bg-color-primary p-4 flex justify-between items-center fixed w-full top-0 z-10">
       <div className="flex items-center">
         <img className="text-white rounded-full w-12" src={img} alt="logo" />
         <div className="ml-4 md:ml-6">
@@ -22,7 +23,7 @@ const Navbar = () => {
       </div>
       <div className="flex items-center mt-2 md:mt-0 md:ml-6">
         <div className="hidden md:flex space-x-4">
-          <button className="text-white"><a href="/signinuser">Iniciar Sesión</a></button>
+          <button className="text-white"><a href="/sign-in-user">Iniciar Sesión</a></button>
           <button className="text-white"><a href="/registeruser">Registrarse</a></button>
         </div>
         <div className="md:hidden ml-auto">

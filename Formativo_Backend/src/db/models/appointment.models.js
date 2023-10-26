@@ -24,11 +24,11 @@ const AppointmentSchema =  {
   },
   date: {
     allowNull: false,
-    type: DataTypes.DATE
+    type: DataTypes.DATEONLY,
   },
   time: {
     allowNull: false,
-    type: DataTypes.TIME
+    type: DataTypes.STRING,
   },
   state: {
     allowNull: false,
@@ -64,8 +64,10 @@ const AppointmentSchema =  {
 
 class Appointment extends Model {
 
-  static associate() {
-    
+  static associate(models) {
+    this.belongsTo(models.Service,{
+      foreignKey:'service_id',
+    })
   }
 
   static config(sequelize) {

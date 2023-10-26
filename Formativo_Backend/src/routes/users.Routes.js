@@ -40,7 +40,8 @@ userRouter.post(
       const { email, password } = req.body;
       const findUser = await service.login(email, password);
       const token = await createAccessToken({
-        id: findUser.documentUser,
+        id: findUser._id,
+        document: findUser.documentUser,
         username: findUser.name,
         role: findUser.role,
       });
@@ -126,10 +127,6 @@ userRouter.post(
     try {
       const body = req.body;
       const newUser = await service.registerUser(body);
-
-      const token = await createAccessToken({ id: newUser.documentUser });
-
-      res.cookie("token", token);
       if (newUser){
 
         await register(newUser.email, newUser.name)

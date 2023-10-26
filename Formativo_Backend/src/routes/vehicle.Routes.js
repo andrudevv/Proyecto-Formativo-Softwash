@@ -23,7 +23,7 @@ vehicleRouter.post(
     try {
       const body = req.body;
       const rta = await vehicleService.create(body);
-      res.status(201).json({ message: "Registro de categoria exitoso ", rta });
+      res.status(201).json({ message: "Registro de vehiculo exitoso ", rta });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: error.message });

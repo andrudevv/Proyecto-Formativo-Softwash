@@ -17,9 +17,13 @@ const phone = Joi.number().integer();
 const email = Joi.string().email();
 const password = Joi.string().min(6);
 const departmentId = Joi.number().integer();
+const municipalityId = Joi.number().integer();
 const membership = Joi.boolean();
 const ability = Joi.number().integer();
-const municipalityId = Joi.number().integer();
+const aperture = Joi.string();
+const closing = Joi.string();
+
+
 
 
 
@@ -30,11 +34,13 @@ const createLaundrySchema = Joi.object({
     phone: phone.required(),
     email: email.required(),
     password: password.required(),
-    ability: ability,
+    ability: ability.required(),
+    aperture: aperture.required(),
+    closing: closing.required(),
     departmentId : departmentId.required(),
     municipalityId: municipalityId.required().messages({
         "number.empty":"este campo no puede estar vacio",
-        "number.base":"Municipio' este campo debe ser un numero"
+        "number.base":"Municipio' este campo debe seleccionarse"
     }), 
     
 
@@ -50,7 +56,10 @@ const updateLaundrySchema = Joi.object({
     email: email,
     password: password,
     membership : membership,
-    departmentId: departmentId
+    departmentId: departmentId,
+    ability: ability,
+    aperture: aperture,
+    closing: closing,
 })
 
 const getLaundrySchema =Joi.object({

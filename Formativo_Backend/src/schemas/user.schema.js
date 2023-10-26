@@ -12,8 +12,8 @@ const phone = Joi.number().integer();
 const email = Joi.string().email();
 const password = Joi.string().min(6);
 const token = Joi.string();
-const city = Joi.string();
-const municipality = Joi.string();
+const municipalityId = Joi.number().integer();
+const departmentId = Joi.number().integer();
 const role = Joi.string();
 
 const createuserShema = Joi.object({
@@ -24,8 +24,8 @@ const createuserShema = Joi.object({
   email: email.required(),
   password: password.required(),
   token: token,
-  city: city.required(),
-  municipality: municipality.required(),
+  departmentId: departmentId.required(),
+  municipalityId: municipalityId.required(),
   role: role,
 })
 

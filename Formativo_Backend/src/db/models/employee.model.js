@@ -22,7 +22,7 @@ const EmployeeSchema = {
     allowNull: true,
     type: DataTypes.INTEGER,
   },
-  tipeEmployee: {
+  typeEmployee: {
     field: 'type',
     allowNull: false,
     type: DataTypes.INTEGER,

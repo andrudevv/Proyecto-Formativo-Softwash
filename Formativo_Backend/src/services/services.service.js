@@ -1,46 +1,50 @@
-import { createError } from "http-errors";
 import { Service } from "../db/models/index.js";
 
 
 class Services {
   constructor() {}
 
-  async create(data) {
+  async createService(data) {
     const newService = await Service.create(data);
     return newService;
   }
 
-  async find(query) {
-    const options = {
-      include: ["category"],
-      where: {},
-    };
-    const { limit, offset } = query;
-    if (limit && offset) {
-      options.limit = limit;
-      options.offset = offset;
-    }
-
-    const { price } = query;
-    if (price) {
-      options.where.price = price;
-    }
-
-    const { price_min, price_max } = query;
-    if (price_min && price_max) {
-      options.where.price = {
-        [Op.gte]: price_min,
-        [Op.lte]: price_max,
-      };
-    }
-    const products = await Service.findAll(options);
-    return products;
+  async findServices(id){
+    const serviceFound = await Service.findAll({where: {laundryId: id}});
+    return serviceFound;
   }
+  
+  // async find(query) {
+  //   const options = {
+  //     include: ["category"],
+  //     where: {},
+  //   };
+  //   const { limit, offset } = query;
+  //   if (limit && offset) {
+  //     options.limit = limit;
+  //     options.offset = offset;
+  //   }
+
+  //   const { price } = query;
+  //   if (price) {
+  //     options.where.price = price;
+  //   }
+
+  //   const { price_min, price_max } = query;
+  //   if (price_min && price_max) {
+  //     options.where.price = {
+  //       [Op.gte]: price_min,
+  //       [Op.lte]: price_max,
+  //     };
+  //   }
+  //   const products = await Service.findAll(options);
+  //   return products;
+  // }
 
   async findOne(id) {
     const service = Service.find((item) => item.id === id);
     if (!service) {
-      throw createError(404, "servicio no encontrado");
+      throw new Error("servicio no encontrado");
     }
     return service;
   }
@@ -53,7 +57,7 @@ class Services {
       const updatedService = await Service.findByPk(id);
       return updatedService;
     }
-    throw createError(404, "Servicio no encontrado");
+    throw new Error("Servicio no encontrado");
   }
 
   async delete(id) {
@@ -63,7 +67,7 @@ class Services {
     if (deleted) {
       return { id };
     }
-    throw createError(404, "Servicio no encontrado");
+    throw new Error("Servicio no encontrado");
   }
 }
- export {Services}
+ export default Services;

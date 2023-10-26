@@ -6,7 +6,7 @@ const name = Joi.string();
 const duraction = Joi.string();
 const description = Joi.string();
 const price = Joi.number().integer();
-const categoryId = Joi.string();
+const typeVehicle = Joi.string();
 
 
 const getServiceSchema = Joi.object({
@@ -18,7 +18,7 @@ const createServiceShema = Joi.object({
     duraction: duraction.required(),
     description: description.required(),
     price: price.required(),
-    categoryId: categoryId.required()
+    typeVehicle: typeVehicle.required()
 })
 
 
@@ -28,7 +28,7 @@ const updateServiceShema = Joi.object({
     duraction: duraction,
     description: description,
     price: price,
-    categoryId: categoryId
+    typeVehicle: typeVehicle
 })
 
 

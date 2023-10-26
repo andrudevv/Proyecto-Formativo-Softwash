@@ -1,6 +1,5 @@
 import { Model, DataTypes } from "sequelize";
 
-import { CATEGORY_TABLE } from "./category.vehicle.model.js";
 import { USER_TABLE} from './user.model.js'
 const VEHICLE_TABLE = "vehicles";
 
@@ -15,7 +14,6 @@ const UserVehicleSchema = {
   plate: {
     allowNull: false,
     type: DataTypes.STRING,
-    unique: true,
   },
   model: {
     allowNull: false,
@@ -29,7 +27,6 @@ const UserVehicleSchema = {
     field: 'user_id',
     allowNull: true,
     type: DataTypes.INTEGER,
-    unique: true,
     references: {
       model: USER_TABLE,
       key: 'id'
@@ -37,16 +34,9 @@ const UserVehicleSchema = {
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL'
   },
-  categoryId: {
-    field: 'category_id',
-    allowNull: true,
-    type: DataTypes.INTEGER,
-    references: {
-      model: CATEGORY_TABLE,
-      key: 'id'
-    },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+  typeVehicle: {
+    allowNull: false,
+    type: DataTypes.STRING,
   }
   // createAt:{
   //     allowNull: false,
@@ -58,14 +48,14 @@ const UserVehicleSchema = {
 
 class Vehicle extends Model {
   static associate(models) {
-    this.belongsTo(models.CategoryVehicle, { foreignKey: "categoryId",as: 'CategoryVehicle' });
     this.belongsTo(models.User, { foreignKey:"userId",as: 'User' });
-    // this.(models.Appointment, {
-    //   through: models.Appointment, // Tabla puente
-    //   foreignKey: 'vehicleId', // Clave foránea en UserRole que apunta a Role
-    //   otherKey: 'serviceId', // Clave foránea en UserRole que apunta a User
-    //   as: 'Vehicle',
-    // });
+    this.belongsToMany(models.Service, {
+      as: 'Service',
+      through: models.Appointment, // Tabla puente
+      foreignKey: 'vehicleId', // Clave foránea en UserRole que apunta a Role
+      otherKey: 'serviceId', // Clave foránea en UserRole que apunta a User
+      
+    });
   }
   static config(sequelize) {
     return {
