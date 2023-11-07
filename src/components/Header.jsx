@@ -13,9 +13,9 @@ const Navbar = () => {
 
   return (
 
-    <header className="bg-gradient-to-r from-blue-500 via-blue-700 to-blue-700 p-4 flex justify-between items-center fixed w-full top-0 z-10">
+    <header className="bg-gradient-to-r from-blue-500 via-blue-700 to-blue-700 p-1 flex justify-between items-center fixed w-full top-0 z-10">
       <div className="flex items-center">
-        <img className="text-white rounded-full w-12" src={img} alt="logo" />
+        <img className="text-white rounded-lg w-20 bg-cover" src={img} alt="logo" />
         <div className="ml-4 md:ml-6">
           <div className="text-white font-bold text-xl">SoftWash</div>
         </div>

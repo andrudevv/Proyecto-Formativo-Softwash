@@ -107,6 +107,7 @@ userRouter.get("/getDepartments", async (req, res, next) => {
   try {
     const rta = await department.find();
     // const rta = await DepartmentService.findOne(body.departmentId);
+    console.log(rta);
     res.status(201).json(rta);
   } catch (error) {
     console.error(error);

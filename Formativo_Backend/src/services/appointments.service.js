@@ -1,6 +1,5 @@
 import { Sequelize } from "sequelize";
-import { Appointment, Service , Laundry} from "../db/models/index.js";
-
+import { Appointment, Service, Laundry } from "../db/models/index.js";
 class AppointmentService {
   constructor() {}
 
@@ -47,39 +46,70 @@ class AppointmentService {
   //   }
 
   async saveAppointment(dt) {
-    const searchAbility = await Appointment.findOne({
-      attributes: [
-        "time",
-        [Sequelize.fn("COUNT", Sequelize.col("time")), "count"],
-      ],
-      where: {
-        time: dt.time, // Fecha específica
-      },
-      group: ["time"],
-      having: Sequelize.literal("count <= 1"),
-    });
-    if (searchAbility) {
-      console.log("hay disponibilidad");
-    } else {
-      console.log("no hay disponibilidad");
+    try {
+
+      const existingAppointment = await Appointment.findOne({
+        where: {
+          vehicleId:dt.vehicleId,
+          serviceId:dt.serviceId,
+        },
+      });
+      if (existingAppointment && existingAppointment.state === 'pendiente') {
+        console.log('No puedes agendar esta cita porque ya hay una cita pendiente para este vehículo y servicio.');
+        throw new Error('No puedes agendar esta cita porque ya hay una cita pendiente para este vehículo y servicio.');
+      }
+      const searchAbility = await Appointment.findOne({
+        attributes: [
+          "time",
+          [Sequelize.fn("COUNT", Sequelize.col("time")), "cantidad"],
+        ],
+        where: {
+          time: dt.date, // Fecha específica
+        },
+        group: ["time"],
+      });
+      if(!searchAbility){
+        const date = await Appointment.create(dt);
+        console.log("Cita programada con éxito");
+        return date;
+      }else if(searchAbility && searchAbility.dataValues.cantidad >= 2){
+        console.log("No hay disponibilidad para esta hora");
+        throw new Error("No hay disponibilidad para esta hora, vuelve a buscar disponibilidad");
+      }
+     
+    } catch (error) {
+      throw new Error(error.message);
     }
-    const date = await Appointment.create(dt);
-    console.log(date);
-    return date;
   }
-  async findAppointments(id){
-    const findAppointment = await Appointment.findAll({where: {serviceId: id }});
+
+  async findAppointments(id) {
+    const findAppointment = await Appointment.findAll({
+      where: { serviceId: id },
+    });
     return findAppointment;
   }
 
-  async findApp(id){
-    const app=await Appointment.findAll({
+  async findApp(id) {
+    const app = await Appointment.findAll({
+      attributes: [
+        "id",
+        "createdAt",
+        "amount",
+        "date",
+        "time",
+        "state",
+        "observations",
+        "vehicleId",
+        "serviceId",
+      ],
       include: [
         {
           model: Service,
+          attributes: [],
           include: [
             {
               model: Laundry,
+              attributes: [],
               where: {
                 id: id, // Filtra por el ID del lavadero
               },
@@ -90,60 +120,52 @@ class AppointmentService {
     });
     return app;
   }
-  async findTime(hora){
+  async findTime(date, limitLaundry) {
     const searchAbility = await Appointment.findAll({
       attributes: [
         "time",
         [Sequelize.fn("COUNT", Sequelize.col("time")), "cantidad"],
       ],
       where: {
-        time: [hora], // Fecha específica
+        date: date,
       },
       group: ["time"],
-      // having: Sequelize.literal("count(time) <= 1"),
+      // having: Sequelize.literal('cantidad <= 2'),
+      having: Sequelize.literal(`cantidad <= ${limitLaundry}`), // Filtra para que la cantidad no sea mayor a 2
     });
-    const objTime = searchAbility[0];
-    if(objTime.dataValues.cantidad <= 2){
-      console.log('cantidad 2');
-    }else{
-      console.log('mas de 2');
+    if (Array.isArray(searchAbility)) {
+      if (searchAbility.length > 0) {
+        const resultados = searchAbility.map((cita) => ({
+          hora: cita.dataValues.time,
+          cantidad: cita.dataValues.cantidad,
+        }));
+        return resultados;
+      } else {
+        throw new Error("No hay citas para este dia");
+      }
+    } else {
+      // Puedes manejar otros tipos de errores si es necesario
+      throw new Error("Error al buscar citas.");
     }
-    const resultados = searchAbility.map(cita => ({
-      hora: cita.dataValues.time,
-      cantidad: cita.dataValues.cantidad,
-    }));
-    console.log(resultados);
   }
-  async findAbility(dt,hora) {
-    // const searchAbility = await Appointment.findAll({
-    //   attributes: [
-    //     "time",
-    //     [Sequelize.fn("COUNT", Sequelize.col("time")), "cantidad"],
-    //   ],
-    //   where: {
-    //     time: [hora], // Fecha específica
-    //   },
-    //   group: ["time"],
-    //   // having: Sequelize.literal("count(time) <= 1"),
-    // });
-    // const objTime = searchAbility[0];
-    // if(objTime.dataValues.cantidad <= 2){
-    //   console.log('cantidad 2');
-    // }else{
-    //   console.log('mas de 2');
-    // }
-    // const resultados = searchAbility.map(cita => ({
-    //   hora: cita.dataValues.time,
-    //   cantidad: cita.dataValues.cantidad,
-    // }));
-    // console.log(resultados);
+  async findAbility(laundryid, dt) {
+    const capacity = await Laundry.findByPk(laundryid);
+    if (!capacity) {
+      throw new Error("lavadero no encontrado");
+    }
 
-    const findhour= await this.findTime(hora)
-    console.log(findhour);
-    const find = await Appointment.findAll({ where: { date: dt } });
-    if (!find) return console.log("no hay citas asignadas");
-    return { find };
+    const findhour = await this.findTime(dt, capacity.ability);
+    if (findhour.length <= 0) {
+      throw new Error("No hay horarios disponibles para este dia");
+    }
+    return findhour;
+
+    // console.log("findhour",findhour);
+    // const find = await Appointment.findAll({ where: { date: dt} });
+    // if (!find) return console.log("no hay citas asignadas");
+    // return { find };
   }
+
   async update(id, changes) {
     const laundry = await this.findOne(id);
     const rta = await laundry.update(changes);

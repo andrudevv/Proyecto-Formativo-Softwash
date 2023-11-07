@@ -10,6 +10,7 @@ import {
 } from "../schemas/vehicle.schema.js";
 import validatorHandler from "../middlewares/validator.handler.js";
 import { authRequired } from "../middlewares/validateToken.js";
+import { validatePlateCar, validatePlateMotorcycle } from "../middlewares/validatePlate.js";
 
 //
 const vehicleService = new VehicleService();
@@ -22,6 +23,25 @@ vehicleRouter.post(
   async (req, res) => {
     try {
       const body = req.body;
+      if(body.typeVehicle === "moto"){
+      const plate = await validatePlateMotorcycle(body.plate);
+      if(!plate)return res
+        .status(404)
+        .json({
+          message:
+            "error en la placa por favor ingrese una placa valida",
+        }); 
+      return plate;
+      }else if(body.typeVehicle === "carro"){
+        const plate = await validatePlateCar(body.plate);
+        if(!plate)return res
+        .status(404)
+        .json({
+          message:
+            "error en la placa por favor ingrese una placa valida",
+        }); 
+        return plate;
+      }
       const rta = await vehicleService.create(body);
       res.status(201).json({ message: "Registro de vehiculo exitoso ", rta });
     } catch (error) {

@@ -3,6 +3,7 @@ import express from "express";
 
 //
 import Services  from "../services/services.service.js";
+import LaundryService from "../services/laundry.service.js";
 // import {
 //   createVehicleShema,
 //   updateVehicleShema,
@@ -12,6 +13,8 @@ import Services  from "../services/services.service.js";
 // import { authRequired } from "../middlewares/validateToken.js";
 
 //
+
+const Laundry = new LaundryService();
 const Service = new Services();
 const serviceRouter = express.Router();
 
@@ -23,6 +26,11 @@ serviceRouter.post(
   async (req, res) => {
     try {
       const body = req.body;
+      const findLaundry = Laundry.findOne(body.laundryId);
+      if (!findLaundry){
+        return res.status(401).json({message: "no se encontro un lavadero"});
+      }
+  
       const rta = await Service.createService(body);
       res.status(201).json({ message: "Registro de servicio exitoso ", rta });
     } catch (error) {

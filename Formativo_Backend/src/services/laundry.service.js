@@ -15,12 +15,12 @@ class LaundryService {
     return where;
   }
   async findOne(id) {
-    const Laundry = await Laundry.findOne(id);
+    const findLaundry = await Laundry.findOne(id);
 
-    if (!Laundry) {
-      throw new Error("correo no encontrado");
+    if (!findLaundry) {
+      throw new Error("lavadero no encontrado");
     }
-    return Laundry;
+    return findLaundry;
   }
 
   async login(rutLaundry, email, password) {

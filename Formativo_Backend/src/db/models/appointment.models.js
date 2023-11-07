@@ -32,7 +32,8 @@ const AppointmentSchema =  {
   },
   state: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    defaultValue: "pendiente",
   },
   observations: {
     allowNull: false,
