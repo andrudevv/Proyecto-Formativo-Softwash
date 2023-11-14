@@ -1,4 +1,5 @@
-import Joi from "joi";
+const Joi = require('joi');
+
 // const customMessages = {
 //   "string.empty": "Este campo no puede estar vacío",
 //   "string.email": "Debes ingresar una dirección de correo electrónico válida",
@@ -13,7 +14,6 @@ const email = Joi.string().email();
 const password = Joi.string().min(6);
 const token = Joi.string();
 const municipalityId = Joi.number().integer();
-const departmentId = Joi.number().integer();
 const role = Joi.string();
 
 const createuserShema = Joi.object({
@@ -24,14 +24,20 @@ const createuserShema = Joi.object({
   email: email.required(),
   password: password.required(),
   token: token,
-  departmentId: departmentId.required(),
   municipalityId: municipalityId.required(),
   role: role,
 })
 
 const updateUserShema = Joi.object({
-  email: email,
+  documentUser: documentUser,
+  name: name,
+  lastName: lastName,
+  phone: phone,
+    email: email,
+  municipalityId: municipalityId,
+  
 });
+
 
 const getUserShema = Joi.object({
   email: email.required(),
@@ -41,4 +47,4 @@ const loginShema = Joi.object({
   email: email.required(),
   password: password.required(),
 });
-export { createuserShema, updateUserShema, getUserShema, loginShema };
+module.exports ={ createuserShema, updateUserShema, getUserShema, loginShema };

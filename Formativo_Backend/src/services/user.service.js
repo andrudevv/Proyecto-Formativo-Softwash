@@ -1,9 +1,15 @@
-import bcrypt from "bcryptjs";
 
-import { User } from "../db/models/index.js";
-import { createAccessToken } from "../lib/jwt.js";
-import { sendEmailForgot } from "../utils/resetPassword.js";
-import { verifyToken } from "../lib/jwt.js";
+const bcrypt = require('bcryptjs');
+const {User} = require('../db/models/index.js');
+const {createAccessToken} = require('../lib/jwt.js');
+const sendEmailForgot = require('../utils/userResetPassword.js');
+const {verifyToken} = require('../lib/jwt.js');
+
+const DepartmentService = require('../services/department.service.js')
+const MunicipalityService = require('../services/municipality.service.js')
+
+const municipality = new MunicipalityService();
+
 class UserService {
   constructor() {}
   //Ruta registro para el usuario
@@ -21,11 +27,6 @@ class UserService {
     return newUser;
   }
 
-  async find() {
-    const rta = await User.findAll();
-    return rta;
-  }
-
   async findByEmail(email) {
     const userFound = await User.findOne({ where: { email: email } });
     if (!userFound) {
@@ -36,7 +37,15 @@ class UserService {
 
   // servicio de inicio de sesion
   async login(email, password) {
-    const user = await User.findOne({ where: { email: email } });
+    const user = await User.findOne({
+      attributes: [
+        "id",
+        "documentUser",
+        "name",
+        "email",
+        'password'
+      ],
+       where: { email: email } });
     // en caso de querer mostrar el error en especifico de cada campo se habilitan estos condicionales, la siguiente que esta habilitada es para mayor seguridad sin confirmar el campo erroneo , exigiendo al usuario su atencion en los datos ingresados
     // if (!user) {
     //   throw new Error("El correo electrónico no existe");
@@ -48,10 +57,28 @@ class UserService {
     if (!user || !isPasswordValid) {
       throw new Error("Usuario o contraseña incorrectos");
     }
+    delete user.dataValues.password;
     return user;
   }
 
 
+  async findProfile(id){
+    
+    const findUser = await User.findOne({
+      attributes:{exclude:['password','membership','id','recoveryToken']},
+      where:{id:id}});
+    if (!findUser) {
+      throw new Error("usuario no encontrado");
+    }
+    const findC= await municipality.findName(findUser.municipalityId);
+    if (!findC) {
+      throw new Error("municipio no encontrado");
+    }
+    findUser.municipalityId = findC;
+    
+    return findUser
+    
+  }
 
   async sendEmailForgot(email) {
     const user = await User.findOne({ where: { email: email } });
@@ -68,10 +95,16 @@ class UserService {
       { recoveryToken: token }, 
       { where: { id: user.id } } 
       );
-    if(updateRecovery[0] === 1) return sendEmailForgot(email, token);
+    if(updateRecovery[0] === 1){
+      const sendEmail = sendEmailForgot(email, token);
+      if(!sendEmail){
+        throw new Error('Error al enviar el correo de recuperacion');
+      }
+
+    }
+    return { message: `Se ha enviado un correo de recuperación al correo: ${email}` }
   }
 
- 
 
   async changePassword(token, newPassword){
     try {
@@ -103,14 +136,31 @@ class UserService {
     }
     return user;
   }
-  async update(id, changes) {
-    const user = await user.findOne(id);
+  async updateUser(id, changes) {
+    const user = await User.findOne({where:{id: id}});
     if (!user) {
       throw new Error("El usuario no existe");
     }
-    const rta = await user.update(changes);
-    return rta;
+    if(user.dataValues.email !== changes.email){
+      const existingEmail = User.findOne({
+        where:{email:changes.email}
+      })
+
+      if(existingEmail){
+        throw new Error('Correo electronico en uso');
+      }
+    }else{
+      delete changes.email;
+    }
+    const [Update] = await User.update(changes,{
+      where: {id :id}
+    });
+    if (Update === 0) {
+      throw new Error("no hay datos para actualizar");
+    } 
+    return {message: "Actualizacion exitosa", update:true};
   }
+
   async delete(id) {
     const user = await this.findOne(id);
 
@@ -119,4 +169,4 @@ class UserService {
   }
 }
 
-export default UserService;
+module.exports =UserService;

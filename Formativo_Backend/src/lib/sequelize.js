@@ -1,8 +1,9 @@
-import {Sequelize} from 'sequelize';
-import dotenv from "dotenv";
-dotenv.config();
-// const {config} = require('../config/config');
-import {setUpModels } from '../db/models/index.js';
+const {Sequelize} = require('sequelize');
+require('dotenv').config();
+
+// dotenv.config();
+
+const {setUpModels } = require('../db/models/index.js');
 const nameDB = process.env.DB_NAME;
 const userDb = process.env.DB_USER;
 const passwordDb = process.env.DB_PASSWORD;
@@ -22,7 +23,7 @@ async function conexionDB() {
   try {
     await setUpModels(sequelize); // Configurar los modelos utilizando la función setUpModels
 
-    // await sequelize.sync({ force: true }); // Sincronizar los modelos con la base de datos
+    // await sequelize.sync(); // Sincronizar los modelos con la base de datos
 
     console.log('Modelo sincronizado correctamente con la base de datos');
   } catch (error) {
@@ -31,4 +32,4 @@ async function conexionDB() {
 }
 // const sequelize = new Sequelize(config.dbUrl, options);
 
-export { sequelize, conexionDB } ;
+module.exports= { sequelize, conexionDB } ;

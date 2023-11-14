@@ -13,4 +13,4 @@ function validatorHandler(schema, property) {
 }
 
   
-export default validatorHandler ;
+module.exports =  {validatorHandler} ;

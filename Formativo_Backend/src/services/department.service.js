@@ -1,4 +1,5 @@
-import { Department } from "../db/models/index.js";
+
+const {Department} = require('../db/models/index.js');
 
 
 class DepartmentService {
@@ -17,27 +18,17 @@ class DepartmentService {
       }
       return dep;
     }
-  
-    async create(data) {
-      
-      const newDep = await Department.create(data);
-      
-      return newDep;
+    async findName(id) {
+      const dep = await Department.findOne({where: { id:id}})
+      if (!dep) {
+        throw new Error('departamento no encontrado');
+      }
+      return dep;
     }
   
-    async update(id, changes) {
-      const Dep = await this.findOne(id);
-      const rta = await Dep.update(changes);
-      return rta;
-    }
-  
-    async delete(id) {
-      const Dep = await this.findOne(id);
-      await Dep.destroy();
-      return { rta: true };
-    }
+    
   
   }
   
-export {DepartmentService};
+  module.exports = DepartmentService;
   

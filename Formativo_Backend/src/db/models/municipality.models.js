@@ -1,7 +1,6 @@
-import { Model, DataTypes } from "sequelize";
+const {Model, DataTypes} = require('sequelize');
 
-
-import {DEPARTMENT_TABLE} from './department.models.js';
+const {DEPARTMENT_TABLE} = require('./department.models.js');
 
 
 const MUNICIPALITY_TABLE = 'municipalities';
@@ -35,6 +34,8 @@ class Municipality extends Model {
 
   static associate(models) {
     this.belongsTo(models.Department, { foreignKey: 'departmentId', as: 'Department' });
+    this.hasMany(models.laundry, { foreignKey: 'municipalityId' });
+    this.hasMany(models.User, { foreignKey: 'municipalityId' });
     // this.hasMany(models.laundry, {
     //   as: "municipalityId",
     //   foreignKey: "laundryId",
@@ -51,4 +52,4 @@ class Municipality extends Model {
   }
 }
 
-export { Municipality, MunicipalitySchema, MUNICIPALITY_TABLE };
+module.exports ={ Municipality, MunicipalitySchema, MUNICIPALITY_TABLE };

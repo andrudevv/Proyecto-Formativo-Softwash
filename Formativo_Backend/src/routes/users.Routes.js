@@ -1,37 +1,43 @@
-import express from "express";
-import jwt from "jsonwebtoken";
+const express = require("express");
+const jwt = require("jsonwebtoken");
+const { config } = require("../config/config.js");
 //
-import UserService from "../services/user.service.js";
-import LaundryService from "../services/laundry.service.js";
-import { authRequired } from "../middlewares/validateToken.js";
-import {
+const UserService = require("../services/user.service.js");
+const LaundryService = require("../services/laundry.service.js");
+const authRequired = require("../middlewares/validateToken.js");
+const {
   updateUserShema,
   createuserShema,
   getUserShema,
   loginShema,
-} from "../schemas/user.schema.js";
-import validatorHandler from "../middlewares/validator.handler.js";
-import { createAccessToken } from "../lib/jwt.js";
-import { config } from "../config/config.js";
-import { getLaundrysSchema } from "../schemas/laundry.schema.js";
-import { DepartmentService } from "../services/department.service.js";
-import { MunicipalityService } from "../services/municipality.service.js";
-import { register} from "../utils/emailRegister.js"
+} = require("../schemas/user.schema.js");
+const { validatorHandler } = require("../middlewares/validator.handler.js");
+const { checkUser } = require("../middlewares/auth.handler.js");
+const { createAccessToken } = require("../lib/jwt.js");
+const { getLaundrysSchema } = require("../schemas/laundry.schema.js");
+const DepartmentService = require("../services/department.service.js");
+const MunicipalityService = require("../services/municipality.service.js");
+const { register } = require("../utils/userEmailRegister.js");
+const VehicleService = require("../services/vehicle.service.js");
 //
 const userRouter = express.Router();
+const Vehicle = new VehicleService();
 const service = new UserService();
 const Laundry = new LaundryService();
 const department = new DepartmentService();
 const municipality = new MunicipalityService();
+
+// ruta que toma el correo para enviar la recuperacion de la contraseña
 userRouter.post("/forgot-password", async (req, res, next) => {
   try {
     const { email } = req.body;
     const send = await service.sendEmailForgot(email);
-    if(send) return res.status(201).json({message:'Se ha enviado un correo de recuperación'});
+    res.status(201).json(send);
   } catch (error) {
     next(error);
   }
 });
+// ruta para iniciar sesion
 userRouter.post(
   "/login",
   validatorHandler(loginShema, "body"),
@@ -40,10 +46,9 @@ userRouter.post(
       const { email, password } = req.body;
       const findUser = await service.login(email, password);
       const token = await createAccessToken({
-        id: findUser._id,
+        id: findUser.id,
         document: findUser.documentUser,
         username: findUser.name,
-        role: findUser.role,
       });
       res.cookie("token", token, {
         // httpOnly: process.env.NODE_ENV !== "development",
@@ -58,7 +63,8 @@ userRouter.post(
     }
   }
 );
-userRouter.post("/logout",  authRequired,(req, res) => {
+//ruta para cerrar sesion
+userRouter.post("/logout", authRequired, (req, res) => {
   // Para cerrar sesión, simplemente borramos la cookie de token
   res.clearCookie("token", {
     secure: true, // Asegúrate de que coincida con la configuración utilizada al establecer la cookie
@@ -68,6 +74,7 @@ userRouter.post("/logout",  authRequired,(req, res) => {
   return res.status(200).json({ message: "hasta pronto" });
 });
 
+// cambiar contraseña con un token que se envio al correo para restablecer
 userRouter.post("/change-password/:token", async (req, res, next) => {
   try {
     const { token } = req.params;
@@ -79,8 +86,12 @@ userRouter.post("/change-password/:token", async (req, res, next) => {
     next(error);
   }
 });
+
+// buscar todos los lavaderos segun el usuario realize el filtro
 userRouter.get(
   "/getlaundrys",
+  authRequired,
+  // checkShared,
   validatorHandler(getLaundrysSchema, "body"),
   async (req, res, next) => {
     try {
@@ -103,6 +114,103 @@ userRouter.get(
     };
   }
 );
+
+// falta incluir traer vehiculos y citas
+userRouter.get(
+  "/profile-user",
+  authRequired,
+  checkUser,
+  // checkShared,
+  // checkLaundry,
+  // validatorHandler(createLaundrySchema, "body"),
+  async (req, res, next) => {
+    try {
+      const user = req.user;
+      const userFound = await service.findProfile(user.id);
+      if (!userFound) return res.sendStatus(401);
+      return res.status(200).json({ userFound });
+    } catch (error) {
+      next(error);
+      // return res.status(400).json([error.message]);
+    }
+    (err, res) => {
+      // Este middleware manejará los errores generados por el validador
+      res.status(400).json({ error: err.message });
+    };
+  }
+);
+
+//traer vehiculos de el usuario autenticado
+userRouter.get(
+  "/profile-user-vehicle",
+  authRequired,
+  checkUser,
+  // checkShared,
+  // checkLaundry,
+  // validatorHandler(createLaundrySchema, "body"),
+  async (req, res, next) => {
+    try {
+      const user = req.user;
+      const userFound = await Vehicle.findByUser(user.id);
+      return res.status(200).json({ message: "vehiculos", userFound });
+    } catch (error) {
+      next(error);
+      // return res.status(400).json([error.message]);
+    }
+    (err, res) => {
+      // Este middleware manejará los errores generados por el validador
+      res.status(400).json({ error: err.message });
+    };
+  }
+);
+
+//actualizar datos sin incluir la contraseña
+userRouter.patch(
+  "/",
+  authRequired,
+  // checkLaundry,
+  validatorHandler(updateUserShema, "body"),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const user = req.user;
+      const update = await service.updateUser(user.id, body);
+      res.status(201).json(update);
+    } catch (error) {
+      // res.json([error.message]);
+      next(error);
+      // return res.status(400).json([error.message]);
+    }
+    (err, res) => {
+      // Este middleware manejará los errores generados por el validador
+      res.status(400).json({ error: err.message });
+    };
+  }
+);
+
+// ver el propio perfil (pendiente)
+userRouter.get(
+  "/view-profile/:id",
+  // authRequired,
+  // checkLaundry,
+  // validatorHandler(createLaundrySchema, "body"),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const viewLaundry = await Laundry.findLaundry(id);
+      return res.status(200).json(viewLaundry);
+    } catch (error) {
+      next(error);
+      // return res.status(400).json([error.message]);
+    }
+    (err, res) => {
+      // Este middleware manejará los errores generados por el validador
+      res.status(400).json({ error: err.message });
+    };
+  }
+);
+
+//traer departamentos
 userRouter.get("/getDepartments", async (req, res, next) => {
   try {
     const rta = await department.find();
@@ -121,6 +229,7 @@ userRouter.get("/getDepartments", async (req, res, next) => {
   };
 });
 
+//registro de usuario
 userRouter.post(
   "/register",
   validatorHandler(createuserShema, "body"),
@@ -128,15 +237,8 @@ userRouter.post(
     try {
       const body = req.body;
       const newUser = await service.registerUser(body);
-      if (newUser){
-
-        await register(newUser.email, newUser.name)
-
-        return res
-          .status(201)
-          .json({ message: `Registro exitoso ${newUser.name}` });
-      }
-        
+      await register(newUser.email, newUser.name);
+      res.status(201).json({ message: `Registro exitoso ${newUser.name}` });
     } catch (error) {
       next(error);
       return res.status(500).json({ message: error.message });
@@ -148,7 +250,7 @@ userRouter.post(
   }
 );
 
-// Ruta para salir/ cerrar sesion
+// ruta no necesaria ya que existe el middleware para verificar
 userRouter.get("/verify", async (req, res) => {
   const { token } = req.cookies;
   if (!token) return res.sendStatus(401);
@@ -168,16 +270,8 @@ userRouter.get("/verify", async (req, res) => {
   });
 });
 
-// userRouter.get("/task", authRequired, async (req, res) => {
-//   res.send("tareas hechas");
-//   // try {
-//   //   const users = await service.find();
-//   //   res.json(users);
-//   // } catch (error) {
-//   //   next(error);
-//   // }
-// });
-userRouter.get("/getDepartments/:id", async (req, res, next) => {
+// ruta para traer los municipios segun el departamento(formularios o registro)
+userRouter.get("/get-municipality/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const rta = await municipality.findOne(id);
@@ -194,24 +288,12 @@ userRouter.get("/getDepartments/:id", async (req, res, next) => {
     res.status(400).json({ error: err.message });
   };
 });
-userRouter.patch(
-  "/:id",
-  validatorHandler(getUserShema, "params"),
-  validatorHandler(updateUserShema, "body"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const body = req.body;
-      const category = await service.update(id, body);
-      res.json(category);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 
+// posible ruta para eliminar pero falta organizarla(pendiente)
 userRouter.delete(
   "/:id",
+  authRequired,
+  // checkRoles("admin"),
   validatorHandler(getUserShema, "params"),
   async (req, res, next) => {
     try {
@@ -223,17 +305,19 @@ userRouter.delete(
     }
   }
 );
+
+// (pendiente) organizar servicio para actualizar la contraseña por medio de token
 userRouter.get("/reset-password/:token", async (req, res, next) => {
   try {
     const { token } = req.params;
     const { newPassword } = req.body;
     const user = await service.reset(token);
 
-    if( user){
+    if (user) {
       try {
-      const updatePassword = await service.update(user.id, newPassword)
-        if(updatePassword){
-          console.log('actualizada la contraseña');
+        const updatePassword = await service.update(user.id, newPassword);
+        if (updatePassword) {
+          console.log("actualizada la contraseña");
         }
       } catch (error) {
         next(error);
@@ -251,4 +335,4 @@ userRouter.get("/reset-password/:token", async (req, res, next) => {
   };
 });
 
-export { userRouter };
+module.exports = userRouter;

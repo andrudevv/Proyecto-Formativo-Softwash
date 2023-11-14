@@ -1,6 +1,6 @@
-import { Model, DataTypes } from "sequelize";
-import {DEPARTMENT_TABLE} from './department.models.js'
-
+const {Model, DataTypes} = require('sequelize');
+const {DEPARTMENT_TABLE} = require('./department.models.js');
+const { MUNICIPALITY_TABLE} = require('./municipality.models.js')
 const USER_TABLE = "users";
 
 const UserSchema = {
@@ -45,12 +45,12 @@ const UserSchema = {
     defaultValue: 'user',
     type: DataTypes.STRING
   },
-  departmentId: {
-    field: 'department_id',
+  municipalityId: {
+    field: 'municipality_id',
     allowNull: true,
     type: DataTypes.INTEGER,
     references: {
-      model: DEPARTMENT_TABLE,
+      model: MUNICIPALITY_TABLE,
       key: 'id'
     },
     onUpdate: 'CASCADE',
@@ -70,7 +70,6 @@ class User extends Model {
       as: 'vehicles',
       foreignKey: 'userId'
     });
-    this.belongsTo(models.Department, { foreignKey:"departmentId", as: 'Department' });
     this.belongsTo(models.Municipality, { foreignKey:"municipalityId", as: 'Municipality' });
   }
   static config(sequelize) {
@@ -82,6 +81,6 @@ class User extends Model {
     };
   }
 }
-export { UserSchema,USER_TABLE, User };
+module.exports = { UserSchema,USER_TABLE, User };
 
 // export default {USER_TABLE, UserShema,User}

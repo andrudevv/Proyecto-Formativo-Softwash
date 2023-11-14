@@ -1,4 +1,5 @@
-import { Type } from "../db/models/index.js";
+
+const {Type} = require('../db/models/index.js');
 
 
 class TypeEmployeeService {
@@ -32,4 +33,4 @@ class TypeEmployeeService {
   }
 }
 
-export { TypeEmployeeService };
+module.exports = TypeEmployeeService ;

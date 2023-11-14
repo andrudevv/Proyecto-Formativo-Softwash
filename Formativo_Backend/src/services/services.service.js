@@ -1,19 +1,94 @@
-import { Service } from "../db/models/index.js";
-
+const { Service, Laundry } = require("../db/models/index.js");
 
 class Services {
   constructor() {}
 
-  async createService(data) {
-    const newService = await Service.create(data);
-    return newService;
+  // async createService(data) {
+  //   const newService = await Service.create(data);
+  //   return newService;
+  // }
+
+  async findServices(id, query) {
+    const options = {
+      attributes: { exclude: ["createdAt"] },
+      where: { laundryId: id },
+    };
+    const { limit, offset } = query;
+    if (limit && offset) {
+      options.limit = parseInt(limit);
+      options.offset = parseInt(limit * offset);
+    }
+
+    const { typeVehicles } = query;
+    if (typeVehicles) {
+      options.where.typeVehicles = typeVehicles;
+    }
+
+    const serviceFound = await Service.findAll(options);
+    if (serviceFound.length === 0) {
+      serviceFound[0] = "No se encontraron coincidencias";
+    }
+    return { services: serviceFound };
   }
 
-  async findServices(id){
-    const serviceFound = await Service.findAll({where: {laundryId: id}});
-    return serviceFound;
+  //servicio para el lavadero crear sericios
+  async findAndCreate(id, body) {
+    const findLaundry = await Laundry.findOne({ where: { id: id } });
+    if (!findLaundry) {
+      throw new Error("lavadero no encontrado ");
+    }
+    const newService = await Service.create({
+      ...body,
+      laundryId: id,
+    });
+    if (!newService) {
+      throw new Error("error al crear el servicio");
+    }
+    return { message: "Servicio creado con exito", create: true };
   }
-  
+
+  async findServicesLaundry(id) {
+    const findServices = await Service.findAll({
+      where: { laundry_id: id },
+    });
+    if (findServices.length === 0) {
+      throw new Error("No tienes servicios");
+    }
+    return findServices;
+  }
+
+  async updateService(idService, idClient, changes) {
+    const findService = await Service.findOne({ where: { id: idService } });
+    if (!findService) {
+      throw new Error("no se encontro el servicio");
+    }
+    const [updateService] = await Service.update(changes, {
+      where: { id: idService, laundryId: idClient },
+    });
+    if (updateService === 0) {
+      throw new Error("no hay datos para actualizar");
+    }
+
+    return { message: "Servicio actualizado ", update: true };
+  }
+
+  async deleteService(idService, idClient) {
+    const findService = await Service.findOne({
+      attributes: ["id"],
+      where: { id: idService, laundryId: idClient },
+    });
+    if (!findService) {
+      throw new Error("no se encontro el servicio");
+    }
+
+    const deleted = await Service.destroy({
+      where: { id: findService.dataValues.id },
+    });
+    if (deleted === 0) {
+      throw new Error("No se pudo eliminar el servicio");
+    }
+    return { message: "Servicio eliminado exitosamente ", deleted: true };
+  }
   // async find(query) {
   //   const options = {
   //     include: ["category"],
@@ -70,4 +145,4 @@ class Services {
     throw new Error("Servicio no encontrado");
   }
 }
- export default Services;
+module.exports = Services;

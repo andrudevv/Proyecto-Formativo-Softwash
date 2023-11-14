@@ -1,5 +1,5 @@
-import { config } from "./../config/config.js";
 
+require('dotenv').config();
 function checkApiKey(req, res, next) {
   const apiKey = req.headers["api"];
   if (apiKey === config.apikey) {
@@ -12,21 +12,38 @@ function checkApiKey(req, res, next) {
 function checkLaundry(req, res, next) {
   const user = req.user;
   if (user.membership === true) {
-    return next();
+    next();
   } else {
     next(new Error("no esta autorizado"));
   }
 }
 
-function checkRoles(...roles) {
-  return (req, res, next) => {
-    const user = req.user;
-    if (roles.includes(user.role) || user.membership === true ) {
-      next();
-    } else {
-      next(new Error("no esta autorizado"));
-    }
-  };
+//  function checkRoles(...roles) {
+//   return (req, res, next) => {
+//     const user = req.user;
+//     if (roles.includes(user.role) || user.membership === true ) {
+//       next();
+//     } else {
+//       next(new Error("no esta autorizado"));
+//     }
+//   };
+// }
+function checkUser(req, res, next) {
+  const user = req.user;
+  if (user.hasOwnProperty('document')) {
+    next();
+  } else {
+    next(new Error("no esta autorizado"));
+  }
 }
+function checkShared(req,res, next) {
+      const user = req.user;
+      if (user.hasOwnProperty("document") || user.membership === true ) {
+        next();
+      } else {
+        next(new Error("no esta autorizado"));
+      }
+    
+  }
 
-export { checkApiKey, checkLaundry, checkRoles };
+module.exports = {checkApiKey,checkLaundry,checkShared,checkUser };

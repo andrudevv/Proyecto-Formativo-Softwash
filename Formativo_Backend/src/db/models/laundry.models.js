@@ -1,5 +1,6 @@
-import { Model, DataTypes } from "sequelize";
-import {DEPARTMENT_TABLE} from './department.models.js'
+const {Model, DataTypes} = require('sequelize');
+const {DEPARTMENT_TABLE} = require('./department.models.js');
+const { MUNICIPALITY_TABLE } = require('./municipality.models.js');
 // import { MUNICIPALITY_TABLE } from "./municipality.models.js";
 const LAUNDRY_TABLE = "laundry";
 
@@ -19,7 +20,7 @@ const LaundrySchema = {
     type: DataTypes.STRING,
   },
   address: {
-    allowNull: true,
+    allowNull: false,
     type: DataTypes.STRING,
   },
   phone: {
@@ -40,24 +41,14 @@ const LaundrySchema = {
     allowNull: true,
     type: DataTypes.STRING
   },membership: {
-    allowNull: true,
+    allowNull: false,
     type: DataTypes.BOOLEAN,
     defaultValue: false 
   },
   ability: {
     allowNull: false,
     type: DataTypes.INTEGER,
-  },
-  departmentId: {
-    field: 'department_id',
-    allowNull: true,
-    type: DataTypes.INTEGER,
-    references: {
-      model: DEPARTMENT_TABLE,
-      key: 'id'
-    },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    defaultValue: 1
   },
   aperture: {
     allowNull: false,
@@ -67,17 +58,17 @@ const LaundrySchema = {
     allowNull: false,
     type: DataTypes.STRING,
   },
-  // ,municipalityId: {
-  //   field: 'municipality_id',
-  //   allowNull: true,
-  //   type: DataTypes.INTEGER,
-  //   references: {
-  //     model: MUNICIPALITY_TABLE,
-  //     key: 'id'
-  //   },
-  //   onUpdate: 'CASCADE',
-  //   onDelete: 'SET NULL'
-  // }
+  municipalityId: {
+    field: 'municipality_id',
+    allowNull: true,
+    type: DataTypes.INTEGER,
+    references: {
+      model: MUNICIPALITY_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
+  }
   // createAt:{
   //     allowNull: false,
   //     type: DataTypes.DATE,
@@ -88,9 +79,8 @@ const LaundrySchema = {
 
 class Laundry extends Model {
   static associate(models) {
-    this.belongsTo(models.Department, { foreignKey:"departmentId", as: 'Department' });
-    this.belongsTo(models.Municipality, { foreignKey:"municipalityId", as: 'Municipality' });
-
+    this.belongsTo(models.Municipality, { foreignKey:"municipalityId" });
+    this.hasMany(models.Employee,{foreignKey:"laundryId"})
     this.hasMany(models.Service,{foreignKey:"laundryId"})
   }
   static config(sequelize) {
@@ -102,7 +92,7 @@ class Laundry extends Model {
     };
   }
 }
-export { LaundrySchema, LAUNDRY_TABLE,Laundry };
+module.exports = { LaundrySchema, LAUNDRY_TABLE, Laundry };
 
 // export default {USER_TABLE, UserShema,User}
 

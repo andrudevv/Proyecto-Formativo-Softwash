@@ -1,48 +1,36 @@
-import express from "express";
-// import passport from 'passport';
-
-//
-import { VehicleService } from "../services/vehicle.service.js";
-import {
+const express = require("express");
+const VehicleService = require("../services/vehicle.service.js");
+const {
   createVehicleShema,
   updateVehicleShema,
-  getVehivleSchema,
-} from "../schemas/vehicle.schema.js";
-import validatorHandler from "../middlewares/validator.handler.js";
-import { authRequired } from "../middlewares/validateToken.js";
-import { validatePlateCar, validatePlateMotorcycle } from "../middlewares/validatePlate.js";
-
-//
-const vehicleService = new VehicleService();
+  updateParams,
+  deleteParams,
+} = require("../schemas/vehicle.schema.js");
+const { validatorHandler } = require("../middlewares/validator.handler.js");
+const authRequired = require("../middlewares/validateToken.js");
+const { validateType } = require("../middlewares/validatePlate.js");
+const { checkUser } = require("../middlewares/auth.handler.js");
+const vehicle = new VehicleService();
 const vehicleRouter = express.Router();
 
+//ruta para crear vehiculos segun el usuario que tenga sesion iniciada
 vehicleRouter.post(
   "/create-vehicle",
   authRequired,
+  checkUser,
   validatorHandler(createVehicleShema, "body"),
   async (req, res) => {
     try {
+      const user = req.user;
       const body = req.body;
-      if(body.typeVehicle === "moto"){
-      const plate = await validatePlateMotorcycle(body.plate);
-      if(!plate)return res
-        .status(404)
-        .json({
+      const rtaPlate = await validateType(body.typeVehicle, body.plate);
+      if (!rtaPlate)
+        return res.status(401).json({
           message:
-            "error en la placa por favor ingrese una placa valida",
-        }); 
-      return plate;
-      }else if(body.typeVehicle === "carro"){
-        const plate = await validatePlateCar(body.plate);
-        if(!plate)return res
-        .status(404)
-        .json({
-          message:
-            "error en la placa por favor ingrese una placa valida",
-        }); 
-        return plate;
-      }
-      const rta = await vehicleService.create(body);
+            "Error en el formato de placa, verifica que cumpla ABC-123 para carro o ABC-12A para moto",
+        });
+      body.plate = rtaPlate;
+      const rta = await vehicle.create(body, user.id);
       res.status(201).json({ message: "Registro de vehiculo exitoso ", rta });
     } catch (error) {
       console.error(error);
@@ -53,15 +41,32 @@ vehicleRouter.post(
     };
   }
 );
-
-vehicleRouter.get(
-  "/get-vehicle",
-  validatorHandler(getVehivleSchema, "body"),
+//ruta para traer los vehiculos segun tenga el usuario que tenga sesion iniciada
+vehicleRouter.get("/", authRequired, checkUser, async (req, res) => {
+  try {
+    const user = req.user.id;
+    const getVehicle = await vehicle.findVehicle(user);
+    res.status(201).json(getVehicle);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: error.message });
+  }
+  (err, res) => {
+    res.status(400).json({ error: err.message });
+  };
+});
+//ruta para eliminar el vehiculo que desee el usuario que tenga sesion iniciada
+vehicleRouter.delete(
+  "/:id",
+  authRequired,
+  checkUser,
+  validatorHandler(deleteParams, "params"),
   async (req, res) => {
     try {
-      const body = req.body;
-      const rta = await vehicleService.findByPlate(body.plate);
-      res.status(201).json({ message: "vehiculo ", rta });
+      const user = req.user.id;
+      const { id } = req.params;
+      const deleteVehicle = await vehicle.delete(user, id);
+      res.status(201).json(deleteVehicle);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: error.message });
@@ -71,15 +76,27 @@ vehicleRouter.get(
     };
   }
 );
+//ruta para actualizar un vehiculo que desee el usuario
 vehicleRouter.patch(
-  "/get-vehicle",
-  validatorHandler(getVehivleSchema, "params"),
+  "/:id",
+  authRequired,
+  checkUser,
+  validatorHandler(updateParams, "params"),
   validatorHandler(updateVehicleShema, "body"),
   async (req, res) => {
     try {
+      const { id } = req.params;
+      const user = req.user.id;
       const body = req.body;
-      const rta = await vehicleService.findByPlate(body.plate);
-      res.status(201).json({ message: "vehiculo ", rta });
+      const rtaPlate = await validateType(body.typeVehicle, body.plate);
+      if (!rtaPlate)
+        res.status(401).json({
+          message:
+            "Error en el formato de placa, verifica que cumpla ABC-123 para carro o ABC-12A para moto",
+        });
+      body.plate = rtaPlate;
+      const updateVehicle = await vehicle.findAndUpdate(body, id, user);
+      res.status(201).json(updateVehicle);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: error.message });
@@ -90,4 +107,4 @@ vehicleRouter.patch(
   }
 );
 
-export { vehicleRouter };
+module.exports = vehicleRouter;

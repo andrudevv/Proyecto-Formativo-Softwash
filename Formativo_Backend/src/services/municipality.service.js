@@ -1,4 +1,5 @@
-import { Municipality } from "../db/models/index.js";
+
+const {Municipality} = require('../db/models/index.js');
 
 
 class MunicipalityService {
@@ -14,6 +15,13 @@ class MunicipalityService {
   
     async findOne(department) {
       const dep = await Municipality.findAll({where: {departmentId : department}});
+      if (!dep) {
+        throw new Error('municipio no encontrado');
+      }
+      return dep;
+    }
+    async findName(id) {
+      const dep = await Municipality.findOne({where: { id: id}});
       if (!dep) {
         throw new Error('municipio no encontrado');
       }
@@ -43,5 +51,5 @@ class MunicipalityService {
   
   }
   
-export {MunicipalityService};
+  module.exports =MunicipalityService;
   

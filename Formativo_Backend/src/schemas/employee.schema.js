@@ -1,4 +1,5 @@
-import Joi from 'joi';
+
+const Joi = require('joi');
 
 
 const name = Joi.string();
@@ -25,4 +26,4 @@ const updateEmployeeShema = Joi.object({
 })
 
 
-export{createEmployeeShema, updateEmployeeShema}
+module.exports ={createEmployeeShema, updateEmployeeShema}

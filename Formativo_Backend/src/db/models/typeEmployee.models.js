@@ -1,6 +1,6 @@
 
 
-import { Model, DataTypes } from "sequelize";
+const {Model, DataTypes} = require('sequelize');
 
 const TYPE_TABLE = "type";
 
@@ -26,8 +26,7 @@ const typeSchema = {
 class Type extends Model {
   static associate(models) {
     this.hasMany(models.Employee, {
-        as: 'employees',
-        foreignKey: 'type'
+        foreignKey: 'typeEmployee'
       });
   }
   static config(sequelize) {
@@ -39,6 +38,6 @@ class Type extends Model {
     };
   }
 }
-export { typeSchema, TYPE_TABLE, Type};
+module.exports = { typeSchema, TYPE_TABLE, Type};
 
 // export default {USER_TABLE, UserShema,User}

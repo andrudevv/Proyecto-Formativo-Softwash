@@ -1,5 +1,6 @@
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
+
+const nodemailer = require('nodemailer');
+const dotenv = require('dotenv');
 dotenv.config();
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -9,10 +10,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// const generateRecoveryToken = () => {
-//   return crypto.randomBytes(32).toString("hex");
-// };
-export function sendEmailForgot(email, token) {
+function sendEmailForgot(email, token) {
   return new Promise((resolve, reject) => { 
   // Envía un correo con el token
   const mailOptions = {
@@ -60,7 +58,7 @@ export function sendEmailForgot(email, token) {
         </div>
         <div class="content">
           <p>
-            Haga clic en este <a class="link" href="http://localhost:4000/api/users/change-password/${token}">enlace</a> para restablecer su contraseña.
+            Haga clic en este <a class="link" href="http://localhost:4000/api/client/change-password/${token}">enlace</a> para restablecer su contraseña.
           </p>
         </div>
       </div>
@@ -80,3 +78,5 @@ export function sendEmailForgot(email, token) {
   });
 } );
 }
+
+module.exports = sendEmailForgot;

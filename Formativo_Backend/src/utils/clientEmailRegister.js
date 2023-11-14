@@ -1,5 +1,6 @@
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
+
+const nodemailer = require('nodemailer');
+const dotenv = require('dotenv');
 dotenv.config();
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -9,10 +10,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// const generateRecoveryToken = () => {
-//   return crypto.randomBytes(32).toString("hex");
-// };
-export function register(email, name) {
+
+function register(email, name) {
   return new Promise((resolve, reject) => { 
   // Envía un correo con el token
   const mailOptions = {
@@ -80,3 +79,5 @@ export function register(email, name) {
   });
 } );
 }
+
+module.exports = {register};

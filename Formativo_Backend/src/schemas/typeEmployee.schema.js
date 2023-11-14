@@ -1,4 +1,4 @@
-import Joi from 'joi';
+const Joi = require('joi');
 
 const id = Joi.number().integer();
 const type = Joi.string().min(1).max(15);
@@ -15,4 +15,4 @@ const getTypeSchema = Joi.object({
   id: id.required(),
 });
 
-export { createTypeSchema, updateTypeSchema, getTypeSchema }
+module.exports ={ createTypeSchema, updateTypeSchema, getTypeSchema }

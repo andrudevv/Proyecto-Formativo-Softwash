@@ -18,7 +18,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.4",
-    "react-icons": "^4.10.1",
+    "react-icons": "^4.11.0",
     "react-router-dom": "^6.15.0"
   },
   "devDependencies": {
@@ -34,5 +34,18 @@
     "postcss": "^8.4.28",
     "tailwindcss": "^3.3.3",
     "vite": "^4.4.5"
-  }
+  },
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "postcss.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrudevv/Proyecto_Softwash_Frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrudevv/Proyecto_Softwash_Frontend/issues"
+  },
+  "homepage": "https://github.com/andrudevv/Proyecto_Softwash_Frontend#readme"
 }

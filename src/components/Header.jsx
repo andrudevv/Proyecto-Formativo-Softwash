@@ -12,8 +12,8 @@ const Navbar = () => {
   };
 
   return (
-
-    <header className="bg-gradient-to-r from-blue-500 via-blue-700 to-blue-700 p-1 flex justify-between items-center fixed w-full top-0 z-10">
+<section className='fidex'>
+    <header className=" bg-gradient-to-r from-blue-500 via-blue-700 to-blue-700 p-1 flex justify-between items-center fixed w-full top-0 z-10">
       <div className="flex items-center">
         <img className="text-white rounded-lg w-20 bg-cover" src={img} alt="logo" />
         <div className="ml-4 md:ml-6">
@@ -30,7 +30,7 @@ const Navbar = () => {
             <FiMenu size={24} />
           </button>
           {menuOpen && (
-            <div className="absolute mt-2 w-full bg-custom-pie-pagina p-4 right-0">
+            <div className="absolute mt-2 w-full  p-4 right-0">
               <div className="flex flex-col space-y-2 items-center">
                 <button className="text-white">Inicio</button>
                 <button className="text-white">Registrarse</button>
@@ -40,6 +40,7 @@ const Navbar = () => {
         </div>
       </div>
     </header>
+    </section>
   );
 };
 

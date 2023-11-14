@@ -1,7 +1,7 @@
-import { Model, DataTypes , Sequelize} from "sequelize";
+const {Model, DataTypes, Sequelize} = require('sequelize');
 
+const {LAUNDRY_TABLE} = require('./laundry.models.js');
 
-import { LAUNDRY_TABLE } from "./laundry.models.js";
 
 const SERVICE_TABLE = 'services';
 
@@ -76,4 +76,4 @@ class Service extends Model {
   }
 }
 
-export { Service, ServiceSchema, SERVICE_TABLE };
+module.exports = { Service, ServiceSchema, SERVICE_TABLE };

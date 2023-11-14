@@ -1,26 +1,26 @@
-import { Model, DataTypes,Sequelize } from "sequelize";
+const { Model, DataTypes, Sequelize } = require("sequelize");
 
-import { VEHICLE_TABLE } from "./vehicle.models.js";
-import { SERVICE_TABLE} from './services.models.js'
+const { VEHICLE_TABLE } = require("./vehicle.models.js");
+const { SERVICE_TABLE } = require("./services.models.js");
 
-const APPOINTMENT_TABLE = 'appointments';
+const APPOINTMENT_TABLE = "appointments";
 
-const AppointmentSchema =  {
+const AppointmentSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: 'created_at',
+    field: "created_at",
     defaultValue: Sequelize.NOW,
   },
   amount: {
     allowNull: false,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   date: {
     allowNull: false,
@@ -37,48 +37,50 @@ const AppointmentSchema =  {
   },
   observations: {
     allowNull: false,
-    type: DataTypes.TEXT
+    type: DataTypes.TEXT,
   },
   vehicleId: {
-    field: 'vehicle_id',
+    field: "vehicle_id",
     allowNull: true,
     type: DataTypes.INTEGER,
     references: {
       model: VEHICLE_TABLE,
-      key: 'id'
+      key: "id",
     },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
   },
   serviceId: {
-    field: 'service_id',
+    field: "service_id",
     allowNull: true,
     type: DataTypes.INTEGER,
     references: {
       model: SERVICE_TABLE,
-      key: 'id'
+      key: "id",
     },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
-  }
-}
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
+  },
+};
 
 class Appointment extends Model {
-
   static associate(models) {
-    this.belongsTo(models.Service,{
-      foreignKey:'service_id',
-    })
+    this.belongsTo(models.Service, {
+      foreignKey: "serviceId",
+    });
+    this.belongsTo(models.Vehicle, {
+      foreignKey: "vehicleId",
+    });
   }
 
   static config(sequelize) {
     return {
       sequelize,
       tableName: APPOINTMENT_TABLE,
-      modelName: 'Appointment',
-      timestamps: false
-    }
+      modelName: "Appointment",
+      timestamps: false,
+    };
   }
 }
 
-export{ Appointment, AppointmentSchema, APPOINTMENT_TABLE };
+module.exports = { Appointment, AppointmentSchema, APPOINTMENT_TABLE };

@@ -1,5 +1,4 @@
-import { Model, DataTypes } from "sequelize";
-
+const {Model, DataTypes} = require('sequelize');
 const DEPARTMENT_TABLE = "Department";
 
 const DepartamentSchema = {
@@ -39,4 +38,4 @@ class Department extends Model {
   }
 }
 
-export { Department, DepartamentSchema, DEPARTMENT_TABLE };
+module.exports = { Department, DepartamentSchema, DEPARTMENT_TABLE };

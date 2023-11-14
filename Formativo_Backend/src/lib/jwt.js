@@ -1,7 +1,8 @@
-import { config } from "../config/config.js";
-import jwt from "jsonwebtoken";
 
-export function createAccessToken(payload) {
+const {config} = require('../config/config.js');
+const jwt = require('jsonwebtoken');
+
+function createAccessToken(payload) {
   return new Promise((resolve, reject) => {
     jwt.sign(payload, config.jwtSecret, { expiresIn: 60 * 60 }, (err, token) => {
       if (err) reject(err);
@@ -11,6 +12,7 @@ export function createAccessToken(payload) {
 }
 
 
-export function verifyToken(token) {
+function verifyToken(token) {
   return jwt.verify(token, config.jwtSecret);
 }
+module.exports ={createAccessToken, verifyToken }

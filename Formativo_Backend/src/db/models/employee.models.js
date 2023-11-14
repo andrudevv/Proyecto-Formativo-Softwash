@@ -1,8 +1,7 @@
-import { Model, DataTypes } from "sequelize";
-
-import { TYPE_TABLE } from './typeEmployee.models.js'
+const {Model, DataTypes} = require('sequelize');
 const EMPLOYEE_TABLE = "employees";
-
+const {LAUNDRY_TABLE} = require('./laundry.models.js')
+const {TYPE_TABLE} = require('./typeEmployee.models.js');
 const EmployeeSchema = {
   id: {
     allowNull: false,
@@ -22,9 +21,20 @@ const EmployeeSchema = {
     allowNull: true,
     type: DataTypes.INTEGER,
   },
+  laundryId:{
+    field: 'laundry_id',
+    allowNull: true,
+    type: DataTypes.INTEGER,
+    references: {
+      model: LAUNDRY_TABLE,
+      key: 'id'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
+  },
   typeEmployee: {
-    field: 'type',
-    allowNull: false,
+    field: 'type_employee',
+    allowNull: true,
     type: DataTypes.INTEGER,
     references: {
       model: TYPE_TABLE,
@@ -43,7 +53,8 @@ const EmployeeSchema = {
 
 class Employee extends Model {
   static associate(models) {
-    this.belongsTo(models.Employee, { as: 'Type' });
+    this.belongsTo(models.Type, { foreignKey: 'typeEmployee' });
+    this.belongsTo(models.laundry, { foreignKey: 'laundryId' });
   }
   static config(sequelize) {
     return {
@@ -54,6 +65,6 @@ class Employee extends Model {
     };
   }
 }
-export { Employee , EmployeeSchema, EMPLOYEE_TABLE};
+module.exports = { Employee , EmployeeSchema, EMPLOYEE_TABLE};
 
 // export default {USER_TABLE, UserShema,User}

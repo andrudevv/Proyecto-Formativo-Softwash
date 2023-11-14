@@ -6,12 +6,12 @@ import LoginUser from "./components/User/LoginUser";
 import LoginClient from "./components/Client/loginClient";
 import RegisterUsuario from "./components/User/RegisterUsuario";
 import RegisterClient from "./components/Client/RegisterClient";
-import RegisterLaundry from "./components/Admin/RegisterLaundry";
+// import RegisterLaundry from "./components/Admin/RegisterLaundry";
 import ProtectedRoute from "./routes/protectedRoutes";
 import Navbar from "./components/Header"
 import UserEmailReset from "./pages/userEmailReset";
 import { AuthClientProvider } from "./context/ClientContext";
-// import RegisterClient from "./components/Client/Body"
+import CrudTable from "./components/CrudTable";
 function App() {
 
   return (
@@ -29,6 +29,7 @@ function App() {
       <Route path="/registeruser" element={<RegisterUsuario/>} />
       <Route path="/registerclient" element={<RegisterClient/>} />
       <Route path="/logout" element={<h1>hasta pronto </h1>} />
+      <Route path="/crud" element={<CrudTable/>} />
       
       <Route path="/reset-password" element={<UserEmailReset/>} />
 
@@ -39,8 +40,8 @@ function App() {
 
 
 
-      <Route path="/iniciarsessionAdministrador" element={<LoginClient/>} />
-      <Route path="/registrarlavadero" element={<RegisterLaundry/>} />
+      {/* <Route path="/iniciarsessionAdministrador" element={<LoginClient/>} /> */}
+      {/* <Route path="/registrarlavadero" element={<RegisterLaundry/>} /> */}
       <Route path="/registrarse" element={<h1>homepage</h1>} />
     </Routes>
     </main>

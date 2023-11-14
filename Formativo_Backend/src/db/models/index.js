@@ -1,12 +1,16 @@
-import {User, UserSchema} from './user.model.js';
-import { Appointment, AppointmentSchema } from './appointment.models.js' 
-import {Department, DepartamentSchema} from './department.models.js'
-import {Employee, EmployeeSchema} from './employee.model.js'
-import { Laundry, LaundrySchema } from './laundry.models.js';
-import {Municipality , MunicipalitySchema} from './municipality.models.js'
-import {Service, ServiceSchema} from './services.models.js'
-import { Type, typeSchema } from './typeEmployee.models.js';
-import { Vehicle, UserVehicleSchema } from './vehicle.models.js';
+const {User, UserSchema} = require('./user.models.js');
+const { Appointment, AppointmentSchema } = require('./appointment.models.js');
+
+const {Department, DepartamentSchema} =require('./department.models.js');
+const { Employee, EmployeeSchema} = require('./employee.models.js')
+const {Laundry, LaundrySchema} = require('./laundry.models.js');
+const {Municipality , MunicipalitySchema} = require('./municipality.models.js');
+const {Service, ServiceSchema} = require('./services.models.js');
+const { Type, typeSchema} = require('./typeEmployee.models.js');
+const {Vehicle, UserVehicleSchema} = require('./vehicle.models.js');
+
+
+
 function setUpModels (sequelize){
     User.init(UserSchema, User.config(sequelize));
     Appointment.init(AppointmentSchema, Appointment.config(sequelize));
@@ -31,4 +35,4 @@ function setUpModels (sequelize){
 
     // ,Appointment, Category, Department, Employee, Laundry, Municipality ,Service, Type, Vehicle
 }
-export {setUpModels, User, Appointment, Department, Employee, Laundry, Municipality ,Service, Type, Vehicle}
+module.exports = {setUpModels, User, Appointment, Department, Employee, Laundry, Municipality ,Service, Type, Vehicle}

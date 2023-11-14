@@ -1,6 +1,5 @@
-import { createError } from "http-errors";
-// import { models} from "../lib/sequelize.js";
-import { Employee } from "../db/models/index.js";
+
+const {Employee} = require('../db/models/index.js');
 
 
 class Employee {
@@ -48,4 +47,4 @@ class Employee {
 
 }
 
-export {Employee}
+module.exports =Employee;
