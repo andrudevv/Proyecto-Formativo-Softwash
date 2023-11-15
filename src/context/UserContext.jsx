@@ -39,7 +39,7 @@ export const AuthUserProvider = ({ children }) => {
             setUser(res.data);
             // setIsAuthenticated(true);
             setRegisterErrors([]);
-            setSuccessMessage(res.data.message);
+            setSuccessMessage(`Registro exitoso ${res.data.name}`);
             setRegistrationSuccess(true);
         } catch (error) {
             console.log(error);
@@ -52,12 +52,11 @@ export const AuthUserProvider = ({ children }) => {
 
 
     const signin = async (user) => {
-
-
         try {
             const res = await loginRequest(user);
             console.log(res);
             setIsAuthenticated(true);
+            setUser(res.data)
 
 
             // console.log(Response.data);

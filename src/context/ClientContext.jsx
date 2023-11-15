@@ -12,7 +12,7 @@ export const clientAuth = () => {
 
 export const AuthClientProvider = ({ children }) => {
 
-    const [user, setUser] = useState(null)
+    const [client, setCLient] = useState(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [registerErrors, setRegisterErrors] = useState([]);
     const [successMessage, setSuccessMessage] = useState("");
@@ -52,7 +52,7 @@ export const AuthClientProvider = ({ children }) => {
             setUser(res.data);
             // setIsAuthenticated(true);
             setRegisterErrors([]);
-            setSuccessMessage(res.data.message);
+            setSuccessMessage(`Registro exitoso ${res.data.name}`);
             setRegistrationSuccess(true);
         } catch (error) {
             setRegisterErrors(error.response.data);
@@ -79,7 +79,7 @@ export const AuthClientProvider = ({ children }) => {
     }
     const logout = () => {
         Cookies.remove("token");
-        setUser(null);
+        setCLient(null);
         setIsAuthenticated(false);
     };
     const resetEmail = async (email) => {
@@ -102,7 +102,7 @@ export const AuthClientProvider = ({ children }) => {
                 const res = await clientVerifyTokenRequest(cookies.token);
                 if (!res.data) return setIsAuthenticated(false);
                 setIsAuthenticated(true);
-                setUser(res.data);
+                setCLient(res.data);
                 setLoading(false);
             } catch (error) {
                 setIsAuthenticated(false);
@@ -114,7 +114,7 @@ export const AuthClientProvider = ({ children }) => {
     return (
         <AuthClientContext.Provider value={{
             signupClient,
-            user,
+            client,
             isAuthenticated,
             registerErrors,
             signin,

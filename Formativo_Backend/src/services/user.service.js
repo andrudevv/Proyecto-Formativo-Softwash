@@ -5,7 +5,6 @@ const {createAccessToken} = require('../lib/jwt.js');
 const sendEmailForgot = require('../utils/userResetPassword.js');
 const {verifyToken} = require('../lib/jwt.js');
 
-const DepartmentService = require('../services/department.service.js')
 const MunicipalityService = require('../services/municipality.service.js')
 
 const municipality = new MunicipalityService();

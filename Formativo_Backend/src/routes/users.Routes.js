@@ -37,6 +37,38 @@ userRouter.post("/forgot-password", async (req, res, next) => {
     next(error);
   }
 });
+
+
+//registro de usuario
+userRouter.post(
+  "/register",
+  validatorHandler(createuserShema, "body"),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newUser = await service.registerUser(body);
+      // await register(newUser.email, newUser.name);
+      const token = await createAccessToken({
+        id: newUser.id,
+        document: newUser.documentUser,
+        username: newUser.name,
+      });
+      res.cookie("token", token, {
+        // httpOnly: process.env.NODE_ENV !== "development",
+        secure: true,
+        sameSite: "none",
+      });
+      res.status(201).json({message:`Registro exitoso ${newUser.name}`,newUser});
+    } catch (error) {
+      next(error);
+      return res.status(500).json({ message: error.message });
+    }
+    (err, res) => {
+      // Este middleware manejará los errores generados por el validador
+      res.status(400).json({ error: err.message });
+    };
+  }
+);
 // ruta para iniciar sesion
 userRouter.post(
   "/login",
@@ -101,6 +133,7 @@ userRouter.get(
         body.departmentId,
         body.municipalityId
       );
+      
       res.status(201).json({ message: "lavadero", rta });
     } catch (error) {
       console.error(error);
@@ -229,26 +262,6 @@ userRouter.get("/getDepartments", async (req, res, next) => {
   };
 });
 
-//registro de usuario
-userRouter.post(
-  "/register",
-  validatorHandler(createuserShema, "body"),
-  async (req, res, next) => {
-    try {
-      const body = req.body;
-      const newUser = await service.registerUser(body);
-      await register(newUser.email, newUser.name);
-      res.status(201).json({ message: `Registro exitoso ${newUser.name}` });
-    } catch (error) {
-      next(error);
-      return res.status(500).json({ message: error.message });
-    }
-    (err, res) => {
-      // Este middleware manejará los errores generados por el validador
-      res.status(400).json({ error: err.message });
-    };
-  }
-);
 
 // ruta no necesaria ya que existe el middleware para verificar
 userRouter.get("/verify", async (req, res) => {

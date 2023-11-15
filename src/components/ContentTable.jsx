@@ -12,7 +12,7 @@ export default function ContentTable({fields , fieldsMapping, data,buttonActions
             </thead>
             <tbody className={stylesTbody}>
                 {data.map((row,index)=>(
-                    <tr key={index} className='border-b'>
+                    <tr key={index} className={index % 2 === 0 ? 'bg-blue-100' : 'bg-white'}>
                     {fields.map((field,subIndex) => (
                         <td key={subIndex} className={`text-center p-2 ${field === 'acciones' ? styleActions : ''}`}>
                            {field === 'acciones' ? buttonActions(row['id']) : row[field]}

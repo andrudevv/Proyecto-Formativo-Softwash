@@ -22,7 +22,7 @@ laundryRouter.post(
     try {
       const body = req.body;
       const newClient = await Laundry.regiterClient(body);
-      await register(newClient.email, newClient.name);
+      // await register(newClient.email, newClient.name);
       res.status(201).json(newClient);
     } catch (error) {
       next(error);

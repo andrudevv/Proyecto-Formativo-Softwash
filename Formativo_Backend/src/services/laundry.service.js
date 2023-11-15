@@ -141,7 +141,7 @@ class LaundryService {
       password: passwordHash,
     });
     delete newLaundry.dataValues.password;
-    return { message: `registro exitoso ${newLaundry.name}` };
+    return newLaundry;
   }
   async updateClient(id, changes) {
     const laundry = await Laundry.findOne({
