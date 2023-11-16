@@ -5,6 +5,8 @@ const { checkLaundry, checkUser } = require("../middlewares/auth.handler.js");
 const authRequired = require("../middlewares/validateToken.js");
 const { createAccessToken } = require("../lib/jwt.js");
 const { register } = require("../utils/clientEmailRegister.js");
+const jwt = require("jsonwebtoken");
+const { config } = require("../config/config.js");
 const {
   createLaundrySchema,
   updateLaundrySchema,
@@ -123,7 +125,23 @@ laundryRouter.get(
     };
   }
 );
+laundryRouter.get("/verify", async (req, res) => {
+  const { token } = req.cookies;
+  if (!token) return res.sendStatus(401);
 
+  jwt.verify(token, config.jwtSecret, async (error, user) => {
+    if (error) return res.sendStatus(401);
+
+    const userFound = await Laundry.findOne(user.id);
+    if (!userFound) return res.sendStatus(401);
+
+    return res.json({
+      id: userFound._id,
+      name: userFound.name,
+      email: userFound.email
+    });
+  });
+});
 // ruta para actualizar datos del cliente
 laundryRouter.patch(
   "/",

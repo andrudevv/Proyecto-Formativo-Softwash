@@ -3,13 +3,15 @@ import { FiMenu } from 'react-icons/fi';
 import img from '../../img/SoftWash.jpg';
 import { Link } from 'react-router-dom';
 
-export default function NavbarUser({nameUser, logoutUser}) {
+import { useAuth } from '../../context/UserContext';
+export default function NavbarUser({ logoutUser}) {
+  const { user } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
       };
   return (
-    <header className="bg-custom-nav-bar p-4 flex justify-between items-center fixed w-full top-0 z-1">
+    <header className="flex bg-gradient-to-r from-blue-900 via-blue-700 to-blue-700 p-4  justify-between items-center fixed w-full top-0 z-10">
       <div className="flex items-center">
         <img className="text-white rounded-full w-12" src={img} alt="logo" />
         <div className="ml-4 md:ml-6">
@@ -18,9 +20,10 @@ export default function NavbarUser({nameUser, logoutUser}) {
       </div>
       <div className="flex items-center mt-2 md:mt-0 md:ml-6">
         <div className="hidden md:flex space-x-4">
-          <button className="text-white"><Link to="/home-client" className="font-Pathway Gothic One">Inicio</Link></button>
-          <button className="text-white"><Link to="/appointments" className="font-Pathway Gothic One">Citas</Link></button>
-          <span className="text-white">!Hola,{nameUser}</span>
+          <button className="text-white"><Link to="/home-user" className="font-Pathway Gothic One">Inicio</Link></button>
+          <button className="text-white"><Link to="/my-appointments" className="font-Pathway Gothic One">Citas</Link></button>
+          <button className="text-white"><Link to="/my-vehicles" className="font-Pathway Gothic One">Mis vehiculos</Link></button>
+          <span className="text-white">!Hola {user.name}</span>
           <button className="text-white"  onClick={logoutUser}><Link to="/" className="font-Pathway Gothic One">Cerrar Sesion</Link></button>
         </div>
         <div className="md:hidden ml-auto">
@@ -31,10 +34,10 @@ export default function NavbarUser({nameUser, logoutUser}) {
             <div className="absolute right-0 top-16 mt-2 bg-custom-pie-pagina p-4">
               <ul className="bg-white p-4 text-xl">
                 <li className="cursor-pointer mb-4">
-                <span className="hover:text-SoftRed font-Pathway Gothic One">!Hola, {nameUser}</span>
+                <span className="hover:text-SoftRed font-Pathway Gothic One">!Hola {user.name}</span>
                 </li>
                 <li className="cursor-pointer mb-4">
-                  <a className="hover:text-SoftRed font-Pathway Gothic One" href="/signinuser">Iniciar Sesión</a>
+                  <a className="hover:text-SoftRed font-Pathway Gothic One" href="/sign-in-user">Iniciar Sesión</a>
                 </li>
                 <li className="cursor-pointer">
                 <button className="hover:text-SoftRed font-Pathway Gothic One"  onClick={logoutUser}><Link to="/" className="font-Pathway Gothic One">Cerrar Sesion</Link></button>

@@ -2,13 +2,9 @@ const bcrypt = require("bcryptjs");
 const {verifyToken} = require('../lib/jwt.js');
 const {createAccessToken} = require('../lib/jwt.js');
 const sendEmailForgot = require('../utils/clientResetPassword.js');
-
 const { Laundry, Municipality, Service } = require("../db/models/index.js");
-const DepartmentService = require("../services/department.service.js");
 const MunicipalityService = require("../services/municipality.service.js");
-
 const municipality = new MunicipalityService();
-const department = new DepartmentService();
 class LaundryService {
   constructor() {}
   // consulta para traer todos los lavaderos segun departamento y ciudad
@@ -77,9 +73,9 @@ class LaundryService {
 
 
   
-
+ //servicio para el verify , verifica los datos de las cookies para manipular frontend
   async findOne(id) {
-    const findLaundry = await Laundry.findOne(id);
+    const findLaundry = await Laundry.findOne({where: {id:id}});
     if (!findLaundry) {
       throw new Error("lavadero no encontrado ");
     }
@@ -99,6 +95,7 @@ class LaundryService {
     return findLaundry;
   }
 
+  // servicio para iniciar sesion el cliente
   async login(rutLaundry, email, password) {
     const laundry = await Laundry.findOne({
       attributes: [
@@ -127,6 +124,8 @@ class LaundryService {
     delete laundry.dataValues.password;
     return laundry;
   }
+
+  //servicio para registrarse el cliente
   async regiterClient(body) {
     const laundryFound = await Laundry.findOne({
       attributes:['email','id'],
@@ -143,6 +142,8 @@ class LaundryService {
     delete newLaundry.dataValues.password;
     return newLaundry;
   }
+
+  //servicio para que el cliente actualice sus datos excepto contraseña
   async updateClient(id, changes) {
     const laundry = await Laundry.findOne({
       attributes:['email','id'],
@@ -172,6 +173,7 @@ class LaundryService {
     return { message: "Actualizacion exitosa", update:true };
   }
 
+  //servicio para que el cliente recupere la contraseña en caso de olvidarla
   async sendEmailForgot(email) {
     const laundry = await Laundry.findOne({
       attributes:['id','rutLaundry','name','email','recoveryToken'],
@@ -197,7 +199,7 @@ class LaundryService {
     }
     return { message: `Se ha enviado un correo de recuperación al correo: ${email}` }
   }
-
+//servicio que permite cambiar la contraseña por medio de la recuperacion
   async changePassword(token, newPassword){
     try {
       const payload = verifyToken(token);
@@ -212,6 +214,7 @@ class LaundryService {
       throw new Error('no autorizado')
     }
   }
+  //servicio para eliminar, por el momento no se usara
   async delete(id) {
     const laundry = await this.findOne(id);
     await laundry.destroy();

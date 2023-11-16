@@ -121,7 +121,7 @@ class UserService {
   }
 
   async findOne(id) {
-    const user = await User.findOne(id);
+    const user = await User.findOne({where: {id:id}});
     if (!user) {
       throw new Error("correo no encontrado");
     }

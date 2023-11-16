@@ -50,11 +50,11 @@ export const loginClientRequest = (user) =>
 
 //verificar token
 
-// export const verifyTokenRequest = () => Axios.get(`${API}/users/verify`);
-export const clientVerifyTokenRequest = () => Axios.get(`${API}/users/verify`);
+
+export const clientVerifyTokenRequest = () => Axios.get(`${API}/client/verify`);
 
 export const resetPasswordClient = (data) =>
-  Axios.post(`${API}/users/forgot-password`, data)
+  Axios.post(`${API}/client/forgot-password`, data)
     .then((Response) => {
       console.log("correo enviado ", Response);
       return Response.data;

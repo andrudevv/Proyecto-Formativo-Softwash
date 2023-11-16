@@ -56,7 +56,7 @@ function RegisterClient() {
   return (
     <>
       <ToastContainer />
-      <div className="flex justify-center items-center min-h-screenbg-gradient-to-r mt-20 from-gray-200 via-neutral-100 to-gray-200   border-gray-200">
+      <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-700 p-4 flex justify-between items-center fixed w-full top-0 z-10">
         <div className="w-full sm:w-96  bg-white p-4 rounded-md shadow-md">
           <h2 className="text-lg font-semibold mb-4 text-center">
             Registrarse como lavadero

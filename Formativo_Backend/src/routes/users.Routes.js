@@ -263,7 +263,7 @@ userRouter.get("/getDepartments", async (req, res, next) => {
 });
 
 
-// ruta no necesaria ya que existe el middleware para verificar
+// ruta necesaria para que el front valide las cookies y manipule el id o el nombre o correo segun lo requiera
 userRouter.get("/verify", async (req, res) => {
   const { token } = req.cookies;
   if (!token) return res.sendStatus(401);
@@ -271,14 +271,13 @@ userRouter.get("/verify", async (req, res) => {
   jwt.verify(token, config.jwtSecret, async (error, user) => {
     if (error) return res.sendStatus(401);
 
-    const userFound = await service.findOne(user);
+    const userFound = await service.findOne(user.id);
     if (!userFound) return res.sendStatus(401);
 
     return res.json({
       id: userFound._id,
-      username: userFound.username,
-      email: userFound.email,
-      role: userFound.role,
+      name: userFound.name,
+      email: userFound.email
     });
   });
 });

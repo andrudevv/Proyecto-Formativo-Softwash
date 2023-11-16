@@ -13,6 +13,7 @@ import MyVehicles from "./pages/User/ViewVehicles";
 import ProtectedRoutesClient from "./routes/ProtectedRoutesClient";
 import HomeUsers from "./pages/HomeUsers";
 import NotFound404 from "./pages/NotFound404";
+import Footer from "./components/Footer";
 function App() {
 
   return (
@@ -20,8 +21,8 @@ function App() {
       <AuthClientProvider>
 <BrowserRouter>
 <Navbar/>
-<main className=" 
- container mx-auto">
+<main className=" pt-20
+ container mx-auto min-h-screen">
     <Routes>
       <Route path="/" element={<HomeUsers/>} />
       
@@ -36,20 +37,22 @@ function App() {
 
 //  Rutas para el usuario protegidas 
       <Route element={<ProtectedRoutesUser/>}>
-        <Route path="/home-user" element={<h1>iniciado correctamente usuario</h1>} />
+        <Route path="/home-user" element={<HomeUsers/>} />
         <Route path="/logout" element={<h1>hasta pronto </h1>} />
-
+        <Route path="/my-vehicles" element={<MyVehicles/>} />
+        <Route path="/my-appointments" element={<h1>citas</h1>} />
 
       </Route>
 // finaliza rutas protegidas
 
-        <Route path="/my-vehicles" element={<MyVehicles/>} />
+        
 
 
 
 // Rutas protegidas para el cliente
       <Route element={<ProtectedRoutesClient/>}>
       <Route path="/home-client" element={<h1>iniciado correctamente cliente</h1>} />
+      <Route path="/my-services" element={<h1>servicios</h1>} />
 
       <Route path="/logout" element={<h1>hasta pronto </h1>} />
 
@@ -62,6 +65,7 @@ function App() {
       <Route path="/registrarse" element={<h1>homepage</h1>} />
     </Routes>
     </main>
+    <Footer />
     </BrowserRouter>
     </AuthClientProvider>
     </AuthUserProvider>

@@ -119,7 +119,7 @@ function HomeUsers() {
         </div>
       </div>
     </div>
-    <Footer/>
+  
     </>
   );
 }
