@@ -65,7 +65,7 @@ appointmentRouter.get(
   checkUser,
   async (req, res) => {
     try {
-      const date = validador();
+      // const date = validador();
       const userId = req.user.id;
       const myappointments = await appointment.findMyAppointments(userId);
       // const rt = await appointment.getCitas(date);

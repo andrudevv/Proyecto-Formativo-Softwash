@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function ContentTable({fields , fieldsMapping, data,buttonActions,stylesTable,stylesThead,stylesTbody, styleActions}) {
     return (
-        <table className={stylesTable}>
+        <table className={`mt-4 ${stylesTable}`}>
             <thead className={`${stylesThead} hidden md:table-header-group`} >
                 <tr className='text-center'>
                     {fields.map((field) => (

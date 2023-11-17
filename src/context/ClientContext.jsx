@@ -1,6 +1,8 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { registerClientRequest, loginClientRequest, resetPasswordClient } from "../services/api/auth";
 import Cookies from "js-cookie";
+import { ToastContainer, toast } from 'react-toastify';
+
 import { clientVerifyTokenRequest } from "../services/api/auth";
 export const AuthClientContext = createContext()
 export const clientAuth = () => {
@@ -50,10 +52,12 @@ export const AuthClientProvider = ({ children }) => {
             const res = await registerClientRequest(user);
             console.log(res);
             setUser(res.data);
+            setRegistrationSuccess(true);
             // setIsAuthenticated(true);
             setRegisterErrors([]);
-            setSuccessMessage(`Registro exitoso ${res.data.name}`);
-            setRegistrationSuccess(true);
+            setSuccessMessage(res.data.message);
+            // toast.success('!Registro exitoso. ', { theme: "light" })
+            
         } catch (error) {
             setRegisterErrors(error.response.data);
         }

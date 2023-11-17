@@ -25,7 +25,7 @@ laundryRouter.post(
       const body = req.body;
       const newClient = await Laundry.regiterClient(body);
       // await register(newClient.email, newClient.name);
-      res.status(201).json(newClient);
+      res.status(201).json({message: `Registro exitoso ${newClient.name}`});
     } catch (error) {
       next(error);
       return res.status(400).json([error.message]);

@@ -108,13 +108,24 @@ class AppointmentService {
       include: [
         {
           model: Vehicle,
-          attributes: [],
+          attributes: ["plate"],
           where: { userId: id },
+        },
+        {
+          model: Service,
+          attributes:["name"],
+          include:[
+            {
+              model:Laundry,
+              attributes:["address"],
+            }
+          ]
+
         },
       ],
     });
     if (findAppointments.length === 0) {
-      throw new Error("No tienes citas agendadas");
+      return message = {message:'No tienes citas agendadas'};
     }
     return { myAppointments: findAppointments };
   }

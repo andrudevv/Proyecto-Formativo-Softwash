@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form"
 import { useAuth } from "../../context/UserContext";
 import Axios from "../../services/axios";
 import { ToastContainer, toast } from 'react-toastify';
+import img from '../../img/SoftWash.jpg'
+import { Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 function RegisterUser() {
 
@@ -48,104 +50,167 @@ function RegisterUser() {
   }, []);
   return (
     <>
-      <ToastContainer /> 
-      <div className="flex justify-center items-center min-h-screen mt-20 bg-gray-200">
-        <div className="w-full sm:w-96  bg-white p-4 rounded-md shadow-md">
-          <h2 className="text-lg font-semibold mb-4 text-center">
-            Registrarse como usuario
-          </h2>
-          {registerErrors?.map((error, i) => (
-            <div className='bg-red-500 p-2 mt-1  rounded-lg text-white' key={i}>
-              {error.response.data.message}
-            </div>
-          ))}
-
-          {successMessage && (
-            <div>
-              {successMessage} 
-            </div>) &&
-            toast.success('!Registro exitoso. ', { theme: "light" })
-          }
-
-
-          {/* Condición para mostrar el formulario o el mensaje de éxito */}
-          {!registrationSuccess ? (
-            <form onSubmit={onSubmit}>
-              <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Documento</label>
-              <input type="number"  {...register('documentUser', { required: true })} className="w-full mb-2 text-black px-4 py-2 rounded-md" placeholder="Numero de documento" />{errors.documentUser && (
-                <p className="text-red-500">el documento es requerido</p>
-              )}
-              <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Nombre</label>
-
-              <input type="text" {...register('name', { required: true })} className="w-full mb-2 text-black  px-4 py-2 rounded-md" placeholder="nombre" />
-              {errors.name && (
-                <p className="text-red-500">nombre es requerido</p>
-              )}
-              <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Apellido</label>
-              <input type="text" {...register('lastName', { required: true })} className="w-full  mb-2 text-black px-4 py-2 rounded-md" placeholder="apellidos" />
-              <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Telefono</label>
-              <input type="number" {...register('phone', { required: true })} className="w-full mb-2 text-black px-4 py-2 rounded-md" placeholder="telefono" />
-              <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Correo</label>
-              <input type="email" {...register('email', { required: true })} className="w-full mb-2 text-black px-4 py-2 rounded-md" placeholder="correo" />
-              {errors.email && (
-                <p className="text-red-500">email es requerido</p>
-              )}
-              <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Contraseña</label>
-              <input type="password" {...register('password', { required: true })} className="w-full mb-2 text-black px-4 py-2 rounded-md" placeholder="contraseña" />
-              {errors.password && (
-                <p className="text-red-500">contraseña es requerida</p>
-              )}
-
-              <label className="w-full mb-2 font-semibold text-black px-4 py-2 rounded-md">Departamento</label>
-              <select
-
-                className="font-Pathway Gothic One w-full p-2 bg-white rounded-md border border-gray-300 focus:ring"
-                placeholder="departamento"
-                onChange={(e) => getMunicipalities(e.target.value)}
-              >
-                <option value="">Departamento</option>
-                {departments.map((city, index) => (
-                  <option
-                    key={index}
-                    value={city.id}
-                    style={{ width: "100%" }}
-                  >
-
-                    {city.name}
-                  </option>
-                ))}
+      <ToastContainer />
+      {
+                registerErrors.map((error, i) => (
+                    toast.error(<div className='bg-red-500 p-2 mt-1 rounded-lg text-white' key={i}>
+                        {error}
+                    </div>, { theme: "light" })
                 ))
-              </select>
-              <label className="w-full mb-2 font-semibold text-black px-4 py-2 rounded-md">Municipio</label>
-              <select {...register('municipalityId', { required: true })} className="font-Pathway Gothic One w-full p-2 bg-white rounded-md border border-gray-300 focus:ring" placeholder="municipio">
-                <option >Municipio</option>
-                {municipalities.map((department) => (
-                  <option
-                    key={department.id}
-                    value={department.id}
-                    style={{ width: "100%" }}
-                  >
+            }
 
-                    {department.name}
-                  </option>
-                ))}
-              </select>
+            {/* {successMessage && (
+
+                <div className='bg-green-500 p-2 text-white'>
+                    {successMessage}
+                </div>
+            )} */}
+            {!registrationSuccess ? (
+      <div className='flex justify-center '>
+        <div className='flex flex-col sm:flex-row sm:w-[85%]  mt-6  bg-gray-200 rounded-lg shadow-lg  shadow-gray-400   relative z-0'>
+          <div className='flex flex-col   sm:absolute md:w-2/5 h-full z-10'>
+
+            <section className=" bg-blue-700  rounded-lg sm:rounded-none sm:bg-transparent flex flex-col w-full h-full justify-center items-center p-6" >
+
+              <img className="text-white rounded-md w-24 mb-8" src={img} alt="logo" />
+              <h1 className="text-white h-8 text-2xl font-semibold mb-8">SOFTWASH</h1>
+              <span className="text-white text-center ml-6 mr-6 text-1xl font-semibold">"Innovación que brilla en cada gota. Tu lavadero, nuestra tecnología."
+              </span>
+              <hr className=" shadow-xl shadow-white bg-white w-[70%]" />
+              <button className="bg-button-primary shadow-lg shadow-blue-400 hover:scale-110 text-black font-semibold   mt-4 rounded hover:bg-blue-400  sm:h-16  w-2/3" ><Link to="/register-client">Registrarse como Lavadero?</Link></button>
+            </section>
+          </div>
 
 
 
-              <button type="submit" className="bg-blue-700 text-white font-semibold mt-4 py-2 px-4 rounded hover:bg-cyan-500 focus:outline-none focus:ring focus:ring-cyan-700 w-full">registrarse</button>
-              <button className="bg-blue-700 text-white font-semibold mt-4 py-2 px-4 rounded hover:bg-cyan-500 focus:outline-none focus:ring focus:ring-cyan-700 w-full"><a href="/register-client">registrarse como lavadero?</a></button>
-            </form>
-          ) : (
-            <div className="text-center">
-            <p>Registro exitoso. ¡Gracias por unirte!</p>
-            <a className="text-black text-green-500 text-2xl hover:text-cyan-500" href="/sign-in-user" >iniciar sesión</a>
-            </div>
-          )}
+
+
+          {/* estilos del formulario */}
+          <div className='static  sm:block bg-blue-700 sm:w-[40%] sm:h-[100%] h-[80%] sm:border-t-transparent border-r-gray-200   sm:border-t-[600px] sm:border-r-[50px] rounded-l-lg'></div>
+
+          {/* estilos del formulario */}
+
+
+
+          <div className='w-full md:w-3/5 bg-gray-200 rounded-lg sm:relative z-10'>
+            <section className="p-6">
+              <h1 className="text-center font-semibold text-lg mt-2 mb-2">Usuario</h1>
+              <hr className=" bg-gray-300 shadow-xl shadow-white h-1 ml-6 mr-6 mb-2" />
+
+              <form onSubmit={onSubmit} className="flex grid-cols-1 md:grid-cols-2  gap-4 max-w-md mx-auto">
+                <div className="grid grid-cols-4 gap-4">
+
+                  <div className="col-span-2 relative">
+                    <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Documento <span className="text-red-500">*</span></label>
+                    <input type="number"  {...register('documentUser', { required: true })} className="w-10/12 mb-2 text-black px-4 py-2 rounded-md" placeholder="Cedula" />
+                    {errors.documentUser && (
+                      <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
+                    )}</div>
+
+                  <div className="col-span-2 relative">
+                    <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Nombre <span className="text-red-500">*</span></label>
+
+                    <input type="text" {...register('name', { required: true })} className="w-10/12 mb-2 text-black  px-4 py-2 rounded-md" placeholder="Nombre" />
+                    {errors.name && (
+                      <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
+                    )}
+                  </div>
+
+                  <div className="col-span-2 relative">
+                    <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Apellidos <span className="text-red-500">*</span></label>
+                    <input type="text" {...register('lastName', { required: true })} className="w-10/12  mb-2 text-black px-4 py-2 rounded-md" placeholder="Apellidos" />
+                    {errors.lastName && (
+                      <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
+                    )}
+                  </div>
+
+                  <div className="col-span-2 relative">
+                    <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Telefono <span className="text-red-500">*</span></label>
+                    <input type="number" {...register('phone', { required: true })} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="Ingrese Tel.." />
+                    {errors.phone && (
+                      <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
+                    )}
+                  </div>
+
+
+                  <div className="col-span-2 relative">
+                    <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Correo <span className="text-red-500">*</span></label>
+                    <input type="email" {...register('email', { required: true })} className="w-10/12 mb-2 text-black px-4 py-2 rounded-md" placeholder="Correo" />
+                    {errors.email && (
+                     <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
+                    )}
+                  </div>
+
+                  <div className="col-span-2 relative ">
+                    <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Contraseña <span className="text-red-500">*</span></label>
+                    <input type="password" {...register('password', { required: true })} className="w-10/12 mb-2 text-black px-4 py-2 rounded-md" placeholder="Contraseña" />               {errors.password && (
+                      <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
+                    )}
+                  </div>
+
+                  <div className="col-span-2 ">
+                    <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Departamento <span className="text-red-500">*</span></label>
+                    <select
+                      className="font-Pathway Gothic One w-10/12 p-2 bg-white rounded-md border border-gray-300 focus:ring"
+                      placeholder="Departamento"
+                      onChange={(e) => getMunicipalities(e.target.value)}
+                    >
+                      <option value="">Departamento</option>
+                      {departments.map((city, index) => (
+                        <option
+                          key={index}
+                          value={city.id}
+                          style={{ width: "100%" }}
+                        >
+
+                          {city.name}
+                        </option>
+                      ))}
+                      ))
+                    </select>
+                  </div>
+
+                  <div className="col-span-2 ">
+                    <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Municipio <span className="text-red-500">*</span></label>
+                    <select {...register('municipalityId', { required: true })} className="font-Pathway Gothic One w-10/12 p-2 bg-white rounded-md border border-gray-300 focus:ring" placeholder="Municipio">
+                      <option >Municipio</option>
+                      {municipalities.map((department) => (
+                        <option
+                          key={department.id}
+                          value={department.id}
+                          style={{ width: "100%" }}
+                        >
+
+                          {department.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="col-span-4 ">
+                    <button type="submit" className="bg-button-primary  shadow-lg shadow-gray-500 text-black hover:bg-blue-400 font-semibold mt-6 h-10 hover:scale-110   w-full rounded   ">Registrarse</button>
+                  </div>
+
+
+
+                </div>
+              </form>
+            </section>
+          </div>
         </div>
       </div>
+      ) : (
+        <div className="flex mt-20 justify-center items-center">
+
+                    <div className='bg-green-500 p-2 text-white '>
+                {successMessage}
+            </div>
+                </div>
+      )
+
+    }
     </>
-  );
+  )
 }
 
 export default RegisterUser
+

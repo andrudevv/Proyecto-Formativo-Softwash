@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import { useAuth } from "../../context/UserContext";
-import {  useNavigate } from "react-router-dom";
+import {  Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 function LoginUser() {
 
@@ -43,8 +43,9 @@ function LoginUser() {
 
 
 
-        <button type="submit" className="bg-gradient-to-r from-blue-200 via-red-200 to-yellow-200 transition-colors duration-500 hover:bg-gradient-to-r hover:from-red-500 hover:via-yellow-400 hover:to-yellow-300 ">iniciar sesion</button>
-        <a className="bg-custom-botones text-white font-semibold mt-4 py-2 px-4 rounded transition easy-in duration-700 hover:bg-violet-700  w-full"><a href="/sign-in-client">iniciar sesion como lavadero</a></a>
+<button  type="submit"className="bg-button-primary text-black font-semibold hover:scale-110 mt-4 py-2 px-4 rounded hover:bg-blue-400  w-full">iniciar sesion</button>
+        <button className="bg-button-primary text-black font-semibold hover:scale-110 mt-4 py-2 px-4 rounded hover:bg-blue-400  w-full"><Link to="/sign-in-client">iniciar sesion como lavadero</Link></button>
+        <a className=" text-blue-700  font-semibold mt-4 py-2 px-4 rounded hover:scale110 w-full"><Link to="/reset-password-user">Olvido su contraseña?</Link></a>
 
         {/* <p className="flex gap-x-2 justify-between my-3 ">no tienes una cuenta?  <Link to="/register" className="text-sky-500"> sign up</Link></p> */}
       </form>

@@ -58,7 +58,7 @@ userRouter.post(
         secure: true,
         sameSite: "none",
       });
-      res.status(201).json({message:`Registro exitoso ${newUser.name}`,newUser});
+      res.status(201).json({message:`Registro exitoso ${newUser.name}`});
     } catch (error) {
       next(error);
       return res.status(500).json({ message: error.message });
@@ -221,10 +221,10 @@ userRouter.patch(
   }
 );
 
-// ver el propio perfil (pendiente)
+// ver el verfil del lavadero
 userRouter.get(
-  "/view-profile/:id",
-  // authRequired,
+  "/view-profile/",
+  authRequired,
   // checkLaundry,
   // validatorHandler(createLaundrySchema, "body"),
   async (req, res, next) => {
@@ -301,40 +301,15 @@ userRouter.get("/get-municipality/:id", async (req, res, next) => {
   };
 });
 
-// posible ruta para eliminar pero falta organizarla(pendiente)
-userRouter.delete(
-  "/:id",
-  authRequired,
-  // checkRoles("admin"),
-  validatorHandler(getUserShema, "params"),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      await service.delete(id);
-      res.status(201).json({ id });
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 
-// (pendiente) organizar servicio para actualizar la contraseña por medio de token
+
+//actualizar la contraseña por medio de token
 userRouter.get("/reset-password/:token", async (req, res, next) => {
   try {
     const { token } = req.params;
     const { newPassword } = req.body;
-    const user = await service.reset(token);
-
-    if (user) {
-      try {
-        const updatePassword = await service.update(user.id, newPassword);
-        if (updatePassword) {
-          console.log("actualizada la contraseña");
-        }
-      } catch (error) {
-        next(error);
-      }
-    }
+    const user = await service.changePassword(token, newPassword);
+    res.status(201).json(user);
   } catch (error) {
     console.error(error);
 

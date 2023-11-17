@@ -2,14 +2,19 @@ import React, { useState } from 'react';
 import { FiMenu } from 'react-icons/fi';
 import img from '../../img/SoftWash.jpg';
 import { Link } from 'react-router-dom';
-export default function NavbarClient({nameClient, logoutClient}) {
+import { clientAuth } from '../../context/ClientContext';
+export default function NavbarClient() {
     const [menuOpen, setMenuOpen] = useState(false);
+const { client, logout } = clientAuth();
 
+const logoutClient = () => {
+  logout();
+}
     const toggleMenu = () => {
       setMenuOpen(!menuOpen);
     };
   return (
-    <header className="bg-custom-nav-bar p-4 flex justify-between items-center fixed w-full top-0 z-1">
+    <header className="flex bg-gradient-to-r from-blue-900 via-blue-700 to-blue-700 p-4  justify-between items-center fixed w-full top-0 z-10">
       <div className="flex items-center">
         <img className="text-white rounded-full w-12" src={img} alt="logo" />
         <div className="ml-4 md:ml-6">
@@ -20,7 +25,7 @@ export default function NavbarClient({nameClient, logoutClient}) {
         <div className="hidden md:flex space-x-4">
           <button className="text-white"><Link to="/home-client" className="font-Pathway Gothic One">Inicio</Link></button>
           <button className="text-white"><Link to="/appointments" className="font-Pathway Gothic One">Citas</Link></button>
-          <span className="text-white">{nameClient}</span>
+          <span className="text-white">{client.name}</span>
           <button className="text-white"  onClick={logoutClient}><Link to="/" className="font-Pathway Gothic One">Cerrar Sesion</Link></button>
         </div>
         <div className="md:hidden ml-auto">

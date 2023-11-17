@@ -43,7 +43,7 @@ const LaundrySchema = {
   },membership: {
     allowNull: false,
     type: DataTypes.BOOLEAN,
-    defaultValue: false 
+    defaultValue: true 
   },
   ability: {
     allowNull: false,

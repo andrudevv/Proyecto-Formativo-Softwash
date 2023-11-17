@@ -5,15 +5,15 @@ import NavbarClient from '../pages/Client/NavbarClient';
 import NavbarUser from '../pages/User/NavbarUser';
 import GenericNavbar from '../pages/GenericNavbar';
 const Navbar = () => {
-  const { isAuthenticated: isUserAuthenticated, logout: logoutUser } = useAuth();
-  const { isAuthenticated: isClientAuthenticated, logout: logoutClient } = clientAuth();
+  const { isAuthenticated: isUserAuthenticated } = useAuth();
+  const { isAuthenticated: isClientAuthenticated } = clientAuth();
 
 
 
   return (
     <>
-        {isUserAuthenticated &&  <NavbarUser  logoutUser={logoutUser}/>}
-        {isClientAuthenticated && <NavbarClient  logoutClient={logoutClient}/>}
+        {isUserAuthenticated &&  <NavbarUser  />}
+        {isClientAuthenticated && <NavbarClient />}
         {!isUserAuthenticated && !isClientAuthenticated && <GenericNavbar/>}
     </>
   );

@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { FiMenu } from 'react-icons/fi';
 import img from '../../img/SoftWash.jpg';
 import { Link } from 'react-router-dom';
-
 import { useAuth } from '../../context/UserContext';
-export default function NavbarUser({ logoutUser}) {
-  const { user } = useAuth();
+export default function NavbarUser() {
+  const { user,logout } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
+
+    const logoutUser= () =>{
+      logout();
+    }
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
       };
@@ -22,7 +25,7 @@ export default function NavbarUser({ logoutUser}) {
         <div className="hidden md:flex space-x-4">
           <button className="text-white"><Link to="/home-user" className="font-Pathway Gothic One">Inicio</Link></button>
           <button className="text-white"><Link to="/my-appointments" className="font-Pathway Gothic One">Citas</Link></button>
-          <button className="text-white"><Link to="/my-vehicles" className="font-Pathway Gothic One">Mis vehiculos</Link></button>
+          <button className="text-white"><Link to="/view-profile-user" className="font-Pathway Gothic One">Mi perfil</Link></button>
           <span className="text-white">!Hola {user.name}</span>
           <button className="text-white"  onClick={logoutUser}><Link to="/" className="font-Pathway Gothic One">Cerrar Sesion</Link></button>
         </div>

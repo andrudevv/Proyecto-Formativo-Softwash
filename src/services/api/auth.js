@@ -36,13 +36,7 @@ export const resetPassword = (data) =>
 
 export const registerClientRequest = (user) =>
   Axios.post(`${API}/client/register-client`, user)
-    .then((Response) => {
-      return Response;
-    })
-    .catch((error) => {
-      console.log(error);
-      throw error;
-    });
+   
 
 // /validar para usuario
 export const loginClientRequest = (user) =>

@@ -46,9 +46,9 @@ class UserService {
       ],
        where: { email: email } });
     // en caso de querer mostrar el error en especifico de cada campo se habilitan estos condicionales, la siguiente que esta habilitada es para mayor seguridad sin confirmar el campo erroneo , exigiendo al usuario su atencion en los datos ingresados
-    // if (!user) {
-    //   throw new Error("El correo electrónico no existe");
-    // }
+    if (!user) {
+      throw new Error("El correo electrónico no existe");
+    }
     const isPasswordValid = bcrypt.compareSync(password, user.password);
     // if (!isPasswordValid) {
     //   throw new Error("Contraseña incorrecta");
@@ -104,7 +104,7 @@ class UserService {
     return { message: `Se ha enviado un correo de recuperación al correo: ${email}` }
   }
 
-
+//servicio para cambiar la contraseña por medio de token enviado al correo
   async changePassword(token, newPassword){
     try {
       const payload = verifyToken(token);
@@ -120,21 +120,17 @@ class UserService {
     }
   }
 
+
   async findOne(id) {
     const user = await User.findOne({where: {id:id}});
     if (!user) {
-      throw new Error("correo no encontrado");
+      throw new Error("usuario no encontrado");
     }
     return user;
   }
+ 
 
-  async reset(token) {
-    const user = await User.findOne({ where: { recoveryToken: token } });
-    if (!user) {
-      throw new Error("no existe el token");
-    }
-    return user;
-  }
+  //servicio para actualziar datos
   async updateUser(id, changes) {
     const user = await User.findOne({where:{id: id}});
     if (!user) {
@@ -160,12 +156,7 @@ class UserService {
     return {message: "Actualizacion exitosa", update:true};
   }
 
-  async delete(id) {
-    const user = await this.findOne(id);
 
-    await user.destroy();
-    return { id };
-  }
 }
 
 module.exports =UserService;

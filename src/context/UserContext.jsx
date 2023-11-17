@@ -39,7 +39,7 @@ export const AuthUserProvider = ({ children }) => {
             setUser(res.data);
             // setIsAuthenticated(true);
             setRegisterErrors([]);
-            setSuccessMessage(`Registro exitoso ${res.data.name}`);
+            setSuccessMessage(res.data.message);
             setRegistrationSuccess(true);
         } catch (error) {
             console.log(error);

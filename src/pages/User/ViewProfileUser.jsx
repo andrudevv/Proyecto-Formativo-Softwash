@@ -33,8 +33,23 @@ const user = [
         "model": "1900",
         "color": "negro",
         "typeVehicle": "moto"
-    }
+    },
+
+
 ];
+const userData = {
+    "documentUser": 1234,
+    "name": "andrewadmin",
+    "lastName": "ramirez",
+    "phone": 1231214,
+    "email": "rvandruzyzz@gmail.com",
+    "role": "user",
+    "municipalityId": {
+        "id": 2,
+        "name": "Puerto Nariño",
+        "departmentId": 1
+    }
+}
 const fieldsMapping = {
     "id": "ID",
     "plate": "Placa",
@@ -72,7 +87,7 @@ export default function MyVehicles() {
         setIsModalOpen(false);
     };
     const handleEliminarClick = (id) => {
-        toast.success(`Vehiculo eliminado con ID ${id}`,{theme:"light"});
+        toast.success(`Vehiculo eliminado con ID ${id}`, { theme: "light" });
         closeModal();
     };
     const handleOtroBotonClick = (id) => {
@@ -97,19 +112,57 @@ export default function MyVehicles() {
     return (
         <>
 
+            <div className="max-w-2xl mx-auto bg-white p-8 rounded-md shadow-md">
+                {/* <img
+        src={user.documentUser} // Asegúrate de tener una propiedad 'avatar' en tu objeto 'user'
+        alt={user.name} // Asegúrate de tener una propiedad 'name' en tu objeto 'user'
+        className="w-32 h-32 rounded-full mx-auto mb-4"
+      /> */}
+                <h2 className="text-2xl font-bold text-center text-gray-800 mb-2">{userData.name} {userData.lastName}</h2>
+
+
+                {/* Otros detalles del perfil */}
+                <div className="grid grid-cols-2 mt-10 gap-10">
+                    <div>
+                        <strong>Nombre:</strong> {userData.name}
+                    </div>
+                    <div>
+                        <strong>Apellido:</strong> {userData.lastName}
+                    </div>
+                    <div>
+                        <strong>Correo:</strong> {userData.email}
+                    </div>
+                    <div>
+                        <strong>Cedula:</strong> {userData.documentUser}
+                    </div>
+                    <div>
+                        <strong>Telefono:</strong> {userData.phone}
+                    </div>
+
+                    <div>
+                        <strong>Municipio:</strong> {userData.municipalityId.name}
+                    </div>
+                    <div className='col-span-2 text-center'>
+                        <ButtonAction tipo={onclick} estilos={'w-1/3 h-10 font-bold bg-button-primary rounded-md'} text={'Actualizar'} />
+
+                    </div>
+
+                    {/* Agrega más detalles según sea necesario */}
+                </div>
+
+
+            </div>
             <div className='h-[20vh]'></div>
             <ToastContainer />
             <DivContent>
-                <div>
+                <div className='mb-10 h-auto'>
                     {loading ? (
                         <Spinner /> // Display loader while loading
                     ) : (
                         <div>
                             {/* <DivContent className={styles}> */}
                             <h1 className="flex justify-center text-2xl font-bold mb-4">MIS VEHICULOS</h1>
-                            <Link to="/create" className="flex w-24 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-10 mb-10 justify-end">
-                                Añadir vehiculo
-                            </Link>
+                            <ButtonAction estilos={'flex w-24 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-4 w-auto justify-end'} text={'Añadir Vahiculo'} tipo={onclick} />
                             <ContentTable fields={fields} data={user} fieldsMapping={fieldsMapping}
                                 buttonActions={(id) => customButtons.map((button, index) => (<ButtonAction key={index} {...button} onClick={() => button.onClick(id)} />))}
                                 stylesTable={stylesTable} stylesThead={stylesThead} stylesTbody={stylesTbody}
