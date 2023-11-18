@@ -17,7 +17,7 @@ export const AuthUserProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [registerErrors, setRegisterErrors] = useState([]);
     const [successMessage, setSuccessMessage] = useState("");
-    const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
 
     const [loading, setLoading] = useState(true);
 
@@ -37,12 +37,10 @@ export const AuthUserProvider = ({ children }) => {
             const res = await registerRequest(user);
             console.log(res);
             setUser(res.data);
-            // setIsAuthenticated(true);
+            setIsAuthenticated(true);
             setRegisterErrors([]);
-            setSuccessMessage(res.data.message);
-            setRegistrationSuccess(true);
+            setSuccessMessage(res.data.name);
         } catch (error) {
-            console.log(error);
             setRegisterErrors(error.response.data);
         }
 
@@ -111,7 +109,7 @@ export const AuthUserProvider = ({ children }) => {
             loading,
             resetEmail,
             successMessage,
-            registrationSuccess
+           
         }}>
             {children}
         </AuthUserContext.Provider>

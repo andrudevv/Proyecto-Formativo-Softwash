@@ -7,7 +7,7 @@ export default function ReusableModals({isOpen,
     buttons,}) {
     if (!isOpen) return null;
     return (
-        <div id='modal-component-container' className='fixed inset-0'>
+        <div id='modal-component-container' className='fixed z-10 inset-0'>
                         <div className='modal-flex-container flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
                           <div className='modal-bg-container fixed inset-0 bg-gray-700 bg-opacity-75'></div>
 

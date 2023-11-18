@@ -1,8 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { registerClientRequest, loginClientRequest, resetPasswordClient } from "../services/api/auth";
 import Cookies from "js-cookie";
-import { ToastContainer, toast } from 'react-toastify';
-
 import { clientVerifyTokenRequest } from "../services/api/auth";
 export const AuthClientContext = createContext()
 export const clientAuth = () => {
@@ -18,7 +16,7 @@ export const AuthClientProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [registerErrors, setRegisterErrors] = useState([]);
     const [successMessage, setSuccessMessage] = useState("");
-    const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
     // const [departments, setDepartments] = useState([]);
     // const [municipalities, setMunicipalities] = useState([]);
 
@@ -34,29 +32,16 @@ export const AuthClientProvider = ({ children }) => {
         }
     }, [registerErrors]);
 
-    // const getDeps = async()=>{
-    //     try {
-    //     const resGetDep = await getDepartment()
-    //     setDepartments(resGetDep);
-    //     setRegisterErrors([]);
-
-    //     } catch (error) {
-    //         setRegisterErrors([error])
-
-    //     }
-    //     }
-
     const signupClient = async (user) => {
         try {
 
             const res = await registerClientRequest(user);
             console.log(res);
-            setUser(res.data);
-            setRegistrationSuccess(true);
-            // setIsAuthenticated(true);
+            setCLient(res.data);
+            setIsAuthenticated(true);
             setRegisterErrors([]);
-            setSuccessMessage(res.data.message);
-            // toast.success('!Registro exitoso. ', { theme: "light" })
+            setSuccessMessage(res.data.name);
+    
             
         } catch (error) {
             setRegisterErrors(error.response.data);
@@ -72,12 +57,12 @@ export const AuthClientProvider = ({ children }) => {
             const res = await loginClientRequest(user);
             console.log(res);
             setIsAuthenticated(true);
-
+            setCLient(res.data)
 
             // console.log(Response.data);
             // setIsAuthenticated(true);
         } catch (error) {
-            setUser(error.response.data.msg);
+            setRegisterErrors(error.response.data);
 
         }
     }
@@ -126,7 +111,7 @@ export const AuthClientProvider = ({ children }) => {
             loading,
             resetEmail,
             successMessage,
-            registrationSuccess,
+            
         }}>
             {children}
         </AuthClientContext.Provider>

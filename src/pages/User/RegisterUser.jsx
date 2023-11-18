@@ -2,18 +2,33 @@ import { React, useState, useEffect } from "react";
 import { useForm } from "react-hook-form"
 import { useAuth } from "../../context/UserContext";
 import Axios from "../../services/axios";
-import { ToastContainer, toast } from 'react-toastify';
 import img from '../../img/SoftWash.jpg'
-import { Link } from "react-router-dom";
-import 'react-toastify/dist/ReactToastify.css';
+import { Link, useNavigate  } from "react-router-dom";
+import ModelRegister from "../../components/ModalRegister";
+
 function RegisterUser() {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { signup, registerErrors, successMessage, registrationSuccess } = useAuth()
+  const { signup, registerErrors, successMessage } = useAuth()
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [departments, setDepartments] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
+  const navigate = useNavigate();
+
   const onSubmit = handleSubmit(async (values) => {
-    signup(values);
+    const rta = await signup(values);
+    if(rta) {
+      setIsModalOpen(true);
+      // toast.success('!Registro exitoso. ', { theme: "light" })
+      const timer = setTimeout(() => {
+          // Redirige a la página deseada
+          setIsModalOpen(false)
+          navigate("/home-user")
+          // <Redirect to="/home-user" />;;
+      }, 3000);
+      return () => clearTimeout(timer);
+  }
 
   })
   const getMunicipalities = (id) => {
@@ -50,22 +65,25 @@ function RegisterUser() {
   }, []);
   return (
     <>
-      <ToastContainer />
-      {
-                registerErrors.map((error, i) => (
-                    toast.error(<div className='bg-red-500 p-2 mt-1 rounded-lg text-white' key={i}>
-                        {error}
-                    </div>, { theme: "light" })
-                ))
-            }
 
-            {/* {successMessage && (
+      {registerErrors.map((error, i) => (
+                    <div className="flex justify-center items-center">
+                        <div id='modal-component-container' className='fixed  h-52  z-10  top-0'>
+                            <div className='modal-flex-container flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
+                                <div className='modal-bg-container fixed inset-0 bg-gray-700 bg-opacity-75'></div>
+                                <div className='modal-space-container hidden sm:inline-block sm:align-middle sm:h-screen'></div>
 
-                <div className='bg-green-500 p-2 text-white'>
-                    {successMessage}
-                </div>
-            )} */}
-            {!registrationSuccess ? (
+                                <div id='modal-container' className='modal-container inline-block align-bottom  rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full'>
+                                    <div className=' bg-red-500 p-2  rounded-lg text-white' key={i}>
+                                        {error}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>)) }
+
+                    <ModelRegister isOpen={isModalOpen} title={'Registro exitoso'} message={successMessage} />
+           
       <div className='flex justify-center '>
         <div className='flex flex-col sm:flex-row sm:w-[85%]  mt-6  bg-gray-200 rounded-lg shadow-lg  shadow-gray-400   relative z-0'>
           <div className='flex flex-col   sm:absolute md:w-2/5 h-full z-10'>
@@ -198,16 +216,7 @@ function RegisterUser() {
           </div>
         </div>
       </div>
-      ) : (
-        <div className="flex mt-20 justify-center items-center">
-
-                    <div className='bg-green-500 p-2 text-white '>
-                {successMessage}
-            </div>
-                </div>
-      )
-
-    }
+      
     </>
   )
 }

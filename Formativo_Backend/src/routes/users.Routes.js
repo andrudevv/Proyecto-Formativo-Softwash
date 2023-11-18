@@ -58,10 +58,10 @@ userRouter.post(
         secure: true,
         sameSite: "none",
       });
-      res.status(201).json({message:`Registro exitoso ${newUser.name}`});
+      res.status(201).json(newUser);
     } catch (error) {
       next(error);
-      return res.status(500).json({ message: error.message });
+      return res.status(500).json([error.message]);
     }
     (err, res) => {
       // Este middleware manejará los errores generados por el validador
