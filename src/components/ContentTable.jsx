@@ -3,8 +3,8 @@ import React from 'react'
 export default function ContentTable({fields , fieldsMapping, data,buttonActions,stylesTable,stylesThead,stylesTbody, styleActions}) {
     return (
         <table className={`mt-4 ${stylesTable}`}>
-            <thead className={`${stylesThead} hidden md:table-header-group`} >
-                <tr className='text-center'>
+            <thead className={`${stylesThead}  sm:table-header-group`} >
+                <tr className='text-center border border-solid border-black'>
                     {fields.map((field) => (
                         <th key={field} scope="col" className='p-2'>{fieldsMapping[field] || field}</th>
                     ))}
@@ -14,7 +14,7 @@ export default function ContentTable({fields , fieldsMapping, data,buttonActions
                 {data.map((row,index)=>(
                     <tr key={index} className={index % 2 === 0 ? 'bg-blue-100' : 'bg-white'}>
                     {fields.map((field,subIndex) => (
-                        <td key={subIndex} className={`text-center p-2 ${field === 'acciones' ? styleActions : ''}`}>
+                        <td key={subIndex} className={`text-center  border-collapse border table-cell border-black p-2 ${field === 'acciones' ? styleActions : ''}`}>
                            {field === 'acciones' ? buttonActions(row['id']) : row[field]}
                         </td>
                     ))}

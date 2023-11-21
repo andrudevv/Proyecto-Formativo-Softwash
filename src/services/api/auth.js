@@ -15,7 +15,7 @@ export const loginRequest = (user) => Axios.post(`${API}/users/login`, user);
 //verificar token
 
 // export const verifyTokenRequest = () => Axios.get(`${API}/users/verify`);
-export const verifyTokenRequest = () => Axios.get(`${API}/users/verify`);
+export const verifyTokenRequest = () => Axios.get(`${API}/users/verify-user`);
 
 export const resetPassword = (data) =>
   Axios.post(`${API}/users/forgot-password`, data)

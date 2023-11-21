@@ -56,7 +56,7 @@ class LaundryService {
   async findProfile(id) {
     const findLaundry = await Laundry.findOne({
       attributes: {
-        exclude: ["password", "membership", "id", "recoveryToken"],
+        exclude: ["password", "membership", "recoveryToken"],
       },
       where: { id: id },
     });
@@ -151,7 +151,6 @@ class LaundryService {
     if (!laundry) {
       throw new Error("El cliente no existe");
     }
-    
     if(laundry.dataValues.email !== changes.email){
       const existingEmail = await Laundry.findOne({
         where: { email: changes.email},

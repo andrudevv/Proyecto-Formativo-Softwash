@@ -13,7 +13,7 @@ function RegisterClient() {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { signupClient, registerErrors, successMessage } = clientAuth();
+    const { signUpClient, registerErrors, successMessage } = clientAuth();
     const [departments, setDepartments] = useState([]);
     const [municipalities, setMunicipalities] = useState([]);
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ function RegisterClient() {
 
     const onSubmit = handleSubmit(async (values) => {
 
-        const rta = await signupClient(values);
+        const rta = await signUpClient(values);
         if (rta) {
             setIsModalOpen(true);
             // toast.success('!Registro exitoso. ', { theme: "light" })

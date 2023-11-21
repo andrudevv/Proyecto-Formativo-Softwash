@@ -113,11 +113,11 @@ laundryRouter.get(
         const userFound = await Laundry.findProfile(user.id);
         if (!userFound) return res.sendStatus(401);
 
-        return res.json({ userFound });
+        return res.json( userFound );
     } catch (error) {
 
       next(error);
-      // return res.status(400).json([error.message]);
+      res.status(400).json([error.message]);
     }
     (err, res) => {
       // Este middleware manejará los errores generados por el validador

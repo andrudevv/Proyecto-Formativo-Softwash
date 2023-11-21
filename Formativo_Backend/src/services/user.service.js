@@ -1,13 +1,13 @@
 
 const bcrypt = require('bcryptjs');
-const {User} = require('../db/models/index.js');
+const {User, Municipality} = require('../db/models/index.js');
 const {createAccessToken} = require('../lib/jwt.js');
 const sendEmailForgot = require('../utils/userResetPassword.js');
 const {verifyToken} = require('../lib/jwt.js');
 
-const MunicipalityService = require('../services/municipality.service.js')
+// const MunicipalityService = require('../services/municipality.service.js')
 
-const municipality = new MunicipalityService();
+// const municipality = new MunicipalityService();
 
 class UserService {
   constructor() {}
@@ -37,19 +37,17 @@ class UserService {
   // servicio de inicio de sesion
   async login(email, password) {
     const user = await User.findOne({
-      attributes: [
-        "id",
-        "documentUser",
-        "name",
-        "email",
-        'password'
-      ],
+      attributes:{exclude: ['recoveryToken']},
+      include:{
+        model:Municipality,
+        as: "Municipality",
+      },
        where: { email: email } });
     // en caso de querer mostrar el error en especifico de cada campo se habilitan estos condicionales, la siguiente que esta habilitada es para mayor seguridad sin confirmar el campo erroneo , exigiendo al usuario su atencion en los datos ingresados
     if (!user) {
       throw new Error("El correo electrónico no existe");
     }
-    const isPasswordValid = bcrypt.compareSync(password, user.password);
+    const isPasswordValid = bcrypt.compareSync(password, user.dataValues.password);
     // if (!isPasswordValid) {
     //   throw new Error("Contraseña incorrecta");
     // }
@@ -61,23 +59,23 @@ class UserService {
   }
 
 
-  async findProfile(id){
+  // async findProfile(id){
     
-    const findUser = await User.findOne({
-      attributes:{exclude:['password','membership','id','recoveryToken']},
-      where:{id:id}});
-    if (!findUser) {
-      throw new Error("usuario no encontrado");
-    }
-    const findC= await municipality.findName(findUser.municipalityId);
-    if (!findC) {
-      throw new Error("municipio no encontrado");
-    }
-    findUser.municipalityId = findC;
+  //   const findUser = await User.findOne({
+  //     attributes:{exclude:['password','recoveryToken']},
+  //     where:{id:id}});
+  //   if (!findUser) {
+  //     throw new Error("usuario no encontrado");
+  //   }
+  //   // const findC= await municipality.findName(findUser.municipalityId);
+  //   // if (!findC) {
+  //   //   throw new Error("municipio no encontrado");
+  //   // }
+  //   // findUser.municipalityId = findC;
     
-    return findUser
+  //   return findUser
     
-  }
+  // }
 
   async sendEmailForgot(email) {
     const user = await User.findOne({ where: { email: email } });

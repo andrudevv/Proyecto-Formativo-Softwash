@@ -10,7 +10,6 @@ const authRequired = (req, res, next) => {
       return res.status(401).json({
         message: "no esta autorizado su ingreso",
       });
-
     Jwt.verify(token, config.jwtSecret, (err, user) => {
       if (err) {
         return res.status(403).json({

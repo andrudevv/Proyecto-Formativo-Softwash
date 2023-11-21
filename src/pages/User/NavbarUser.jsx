@@ -23,14 +23,14 @@ export default function NavbarUser() {
       </div>
       <div className="flex items-center mt-2 md:mt-0 md:ml-6">
         <div className="hidden md:flex space-x-4">
-          <button className="text-white"><Link to="/home-user" className="font-Pathway Gothic One">Inicio</Link></button>
-          <button className="text-white"><Link to="/my-appointments" className="font-Pathway Gothic One">Citas</Link></button>
-          <button className="text-white"><Link to="/view-profile-user" className="font-Pathway Gothic One">Mi perfil</Link></button>
+          <button className="text-white hover:text-cyan-400"><Link to="/home-user" className="font-Pathway Gothic One">Inicio</Link></button>
+          <button className="text-white hover:text-cyan-400"><Link to="/my-appointments" className="font-Pathway Gothic One">Citas</Link></button>
+          <button className="text-white hover:text-cyan-400"><Link to="/view-profile-user" className="font-Pathway Gothic One">Mi perfil</Link></button>
           <span className="text-white">!Hola {user.name}</span>
-          <button className="text-white"  onClick={logoutUser}><Link to="/" className="font-Pathway Gothic One">Cerrar Sesion</Link></button>
+          <button className="text-white hover:text-cyan-400"  onClick={logoutUser}><Link to="/" className="font-Pathway Gothic One">Cerrar Sesion</Link></button>
         </div>
         <div className="md:hidden ml-auto">
-          <button className="text-white" onClick={toggleMenu}>
+          <button className="text-white hover:text-cyan-400" onClick={toggleMenu}>
             <FiMenu size={24} />
           </button>
           {menuOpen && (

@@ -32,7 +32,7 @@ export const AuthClientProvider = ({ children }) => {
         }
     }, [registerErrors]);
 
-    const signupClient = async (user) => {
+    const signUpClient = async (user) => {
         try {
 
             const res = await registerClientRequest(user);
@@ -50,7 +50,7 @@ export const AuthClientProvider = ({ children }) => {
 
 
 
-    const signin = async (user) => {
+    const signIn = async (user) => {
 
 
         try {
@@ -62,6 +62,7 @@ export const AuthClientProvider = ({ children }) => {
             // console.log(Response.data);
             // setIsAuthenticated(true);
         } catch (error) {
+            console.log(error);
             setRegisterErrors(error.response.data);
 
         }
@@ -102,11 +103,11 @@ export const AuthClientProvider = ({ children }) => {
     }, []);
     return (
         <AuthClientContext.Provider value={{
-            signupClient,
+            signUpClient,
             client,
             isAuthenticated,
             registerErrors,
-            signin,
+            signIn,
             logout,
             loading,
             resetEmail,

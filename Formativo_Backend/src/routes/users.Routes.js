@@ -62,8 +62,7 @@ userRouter.post(
     } catch (error) {
       next(error);
       return res.status(500).json([error.message]);
-    }
-    (err, res) => {
+    }(err, res) => {
       // Este middleware manejará los errores generados por el validador
       res.status(400).json({ error: err.message });
     };
@@ -73,7 +72,7 @@ userRouter.post(
 userRouter.post(
   "/login",
   validatorHandler(loginShema, "body"),
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       const { email, password } = req.body;
       const findUser = await service.login(email, password);
@@ -89,10 +88,12 @@ userRouter.post(
       });
       return res.status(200).json(findUser);
     } catch (error) {
-      // next(error);
-      console.log(error);
-      return res.status(400).json([error.message]);
-    }
+      next(error);
+      res.status(400).json([error.message]);
+    }(err, res) => {
+      // Este middleware manejará los errores generados por el validador
+      res.status(400).json({ error: err.message });
+    };
   }
 );
 //ruta para cerrar sesion
@@ -161,10 +162,10 @@ userRouter.get(
       const user = req.user;
       const userFound = await service.findProfile(user.id);
       if (!userFound) return res.sendStatus(401);
-      return res.status(200).json({ userFound });
+      return res.status(200).json( userFound);
     } catch (error) {
       next(error);
-      // return res.status(400).json([error.message]);
+      res.status(400).json([error.message]);
     }
     (err, res) => {
       // Este middleware manejará los errores generados por el validador
@@ -234,7 +235,7 @@ userRouter.get(
       return res.status(200).json(viewLaundry);
     } catch (error) {
       next(error);
-      // return res.status(400).json([error.message]);
+      res.status(400).json([error.message]);
     }
     (err, res) => {
       // Este middleware manejará los errores generados por el validador
@@ -254,7 +255,7 @@ userRouter.get("/getDepartments", async (req, res, next) => {
     console.error(error);
 
     next(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json([error.message ]);
   }
   (err, res) => {
     // Este middleware manejará los errores generados por el validador
@@ -264,7 +265,7 @@ userRouter.get("/getDepartments", async (req, res, next) => {
 
 
 // ruta necesaria para que el front valide las cookies y manipule el id o el nombre o correo segun lo requiera
-userRouter.get("/verify", async (req, res) => {
+userRouter.get("/verify-user", async (req, res) => {
   const { token } = req.cookies;
   if (!token) return res.sendStatus(401);
 

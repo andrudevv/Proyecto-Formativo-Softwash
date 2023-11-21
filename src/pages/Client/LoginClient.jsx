@@ -1,20 +1,20 @@
 import { useForm } from "react-hook-form"
-import { useAuth } from "../../context/UserContext";
 import {  Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-function LoginUser() {
+import { clientAuth } from "../../context/ClientContext";
+function LoginClient() {
 
   const { register, handleSubmit, formState: { errors } } = useForm()
-  const { signin, registerErrors , isAuthenticated} = useAuth();
+  const { signIn, registerErrors , isAuthenticated} = clientAuth();
   const navigate = useNavigate();
   const onSubmit = handleSubmit((data) => {
-    signin(data);
+    signIn(data);
     // console.log(Response);
   })
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/homeUser");
+      navigate("/home-client");
     }
   }, [isAuthenticated]);
   return (
@@ -28,12 +28,16 @@ function LoginUser() {
       }
       <form onSubmit={onSubmit} className="bg-gray-300 shadow-md rounded-lg w-full md:w-1/2 p-4">
       <h2 className="text-2xl font-semibold mb-6 text-center">Iniciar sesión como lavadero</h2>
+      <input type="number" {...register('rutLaundry', { required: true })} className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md" placeholder="rut" />
+        {errors.rutLaundry && (
+          <p className="text-red-500">rut es requerido</p>
+        )}
         <input type="email" {...register('email', { required: true })} className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md" placeholder="correo" />
-        {errors.correo && (
+        {errors.email && (
           <p className="text-red-500">email es requerido</p>
         )}
         <input type="password" {...register('password', { required: true })} className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md" placeholder="contraseña" />
-        {errors.clave && (
+        {errors.password && (
           <p className="text-red-500">contraseña es requerida</p>
         )}
 
@@ -51,4 +55,4 @@ function LoginUser() {
   )
 }
 
-export default LoginUser
+export default LoginClient
