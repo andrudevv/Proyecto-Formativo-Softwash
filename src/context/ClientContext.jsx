@@ -1,7 +1,9 @@
-import { createContext, useState, useContext, useEffect } from "react";
-import { registerClientRequest, loginClientRequest, resetPasswordClient } from "../services/api/auth";
+import { createContext, useState, useContext,useEffect } from "react";
+import { registerClientRequest, loginClientRequest, resetPasswordClient,clientVerifyTokenRequest } from "../services/api/auth";
 import Cookies from "js-cookie";
-import { clientVerifyTokenRequest } from "../services/api/auth";
+
+
+
 export const AuthClientContext = createContext()
 export const clientAuth = () => {
     const context = useContext(AuthClientContext);
@@ -10,17 +12,17 @@ export const clientAuth = () => {
 
 }
 
-export const AuthClientProvider = ({ children }) => {
 
+export const AuthClientProvider = ({ children }) => {
     const [client, setCLient] = useState(null)
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticatedClient, setIsAuthenticatedClient] = useState(false);
     const [registerErrors, setRegisterErrors] = useState([]);
     const [successMessage, setSuccessMessage] = useState("");
 
     // const [departments, setDepartments] = useState([]);
     // const [municipalities, setMunicipalities] = useState([]);
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
 
     useEffect(() => {
@@ -38,7 +40,7 @@ export const AuthClientProvider = ({ children }) => {
             const res = await registerClientRequest(user);
             console.log(res);
             setCLient(res.data);
-            setIsAuthenticated(true);
+            setIsAuthenticatedClient(true);
             setRegisterErrors([]);
             setSuccessMessage(res.data.name);
     
@@ -56,7 +58,7 @@ export const AuthClientProvider = ({ children }) => {
         try {
             const res = await loginClientRequest(user);
             console.log(res);
-            setIsAuthenticated(true);
+            setIsAuthenticatedClient(true);
             setCLient(res.data)
 
             // console.log(Response.data);
@@ -70,7 +72,7 @@ export const AuthClientProvider = ({ children }) => {
     const logout = () => {
         Cookies.remove("token");
         setCLient(null);
-        setIsAuthenticated(false);
+        setIsAuthenticatedClient(false);
     };
     const resetEmail = async (email) => {
         try {
@@ -81,31 +83,34 @@ export const AuthClientProvider = ({ children }) => {
         }
     }
     useEffect(() => {
+
+
         const checkLogin = async () => {
             const cookies = Cookies.get();
-            if (!cookies.token) {
-                setIsAuthenticated(false);
+            if (!cookies.tokenClient) {
+                setIsAuthenticatedClient(false);
                 setLoading(false);
                 return;
             }
             try {
                 const res = await clientVerifyTokenRequest(cookies.token);
-                if (!res.data) return setIsAuthenticated(false);
-                setIsAuthenticated(true);
+                if (!res.data) return setIsAuthenticatedClient(false);
+                setIsAuthenticatedClient(true);
                 setCLient(res.data);
                 setLoading(false);
             } catch (error) {
-                setIsAuthenticated(false);
+                setIsAuthenticatedClient(false);
                 setLoading(false);
             }
-        };
-        checkLogin();
+        }; 
+            checkLogin();
+
     }, []);
     return (
         <AuthClientContext.Provider value={{
             signUpClient,
             client,
-            isAuthenticated,
+            isAuthenticatedClient,
             registerErrors,
             signIn,
             logout,

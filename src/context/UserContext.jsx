@@ -1,25 +1,21 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { registerRequest, loginRequest, resetPassword } from "../services/api/auth";
+import { registerRequest, loginRequest, resetPassword, verifyTokenRequest } from "../services/api/auth";
 import Cookies from "js-cookie";
-import { verifyTokenRequest } from "../services/api/auth";
 export const AuthUserContext = createContext()
 export const useAuth = () => {
-
-    const context = useContext(AuthUserContext)
+    const context = useContext(AuthUserContext);
     if (!context) throw new Error('No se encuentra el usuario autenticado');
     return { ...context };
 
 }
 
 export const AuthUserProvider = ({ children }) => {
-
     const [user, setUser] = useState(null)
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticatedUser, setIsAuthenticatedUser] = useState(false);
     const [registerErrors, setRegisterErrors] = useState([]);
     const [successMessage, setSuccessMessage] = useState("");
 
-
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
 
     useEffect(() => {
@@ -37,7 +33,7 @@ export const AuthUserProvider = ({ children }) => {
             const res = await registerRequest(user);
             console.log(res);
             setUser(res.data);
-            setIsAuthenticated(true);
+            setIsAuthenticatedUser(true);
             setRegisterErrors([]);
             setSuccessMessage(res.data.name);
         } catch (error) {
@@ -53,7 +49,7 @@ export const AuthUserProvider = ({ children }) => {
         try {
             const res = await loginRequest(user);
             console.log(res);
-            setIsAuthenticated(true);
+            setIsAuthenticatedUser(true);
             setUser(res.data)
 
 
@@ -67,7 +63,7 @@ export const AuthUserProvider = ({ children }) => {
     const logout = () => {
         Cookies.remove("token");
         setUser(null);
-        setIsAuthenticated(false);
+        setIsAuthenticatedUser(false);
     };
     const resetEmail = async (email) => {
         try {
@@ -78,31 +74,34 @@ export const AuthUserProvider = ({ children }) => {
         }
     }
     useEffect(() => {
+       
         const checkLogin = async () => {
             const cookies = Cookies.get();
-            if (!cookies.token) {
-                setIsAuthenticated(false);
+            if (!cookies.tokenUser) {
+                setIsAuthenticatedUser(false);
                 setLoading(false);
                 return;
             }
             try {
                 const res = await verifyTokenRequest(cookies.token);
-                if (!res.data) return setIsAuthenticated(false);
-                setIsAuthenticated(true);
+                if (!res.data) return setIsAuthenticatedUser(false);
+                setIsAuthenticatedUser(true);
                 setUser(res.data);
                 setLoading(false);
             } catch (error) {
-                setIsAuthenticated(false);
+                setIsAuthenticatedUser(false);
                 setLoading(false);
             }
         };
-        checkLogin();
+            checkLogin();
+            
+
     }, []);
     return (
         <AuthUserContext.Provider value={{
             signup,
             user,
-            isAuthenticated,
+            isAuthenticatedUser,
             registerErrors,
             signin,
             logout,

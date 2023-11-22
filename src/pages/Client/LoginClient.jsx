@@ -5,7 +5,7 @@ import { clientAuth } from "../../context/ClientContext";
 function LoginClient() {
 
   const { register, handleSubmit, formState: { errors } } = useForm()
-  const { signIn, registerErrors , isAuthenticated} = clientAuth();
+  const { signIn, registerErrors , isAuthenticatedClient} = clientAuth();
   const navigate = useNavigate();
   const onSubmit = handleSubmit((data) => {
     signIn(data);
@@ -13,10 +13,10 @@ function LoginClient() {
   })
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/home-client");
+    if (isAuthenticatedClient) {
+      navigate("/client/home-client");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticatedClient]);
   return (
     <div className="flex items-center justify-center h-screen bg-custom-pagina-fondo">
       

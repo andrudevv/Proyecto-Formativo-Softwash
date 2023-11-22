@@ -81,7 +81,7 @@ userRouter.post(
         document: findUser.documentUser,
         username: findUser.name,
       });
-      res.cookie("token", token, {
+      res.cookie("tokenUser", token, {
         // httpOnly: process.env.NODE_ENV !== "development",
         secure: true,
         sameSite: "none",
@@ -266,10 +266,10 @@ userRouter.get("/getDepartments", async (req, res, next) => {
 
 // ruta necesaria para que el front valide las cookies y manipule el id o el nombre o correo segun lo requiera
 userRouter.get("/verify-user", async (req, res) => {
-  const { token } = req.cookies;
-  if (!token) return res.sendStatus(401);
+  const { tokenUser } = req.cookies;
+  if (!tokenUser) return res.sendStatus(401);
 
-  jwt.verify(token, config.jwtSecret, async (error, user) => {
+  jwt.verify(tokenUser, config.jwtSecret, async (error, user) => {
     if (error) return res.sendStatus(401);
 
     const userFound = await service.findOne(user.id);

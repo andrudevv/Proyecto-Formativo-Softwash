@@ -5,7 +5,7 @@ import { useEffect } from "react";
 function LoginUser() {
 
   const { register, handleSubmit, formState: { errors } } = useForm()
-  const { signin, registerErrors, isAuthenticated} = useAuth();
+  const { signin, registerErrors, isAuthenticatedUser} = useAuth();
   const navigate = useNavigate();
   const onSubmit = handleSubmit((data) => {
     signin(data);
@@ -13,10 +13,10 @@ function LoginUser() {
   })
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/home-user");
+    if (isAuthenticatedUser) {
+      navigate("/user/home-user");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticatedUser]);
   return (
     <div className="flex items-center justify-center h-screen bg-custom-pagina-fondo">
       
@@ -44,8 +44,10 @@ function LoginUser() {
 
 
 <button  type="submit"className="bg-button-primary text-black font-semibold hover:scale-110 mt-4 py-2 px-4 rounded hover:bg-blue-400  w-full">iniciar sesion</button>
-        <button className="bg-button-primary text-black font-semibold hover:scale-110 mt-4 py-2 px-4 rounded hover:bg-blue-400  w-full"><Link to="/sign-in-client">iniciar sesion como lavadero</Link></button>
-        <a className=" text-blue-700  font-semibold mt-4 py-2 px-4 rounded hover:scale110 w-full"><Link to="/reset-password-user">Olvido su contraseña?</Link></a>
+        <button type="button" className="bg-button-primary text-black font-semibold hover:scale-110 mt-4 py-2 px-4 rounded hover:bg-blue-400  w-full">
+          <Link to="/sign-in-client">iniciar sesion como lavadero</Link>
+          </button>
+        <p className=" text-blue-700  font-semibold mt-4 py-2 px-4 rounded hover:scale110 w-full"><Link to="/reset-password-user">Olvido su contraseña?</Link></p>
 
         {/* <p className="flex gap-x-2 justify-between my-3 ">no tienes una cuenta?  <Link to="/register" className="text-sky-500"> sign up</Link></p> */}
       </form>

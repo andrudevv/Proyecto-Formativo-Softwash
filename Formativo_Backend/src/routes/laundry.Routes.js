@@ -51,7 +51,7 @@ laundryRouter.post(
         username: findLaundry.name,
         membership: findLaundry.membership,
       });
-      res.cookie("token", token, {
+      res.cookie("tokenClient", token, {
         // httpOnly: process.env.NODE_ENV !== "development",
         secure: true,
         sameSite: "none",
@@ -126,10 +126,10 @@ laundryRouter.get(
   }
 );
 laundryRouter.get("/verify", async (req, res) => {
-  const { token } = req.cookies;
-  if (!token) return res.sendStatus(401);
+  const { tokenClient } = req.cookies;
+  if (!tokenClient) return res.sendStatus(401);
 
-  jwt.verify(token, config.jwtSecret, async (error, user) => {
+  jwt.verify(tokenClient, config.jwtSecret, async (error, user) => {
     if (error) return res.sendStatus(401);
 
     const userFound = await Laundry.findOne(user.id);

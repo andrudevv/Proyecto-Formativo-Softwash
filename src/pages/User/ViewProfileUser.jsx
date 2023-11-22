@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm} from "react-hook-form"
 import ContentTable from '../../components/ContentTable'
@@ -70,7 +70,7 @@ const fields = ["id", "plate", "model", "color", "typeVehicle", "acciones"];
 export default function MyVehicles() {
     // const [vehicles, setVehicles] = useState([]); 
     const [editingVehicle, setEditingVehicle] = useState(null);
-    const { user } = useAuth;
+    const { user } = useAuth();
     const { register, handleSubmit, formState: { errors },setValue, reset, getValues } = useForm();
     const [selectedVehicleId, setSelectedVehicleId] = useState(null);
     const [loading, setLoading] = useState(false);   //cambiar a true despues cuando se implemente la consulta en tiempo real
