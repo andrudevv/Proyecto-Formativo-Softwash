@@ -1,4 +1,4 @@
-const { Vehicle, User } = require("../db/models/index.js");
+const { Vehicle, User, Appointment } = require("../db/models/index.js");
 
 class VehicleService {
   constructor() {}
@@ -76,6 +76,12 @@ class VehicleService {
     const vehicle = await Vehicle.findOne({where:{id:id,userId:user}})
     if(!vehicle){
       throw new Error('Vehiculo no encontrado')
+    }
+    const appointmentWithVehicle = Appointment.findOne({
+      where: {vehicleId : vehicle.id}
+    })
+    if(appointmentWithVehicle){
+      throw new Error('No puede eliminar el vehiculo, tiene cita pendiente')
     }
     const deleteV = await Vehicle.destroy({where:{id:id, userId:user}});
     if(!deleteV){

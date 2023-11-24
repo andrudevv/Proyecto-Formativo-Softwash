@@ -1,4 +1,4 @@
-const { Service, Laundry } = require("../db/models/index.js");
+const { Service, Laundry, Appointment } = require("../db/models/index.js");
 
 class Services {
   constructor() {}
@@ -51,9 +51,7 @@ class Services {
     const findServices = await Service.findAll({
       where: { laundry_id: id },
     });
-    if (findServices.length === 0) {
-      throw new Error("No tienes servicios");
-    }
+    
     return findServices;
   }
 
@@ -79,6 +77,12 @@ class Services {
     });
     if (!findService) {
       throw new Error("no se encontro el servicio");
+    }
+    const findserviceWithAppointment = await Appointment.findOne({
+      where: { serviceId : findService.id}
+    })
+    if(findserviceWithAppointment){
+      throw new Error('No puede eliminar el servicio, tiene citas pendientes con el servicio');
     }
 
     const deleted = await Service.destroy({

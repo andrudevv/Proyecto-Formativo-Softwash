@@ -1,5 +1,15 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { registerRequest, loginRequest, resetPassword, verifyTokenRequest } from "../services/api/auth";
+import { registerRequest, 
+    loginRequest, 
+    resetPassword, 
+    verifyTokenRequest,
+    updateVehicleRequest,
+    getVehiclesUser,
+    createNewVehicle,
+    updateUser,
+    getUserProfile,
+    getAppointments,
+    deleteVehicleUser } from "../services/api/auth";
 import Cookies from "js-cookie";
 export const AuthUserContext = createContext()
 export const useAuth = () => {
@@ -31,7 +41,6 @@ export const AuthUserProvider = ({ children }) => {
     const signup = async (user) => {
         try {
             const res = await registerRequest(user);
-            console.log(res);
             setUser(res.data);
             setIsAuthenticatedUser(true);
             setRegisterErrors([]);
@@ -48,16 +57,71 @@ export const AuthUserProvider = ({ children }) => {
     const signin = async (user) => {
         try {
             const res = await loginRequest(user);
-            console.log(res);
             setIsAuthenticatedUser(true);
             setUser(res.data)
-
-
-            // console.log(Response.data);
-            // setIsAuthenticated(true);
         } catch (error) {
             setRegisterErrors(error.response.data)
 
+        }
+    }
+    const getAppointmentsUser = async () => {
+        try {
+            const resp = await getAppointments();
+            return  resp.data
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
+
+    const getProfile = async () =>{
+        try {
+            const objUser  = await getUserProfile();
+            return objUser.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
+    const updateUserProfile = async (upUser) =>{
+        try {
+            const response = await updateUser(upUser);
+            return response.data.message;
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
+
+    const createVehicle = async (newVehicle) => {
+        try {
+            const response = await createNewVehicle(newVehicle);
+            return response.data.message;
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
+    const getVehicles = async () =>{
+        try {
+            const rt = await getVehiclesUser();
+            return rt.data
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
+    const deleteVehicle = async (id) =>{
+        try {
+             const response = await deleteVehicleUser(id);
+             return response.data.message;
+            //  setSuccessMessage(response.data.message)
+
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
+    const updateVehicle = async (id,vehicle) =>{
+        try {
+            await updateVehicleRequest(id,vehicle);
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+            
         }
     }
     const logout = () => {
@@ -82,6 +146,8 @@ export const AuthUserProvider = ({ children }) => {
                 setLoading(false);
                 return;
             }
+
+            
             try {
                 const res = await verifyTokenRequest(cookies.token);
                 if (!res.data) return setIsAuthenticatedUser(false);
@@ -92,6 +158,7 @@ export const AuthUserProvider = ({ children }) => {
                 setIsAuthenticatedUser(false);
                 setLoading(false);
             }
+            
         };
             checkLogin();
             
@@ -103,9 +170,16 @@ export const AuthUserProvider = ({ children }) => {
             user,
             isAuthenticatedUser,
             registerErrors,
+            updateVehicle,
             signin,
             logout,
             loading,
+            updateUserProfile,
+            createVehicle,
+            deleteVehicle,
+            getVehicles,
+            getAppointmentsUser,
+            getProfile,
             resetEmail,
             successMessage,
            

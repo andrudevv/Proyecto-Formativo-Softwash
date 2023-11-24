@@ -2,7 +2,7 @@ const express = require("express");
 const LaundryService = require("../services/laundry.service.js");
 const { validatorHandler } = require("../middlewares/validator.handler.js");
 const { checkLaundry, checkUser } = require("../middlewares/auth.handler.js");
-const authRequired = require("../middlewares/validateToken.js");
+const {authRequiredClient} = require("../middlewares/validateToken.js");
 const { createAccessToken } = require("../lib/jwt.js");
 const { register } = require("../utils/clientEmailRegister.js");
 const jwt = require("jsonwebtoken");
@@ -13,6 +13,7 @@ const {
   getLaundryQuery,
   loginLaundrySchema,
 } = require("../schemas/laundry.schema.js");
+const {authRequiredUser} = require("../middlewares/validateToken.js");
 const laundryRouter = express.Router();
 const Laundry = new LaundryService();
 
@@ -69,10 +70,10 @@ laundryRouter.post(
 );
 
 //ruta para cerrar sesion
-laundryRouter.post("/logout", authRequired,
+laundryRouter.post("/logout", authRequiredClient,
 checkLaundry, (req, res) => {
   // Para cerrar sesión, simplemente borramos la cookie de token
-  res.clearCookie("token", {
+  res.clearCookie("tokenClient", {
     secure: true, // Asegúrate de que coincida con la configuración utilizada al establecer la cookie
     sameSite: "none", // Asegúrate de que coincida con la configuración utilizada al establecer la cookie
   });
@@ -83,7 +84,7 @@ checkLaundry, (req, res) => {
 //filtro de todos los lavaderos por departamento y municipio
 laundryRouter.get(
   "/",
-  authRequired,
+  authRequiredUser,
   checkUser,
   validatorHandler(getLaundryQuery, "query"),
   async (req, res, next) => {
@@ -105,7 +106,7 @@ laundryRouter.get(
 //ruta para el perfil del cliente
 laundryRouter.get(
   "/profile-client",
-  authRequired,
+  authRequiredClient,
   checkLaundry,
   async (req, res, next) => {
     try {
@@ -145,7 +146,7 @@ laundryRouter.get("/verify", async (req, res) => {
 // ruta para actualizar datos del cliente
 laundryRouter.patch(
   "/",
-  authRequired,
+  authRequiredClient,
   checkLaundry,
   validatorHandler(updateLaundrySchema, "body"),
   async (req, res, next) => {

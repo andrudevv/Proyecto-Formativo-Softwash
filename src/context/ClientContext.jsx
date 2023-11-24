@@ -1,5 +1,15 @@
 import { createContext, useState, useContext,useEffect } from "react";
-import { registerClientRequest, loginClientRequest, resetPasswordClient,clientVerifyTokenRequest } from "../services/api/auth";
+import { registerClientRequest, 
+    loginClientRequest, 
+    resetPasswordClient,
+    clientVerifyTokenRequest,
+    getClientProfile,
+    updateClient,
+    getServicesLaudry,
+    updateService,
+    deleteService,
+    createService
+ } from "../services/api/auth";
 import Cookies from "js-cookie";
 
 
@@ -53,20 +63,13 @@ export const AuthClientProvider = ({ children }) => {
 
 
     const signIn = async (user) => {
-
-
         try {
             const res = await loginClientRequest(user);
-            console.log(res);
             setIsAuthenticatedClient(true);
             setCLient(res.data)
-
-            // console.log(Response.data);
-            // setIsAuthenticated(true);
         } catch (error) {
             console.log(error);
             setRegisterErrors(error.response.data);
-
         }
     }
     const logout = () => {
@@ -74,6 +77,55 @@ export const AuthClientProvider = ({ children }) => {
         setCLient(null);
         setIsAuthenticatedClient(false);
     };
+    const getServices = async () =>{
+        try {
+            const findServices = await getServicesLaudry();
+            return findServices.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
+    const newService = async (service) =>{
+        try {
+            const created = await createService(service);
+            return created.data.message;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
+    const updateServiceLaundry = async (id, serviceToUpdate) =>{
+         try {
+            const serviceUpdate = await updateService(id, serviceToUpdate)
+            return serviceUpdate.data.message;
+         } catch (error) {
+            setRegisterErrors(error.response.data)
+         }
+    }
+    const serviceDelete = async (id) =>{
+        try {
+            const deletService = await deleteService(id);
+            return deletService.data.message;
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
+    const updateProfileClient = async (dataClient) =>{
+        try {
+            const resp = await updateClient(dataClient);
+            return resp.data.message;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
+    const getProfileClient = async () => {
+        try {
+            const resp = await getClientProfile();
+            return resp.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+            
+        }
+    }
     const resetEmail = async (email) => {
         try {
             const res = await resetPasswordClient(email);
@@ -102,6 +154,7 @@ export const AuthClientProvider = ({ children }) => {
                 setIsAuthenticatedClient(false);
                 setLoading(false);
             }
+            
         }; 
             checkLogin();
 
@@ -112,6 +165,12 @@ export const AuthClientProvider = ({ children }) => {
             client,
             isAuthenticatedClient,
             registerErrors,
+            getProfileClient,
+            updateProfileClient,
+            updateServiceLaundry,
+            serviceDelete,
+            getServices,
+            newService,
             signIn,
             logout,
             loading,

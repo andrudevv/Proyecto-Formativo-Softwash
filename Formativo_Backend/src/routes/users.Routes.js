@@ -4,7 +4,7 @@ const { config } = require("../config/config.js");
 //
 const UserService = require("../services/user.service.js");
 const LaundryService = require("../services/laundry.service.js");
-const authRequired = require("../middlewares/validateToken.js");
+const {authRequiredUser} = require("../middlewares/validateToken.js");
 const {
   updateUserShema,
   createuserShema,
@@ -97,9 +97,9 @@ userRouter.post(
   }
 );
 //ruta para cerrar sesion
-userRouter.post("/logout", authRequired, (req, res) => {
+userRouter.post("/logout", authRequiredUser, (req, res) => {
   // Para cerrar sesión, simplemente borramos la cookie de token
-  res.clearCookie("token", {
+  res.clearCookie("tokenUser", {
     secure: true, // Asegúrate de que coincida con la configuración utilizada al establecer la cookie
     sameSite: "none", // Asegúrate de que coincida con la configuración utilizada al establecer la cookie
   });
@@ -110,10 +110,10 @@ userRouter.post("/logout", authRequired, (req, res) => {
 // cambiar contraseña con un token que se envio al correo para restablecer
 userRouter.post("/change-password/:token", async (req, res, next) => {
   try {
-    const { token } = req.params;
+    const { tokenUser } = req.params;
     // const user = await service.reset(token);
     const { newPassword } = req.body;
-    const rta = await service.changePassword(token, newPassword);
+    const rta = await service.changePassword(tokenUser, newPassword);
     res.json(rta);
   } catch (error) {
     next(error);
@@ -123,7 +123,7 @@ userRouter.post("/change-password/:token", async (req, res, next) => {
 // buscar todos los lavaderos segun el usuario realize el filtro
 userRouter.get(
   "/getlaundrys",
-  authRequired,
+  authRequiredUser,
   // checkShared,
   validatorHandler(getLaundrysSchema, "body"),
   async (req, res, next) => {
@@ -152,7 +152,7 @@ userRouter.get(
 // falta incluir traer vehiculos y citas
 userRouter.get(
   "/profile-user",
-  authRequired,
+  authRequiredUser,
   checkUser,
   // checkShared,
   // checkLaundry,
@@ -177,7 +177,7 @@ userRouter.get(
 //traer vehiculos de el usuario autenticado
 userRouter.get(
   "/profile-user-vehicle",
-  authRequired,
+  authRequiredUser,
   checkUser,
   // checkShared,
   // checkLaundry,
@@ -186,10 +186,10 @@ userRouter.get(
     try {
       const user = req.user;
       const userFound = await Vehicle.findByUser(user.id);
-      return res.status(200).json({ message: "vehiculos", userFound });
+      return res.status(200).json(userFound);
     } catch (error) {
       next(error);
-      // return res.status(400).json([error.message]);
+      res.status(400).json([error.message]);
     }
     (err, res) => {
       // Este middleware manejará los errores generados por el validador
@@ -201,7 +201,7 @@ userRouter.get(
 //actualizar datos sin incluir la contraseña
 userRouter.patch(
   "/",
-  authRequired,
+  authRequiredUser,
   // checkLaundry,
   validatorHandler(updateUserShema, "body"),
   async (req, res, next) => {
@@ -213,7 +213,7 @@ userRouter.patch(
     } catch (error) {
       // res.json([error.message]);
       next(error);
-      // return res.status(400).json([error.message]);
+      res.status(400).json([error.message]);
     }
     (err, res) => {
       // Este middleware manejará los errores generados por el validador
@@ -225,7 +225,7 @@ userRouter.patch(
 // ver el verfil del lavadero
 userRouter.get(
   "/view-profile/",
-  authRequired,
+  authRequiredUser,
   // checkLaundry,
   // validatorHandler(createLaundrySchema, "body"),
   async (req, res, next) => {
@@ -275,11 +275,7 @@ userRouter.get("/verify-user", async (req, res) => {
     const userFound = await service.findOne(user.id);
     if (!userFound) return res.sendStatus(401);
 
-    return res.json({
-      id: userFound._id,
-      name: userFound.name,
-      email: userFound.email
-    });
+    return res.json(userFound);
   });
 });
 
@@ -294,7 +290,7 @@ userRouter.get("/get-municipality/:id", async (req, res, next) => {
     console.error(error);
 
     next(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json([error.message ]);
   }
   (err, res) => {
     // Este middleware manejará los errores generados por el validador
@@ -307,15 +303,15 @@ userRouter.get("/get-municipality/:id", async (req, res, next) => {
 //actualizar la contraseña por medio de token
 userRouter.get("/reset-password/:token", async (req, res, next) => {
   try {
-    const { token } = req.params;
+    const { tokenUser } = req.params;
     const { newPassword } = req.body;
-    const user = await service.changePassword(token, newPassword);
+    const user = await service.changePassword(tokenUser, newPassword);
     res.status(201).json(user);
   } catch (error) {
     console.error(error);
 
     next(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(500).json([error.message]);
   }
   (err, res) => {
     // Este middleware manejará los errores generados por el validador

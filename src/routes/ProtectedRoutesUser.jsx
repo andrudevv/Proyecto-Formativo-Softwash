@@ -11,3 +11,11 @@ function ProtectedRoutesUser() {
 }
 
 export default ProtectedRoutesUser
+
+
+// vamos a hacer una funcion que tome 2 parametros para sumarlos y el resultado se retornar dividido entre 2
+// function sumar(a,b){
+    //     let result=a+b;
+    //     return result/2;
+    // }
+

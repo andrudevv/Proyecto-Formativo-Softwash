@@ -1,115 +1,100 @@
-import { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { useForm} from "react-hook-form"
+import { useState, useEffect } from 'react';
+import { useForm } from "react-hook-form"
 import ContentTable from '../../components/ContentTable'
 import DivContent from '../../components/DivContent';
 import Spinner from '../../components/SpinnerLoading';
 import ButtonAction from '../../components/ButtonAction';
 import ReusableModals from '../../components/ReusableModals';
-import VehicleRegistrationModal from '../../components/ModalRegisterVehicle';
+import VehicleRegistrationModal from '../../components/User/ModalRegisterVehicle';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ModalUpdateVehicle from '../../components/ModalUpdateVehicle';
-import Axios from "../../services/axios";
+import ModalUpdateVehicle from '../../components/User/ModalUpdateVehicle';
 import { useAuth } from '../../context/UserContext';
-
+import DataProfile from '../../components/User/DataProfile'
+import ModalUpdateProfileUser from '../../components/User/ModalUpdateProfileUser';
 // const styles = 'justify-center items-center bg-gray-200';
 const stylesTable = 'w-full bg-white-100 mb-6  border border-gray-300';
 const stylesThead = 'bg-gray-400';
 const stylesTbody = 'bg-blue-200';
 const styleActions = ' md:grid md:grid-flow-col  md:auto-cols-max place-content-evenly sm:flex sm:space-y';
-const user = [
-    {
-        "id": 1,
-        "plate": "VMV-29C",
-        "model": "1900",
-        "color": "negro",
-        "typeVehicle": "moto"
-    },
-    {
-        "id": 2,
-        "plate": "VMV-29C",
-        "model": "1900",
-        "color": "negro",
-        "typeVehicle": "moto"
-    },
-    {
-        "id": 5,
-        "plate": "VMV-29C",
-        "model": "1900",
-        "color": "negro",
-        "typeVehicle": "moto"
-    },
 
-
-];
-const userData = {
-    "documentUser": 1234,
-    "name": "andrewadmin",
-    "lastName": "ramirez",
-    "phone": 1231214,
-    "email": "rvandruzyzz@gmail.com",
-    "role": "user",
-    "municipalityId": {
-        "id": 2,
-        "name": "Puerto Nariño",
-        "departmentId": 1
-    }
-}
 const fieldsMapping = {
-    "id": "ID",
     "plate": "Placa",
     "model": "Modelo",
     "color": "Color",
     "typeVehicle": "Tipo de Vehículo",
     "acciones": "Acciones"
 };
-const fields = ["id", "plate", "model", "color", "typeVehicle", "acciones"];
+const fields = ["plate", "model", "color", "typeVehicle", "acciones"];
 
 
 export default function MyVehicles() {
     // const [vehicles, setVehicles] = useState([]); 
     const [editingVehicle, setEditingVehicle] = useState(null);
-    const { user } = useAuth();
-    const { register, handleSubmit, formState: { errors },setValue, reset, getValues } = useForm();
+    const {
+        updateVehicle,
+        registerErrors,
+        getVehicles,
+        deleteVehicle,
+        createVehicle,
+        getProfile,
+        updateUserProfile } = useAuth();
+    const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm();
     const [selectedVehicleId, setSelectedVehicleId] = useState(null);
     const [loading, setLoading] = useState(false);   //cambiar a true despues cuando se implemente la consulta en tiempo real
     const [isModalDelete, setIsModalDelete] = useState(false);
-    const [update, Setupdate ] = useState(false);
-    const [create, Setcreate ] = useState(false);
-    const [userD, setUserD ] = useState([]);
-    console.log(user);
-    const onSubmit = handleSubmit (async (values) =>{
-console.log(values);
-// user.push(values);
+    const [update, setUpdate] = useState(false);
+    const [updateProfile, setUpdateProfile] = useState(false);
+    const [create, Setcreate] = useState(false);
+    const [userVehicles, setUserVehicles] = useState([]);
+    const [userData, setUserData] = useState({});
+
+
+
+    // perfil
+    // handle para enviar al request de actualizacion de datos del usuario
+    const onSubmitProfile = handleSubmit(async (userValue) => {
+        try {
+            delete userValue.Municipality;
+            delete userValue.role;
+            delete userValue.id;
+            const response = await updateUserProfile(userValue);
+            if (!response) {
+                toast.error(`Error al actualizar los datos.`, { theme: "light" });
+                setUpdateProfile(false);
+                return
+            }
+            setUpdateProfile(false);
+            const dataProfile = await getProfile();
+            setUserData(dataProfile);
+            toast.success(`${response}`, { theme: "light" });
+
+        } catch (error) {
+            console.log(error);
+        }
+
+
     })
-    // const onSubmitUpdate = handleSubmit (async (values) =>{
-    //     const index = user.findIndex((vehicle) => vehicle.id === editingVehicle.id);
-    //     if (index !== -1) {
-    //         // Actualiza las propiedades del vehículo con los nuevos valores
-    //         user[index] = { ...user[index], ...values };
-            
-        
-    //         // Realiza otras acciones necesarias después de la actualización
-        
-    //         // Cierra el modal de edición
-    //         handleModalUpdateClose();
-    //       }
-    //         })
-    // const onSubmitDelete = handleSubmit ( async(id)=>{
-    //    console.log(`vehiculo eliminado ${id}`);
-        
-    // })
-    // const getVehicles = async () => {
-    //     try {
-    //     //   const res = await axios.get(URI);
-    //     //   setVehicles(res.data);
-    //       setLoading(false);
-    //     } catch (error) {
-    //       console.error('Error fetching Vehicles:', error);
-    //       setLoading(false);
-    //     }
-    //   };
+    const handleModalUpdateOpenProfile = () => {
+        setUpdateProfile(true);
+    }
+    const handleModalUpdateCloseProfile = () => {
+        setUpdateProfile(false);
+    }
+
+    // funciones para eliminar vehiculo
+
+    const handleEliminar = async (id) => {
+        const response = await deleteVehicle(id);
+        if (!response) {
+            toast.error(`Error al eliminar`, { theme: "light" })
+        }
+        toast.success(`${response}`, { theme: "light" });
+        const res = await getVehicles();
+        setUserVehicles(res);
+        closeModalDelete();
+    };
+
     const handleModalDelete = (id) => {
         setSelectedVehicleId(id);
         setIsModalDelete(true);
@@ -118,53 +103,63 @@ console.log(values);
         setSelectedVehicleId(null);
         setIsModalDelete(false);
     };
-    /////////funcion para modal editar
-    const handleModalUpdateOpen =(idV)=>{
-        const vehicleToEdit = user.find((vehicle) => vehicle.id === idV);
-        console.log('1', vehicleToEdit);
-        setEditingVehicle(vehicleToEdit);
-        Setupdate(true);
-    }
-    const handleModalUpdateClose =()=>{
+
+
+
+    //handle para actualizar vehiculo
+
+    const handleModalUpdate = handleSubmit(async (vehicle) => {
+        const id = vehicle.id;
+        delete vehicle.id;
+        const rt = await updateVehicle(id, vehicle);
+        if (!rt) {
+            toast.error(`Error al actualizar los datos.`, { theme: "light" });
+        }
+        toast.success(`${rt}`, { theme: "light" });
+        const response = await getVehicles();
+        setUserVehicles(response);
+        setUpdate(false);
         setEditingVehicle(null);
-        Setupdate(false);
-    }
-    const handleModalUpdate = ()=>{
-        const formValues = getValues();
-        onSubmitUpdate(formValues);
-        setEditingVehicle(null)
-        Setupdate(false);
 
+    })
+    const handleModalUpdateOpen = (idV) => {
+        const vehicleToEdit = userVehicles.find((vehicle) => vehicle.id === idV);
+        setEditingVehicle(vehicleToEdit);
+        setUpdate(true);
     }
-    /////////funciones para modal crear
-    const handleModalCreate =()=>{
-        const formValues = getValues();
-        onSubmit(formValues);
+    const handleModalUpdateClose = () => {
+        setEditingVehicle(null);
+        setUpdate(false);
+    }
+
+
+    /////////funciones para modal crear vehiculos
+    const handleModalCreate = handleSubmit(async (newVehicle) => {
+        console.log(newVehicle);
+        const response = await createVehicle(newVehicle);
+        if (!response) {
+            toast.error(`Error al crear el vehiculo`, { theme: "light" });
+        } else {
+            toast.success(`${response}`, { theme: "light" });
+            const update = await getVehicles();
+            setUserVehicles(update);
+        }
         Setcreate(false);
-    }
-    const handleModalCreateClose =()=>{
-       reset(); 
-       Setcreate(false);
-        
+    })
+
+    const handleModalCreateClose = () => {
+        reset();
+        Setcreate(false);
+
 
     }
-    const handleModalCreateOpen =()=>{
+
+    const handleModalCreateOpen = () => {
         Setcreate(true);
         reset();
-        
+
     }
-    ////////////////////////////
-    const handleEliminarClick = (id) => {
-        console.log(id);
-        // onSubmitDelete(id)
-        toast.success(`Vehiculo eliminado con ID ${id}`, { theme: "light" });
-        closeModalDelete();
-    };
-    const handleOtroBotonClick = (id) => {
-        // Lógica para manejar el otro botón con el ID proporcionado
-        console.log(`Hacer algo con el vehículo con ID ${id}`);
-    };
-   
+
     const customButtons = [
 
         {
@@ -180,99 +175,104 @@ console.log(values);
         },
         // Agrega más botones según sea necesario
     ];
-    // const getProfileUser = () => {
-    //     Axios.get(`http://localhost:4000/api/users/profile-user`)
-    //         .then((Response) => {
-    //             setUserD(Response.data);
-    //             console.log(Response.data);
-    //         })
-    //         .catch((error) => {
-    //             console.log(error)
-    //             throw error;
-    //         });
-    // };
+
     useEffect(() => {
+        const getUser = async () => {
+            setLoading(true)
+            try {
+                const dataProfile = await getProfile();
+                setUserData(dataProfile);
+                setLoading(false)
+            } catch (error) {
+                toast.error(`Error al traer los datos del usuario`, { theme: "light" })
+            }
+        }
+
         const fetchData = async () => {
             try {
-                // getProfileUser();
-                console.log(client);
+                const response = await getVehicles();
+                setUserVehicles(response);
+
+
+
             } catch (error) {
-                console.error('Error al obtener datos del usuario:', error);
-                // Puedes manejar el error aquí, como mostrar un mensaje al usuario.
+                toast.error(`Error al obtener vehiculos del usuario`, { theme: "light" })
             }
         };
-
-        // fetchData();
+        getUser();
+        fetchData();
     }, []);
     return (
         <>
- <ModalUpdateVehicle
- onSubmit={handleModalUpdate} setValue={setValue}   reset={reset} editingVehicle={editingVehicle} handleSubmit={handleSubmit} isOpen={update} title={'Editar vehiculo'} message={'Modificacion'}
- register={register} errors={errors} buttons={[
-    {
-        text: "Editar",
-        tipo: "button",
-        onClick: handleModalUpdate,
-        estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
-    }, {
-        text: "Cancelar",
-        tipo: "button",
-        onClick: handleModalUpdateClose,
-        estilos: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ",
-    },
- ]}/>
- <VehicleRegistrationModal  onSubmit={onsubmit} isOpen={create}
-  title="Registrar vehiculo"
-  setValue={setValue}
-  message={"Ingrese datos del vehiculo"}
-  buttons={[
-    {
-        text: "Registrar",
-        tipo: "button",
-        onClick: handleModalCreate,
-        estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
-    }, {
-        text: "Cancelar",
-        tipo: "button",
-        onClick: handleModalCreateClose,
-        estilos: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ",
-    },
-  ]}
-  errors={errors}
-  register={register}
-
-  />
-            <div className="max-w-2xl mx-auto bg-white p-8 rounded-md shadow-md">
-               
-                <div className="grid grid-cols-2 mt-10 gap-10">
-                    <div>
-                        <strong>Nombre:</strong> {user.name}
-                    </div>
-                    <div>
-                        <strong>Apellido:</strong> {user.lastName}
-                    </div>
-                    <div>
-                        <strong>Correo:</strong> {user.email}
-                    </div>
-                    <div>
-                        <strong>Cedula:</strong> {user.documentUser}
-                    </div>
-                    <div>
-                        <strong>Telefono:</strong> {user.phone}
-                    </div>
-
-                    <div>
-                        <strong>Municipio:</strong> {user.municipalityId.name}
-                    </div>
-                    <div className='col-span-2 text-center'>
-                        <ButtonAction tipo={onclick} estilos={'w-1/3 h-10 font-bold bg-button-primary rounded-md'} text={'Actualizar'} />
-
-                    </div>
-
-                    {/* Agrega más detalles según sea necesario */}
-                </div>
 
 
+            {registerErrors.map((error, i) => (
+                <div className="flex justify-center items-center">
+                    <div id='modal-component-container' className='fixed  h-52  z-10  top-0'>
+                        <div className='modal-flex-container flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
+                            <div className='modal-bg-container fixed inset-0 bg-gray-700 bg-opacity-75'></div>
+                            <div className='modal-space-container hidden sm:inline-block sm:align-middle sm:h-screen'></div>
+
+                            <div id='modal-container' className='modal-container inline-block align-bottom  rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full'>
+                                <div className=' bg-red-500 p-2  rounded-lg text-white' key={i}>
+                                    {error}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>))}
+            <ModalUpdateProfileUser onSubmit={onSubmitProfile} reset={reset} handleSubmit={handleSubmit} DataUser={userData} setValue={setValue} isOpen={updateProfile} title={'Editar Datos del usuario'}
+                register={register} errors={errors} buttons={[
+                    {
+                        text: "Actualizar",
+                        tipo: "button",
+                        onClick: onSubmitProfile,
+                        estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
+                    }, {
+                        text: "Cancelar",
+                        tipo: "button",
+                        onClick: handleModalUpdateCloseProfile,
+                        estilos: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ",
+                    },
+                ]} />
+            <ModalUpdateVehicle
+                onSubmit={handleModalUpdate} setValue={setValue} reset={reset} editingVehicle={editingVehicle} handleSubmit={handleSubmit} isOpen={update} title={'Editar vehiculo'} 
+                register={register} errors={errors} buttons={[
+                    {
+                        text: "Editar",
+                        tipo: "button",
+                        onClick: handleModalUpdate,
+                        estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
+                    }, {
+                        text: "Cancelar",
+                        tipo: "button",
+                        onClick: handleModalUpdateClose,
+                        estilos: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ",
+                    },
+                ]} />
+            <VehicleRegistrationModal onSubmit={onsubmit} isOpen={create}
+                title="Registrar vehiculo"
+                setValue={setValue}
+                
+                buttons={[
+                    {
+                        text: "Registrar",
+                        tipo: "button",
+                        onClick: handleModalCreate,
+                        estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
+                    }, {
+                        text: "Cancelar",
+                        tipo: "button",
+                        onClick: handleModalCreateClose,
+                        estilos: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ",
+                    },
+                ]}
+                errors={errors}
+                register={register}
+
+            />
+            <div>
+                {loading || !userData ? (<Spinner />) : (<><DataProfile user={userData} onClick={handleModalUpdateOpenProfile} /></>)}
             </div>
             <div className='h-[20vh]'></div>
             <ToastContainer />
@@ -285,7 +285,7 @@ console.log(values);
                             {/* <DivContent className={styles}> */}
                             <h1 className="flex justify-center text-2xl font-bold mb-4">MIS VEHICULOS</h1>
                             <ButtonAction estilos={'flex w-24 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-4 w-auto justify-end'} text={'Añadir Vahiculo'} onClick={handleModalCreateOpen} />
-                            <ContentTable fields={fields} data={user} fieldsMapping={fieldsMapping}
+                            <ContentTable fields={fields} data={userVehicles} fieldsMapping={fieldsMapping}
                                 buttonActions={(id) => customButtons.map((button, index) => (<ButtonAction key={index} {...button} onClick={() => button.onClick(id)} />))}
                                 stylesTable={stylesTable} stylesThead={stylesThead} stylesTbody={stylesTbody}
                                 styleActions={styleActions} />
@@ -299,7 +299,7 @@ console.log(values);
                                 buttons={[
                                     {
                                         text: 'Eliminar',
-                                        onClick: () => handleEliminarClick(selectedVehicleId),
+                                        onClick: () => handleEliminar(selectedVehicleId),
                                         styles: 'bg-red-500 hover:bg-red-600 text-black font-bold',
                                     },
                                     {

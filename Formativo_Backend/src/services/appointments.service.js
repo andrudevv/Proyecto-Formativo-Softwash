@@ -124,10 +124,8 @@ class AppointmentService {
         },
       ],
     });
-    if (findAppointments.length === 0) {
-      return message = {message:'No tienes citas agendadas'};
-    }
-    return { myAppointments: findAppointments };
+    
+    return findAppointments ;
   }
 
   // buscar la disponibilidad y id de lavadero por medio de un servicio para crear o actualizar citas

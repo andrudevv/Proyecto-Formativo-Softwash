@@ -44,21 +44,12 @@ const fields = ["id", "plate", "model", "color", "typeVehicle", "acciones"];
 
 
 export default function CrudTable() {
-    // const [vehicles, setVehicles] = useState([]); 
+ 
     const [selectedVehicleId, setSelectedVehicleId] = useState(null);
     const [loading, setLoading] = useState(false);   //cambiar a true despues cuando se implemente la consulta en tiempo real
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // const getVehicles = async () => {
-    //     try {
-    //     //   const res = await axios.get(URI);
-    //     //   setVehicles(res.data);
-    //       setLoading(false);
-    //     } catch (error) {
-    //       console.error('Error fetching Vehicles:', error);
-    //       setLoading(false);
-    //     }
-    //   };
+
     const openModal = (id) => {
         setSelectedVehicleId(id);
         setIsModalOpen(true);

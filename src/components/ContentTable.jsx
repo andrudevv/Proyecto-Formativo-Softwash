@@ -12,9 +12,9 @@ export default function ContentTable({fields , fieldsMapping, data,buttonActions
             </thead>
             <tbody className={stylesTbody}>
                 {data.map((row,index)=>(
-                    <tr key={index} className={index % 2 === 0 ? 'bg-blue-100' : 'bg-white'}>
+                    <tr key={index} className={index % 2 === 0 ? 'bg-blue-100' : 'bg-white ' }>
                     {fields.map((field,subIndex) => (
-                        <td key={subIndex} className={`text-center  border-collapse border table-cell border-black p-2 ${field === 'acciones' ? styleActions : ''}`}>
+                        <td key={subIndex}  className={`text-center  max-w-xl break-all border-collapse border table-cell  border-black p-2 ${field === 'acciones' ? styleActions : ''}`}>
                            {field === 'acciones' ? buttonActions(row['id']) : row[field]}
                         </td>
                     ))}

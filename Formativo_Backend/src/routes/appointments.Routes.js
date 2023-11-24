@@ -17,15 +17,14 @@ const {
 } = require("../schemas/appointments.schema.js");
 const { validatorHandler } = require("../middlewares/validator.handler.js");
 const { checkUser, checkLaundry } = require("../middlewares/auth.handler.js");
-const authRequired = require("../middlewares/validateToken.js");
-
+const {authRequiredClient, authRequiredUser} = require("../middlewares/validateToken.js");
 
 const appointment = new AppointmentService();
 const appointmentRouter = express.Router();
 
 appointmentRouter.post(
   "/create-appointment",
-  authRequired,
+  authRequiredUser,
   checkUser,
   validatorHandler(createAppointmentSchema, "body"),
   async (req, res) => {
@@ -61,7 +60,7 @@ appointmentRouter.post(
 //traer  citas del usuario
 appointmentRouter.get(
   "/my-appointments",
-  authRequired,
+  authRequiredUser,
   checkUser,
   async (req, res) => {
     try {
@@ -80,7 +79,7 @@ appointmentRouter.get(
       res.status(200).json(myappointments);
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: error.message });
+      return res.status(500).json([ error.message]);
     }
     (err, res) => {
       res.status(400).json({ error: err.message });
@@ -91,7 +90,7 @@ appointmentRouter.get(
 //traer citas del lavadero
 appointmentRouter.get(
   "/get-appointments/:date",
-  authRequired,
+  authRequiredClient,
   checkLaundry,
   validatorHandler(getByDate, "params"),
   validatorHandler(getByQuery, "query"),
@@ -140,7 +139,7 @@ appointmentRouter.get(
 //para traer la disponibilidad de horas segun el lavadero es get al seleccionar la fecha
 appointmentRouter.get(
   "/:id/:date",
-  authRequired,
+  authRequiredUser,
   checkUser,
   validatorHandler(getAbilitySchema, "params"),
   async (req, res) => {
@@ -167,7 +166,7 @@ appointmentRouter.get(
 
 appointmentRouter.patch(
   "/my-appointments/:id",
-  authRequired,
+  authRequiredClient,
   checkUser,
   validatorHandler(patchAppointmentParams, "params"),
   validatorHandler(patchAppointment, "body"),

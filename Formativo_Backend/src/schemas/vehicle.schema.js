@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 
 const id = Joi.number().integer();
-const plate = Joi.string().max(7).min(5).regex(/^[A-Z]{3}-\d{2}[A-Z]?$/);
+const plate = Joi.string().max(7).min(5).regex(/^[A-Z]{3}-\d{2}[A-Z\d]?$/);
 const model = Joi.number().integer().max(2024).min(1900);
 const color = Joi.string();
 const userId = Joi.number().integer();

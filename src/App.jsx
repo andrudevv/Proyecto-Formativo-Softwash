@@ -1,6 +1,7 @@
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthUserProvider } from "./context/UserContext";
+
 import LoginUser from "./pages/User/LoginUser";
 import LoginClient from "./pages/Client/LoginClient";
 import RegisterUser from "./pages/User/RegisterUser";
@@ -9,7 +10,7 @@ import ProtectedRoutesUser from "./routes/ProtectedRoutesUser";
 import Navbar from "./components/Header"
 import UserEmailReset from "./utils/UserEmailReset";
 import ClientEmailReset from "./utils/ClientEmailReset";
-import { AuthClientProvider } from "./context/ClientContext";
+import { AuthClientProvider} from "./context/ClientContext";
 import ViewProfile from "./pages/User/ViewProfileUser";
 import ProtectedRoutesClient from "./routes/ProtectedRoutesClient";
 import HomeUsers from "./pages/HomeUsers";
@@ -17,7 +18,7 @@ import NotFound404 from "./pages/NotFound404";
 import Footer from "./components/Footer";
 
 import MyAppointmentUser from "./pages/User/MyAppointmentUser";
-import ModalRegisterVehicle from "./components/ModalRegisterVehicle";
+import ModalRegisterVehicle from "./components/User/ModalRegisterVehicle";
 import ViewProfileClient from "./pages/Client/ViewProfileClient";
 
 function App() {
@@ -31,11 +32,11 @@ function App() {
           <main className=" pt-20 container mx-auto min-h-screen">
             <Routes>
               <Route path="/" element={<HomeUsers />} />
-              <Route path="/sign-in-user" element={<LoginUser />} />
-              <Route path="/register-user" element={<RegisterUser />} />
+              <Route path="/sign-in-user"  element={ <LoginUser />} />
+              <Route path="/register-user" element={ <RegisterUser />} />
               <Route path="/ensayo" element={<ModalRegisterVehicle />} />
               <Route path="/*" element={<NotFound404 />} />
-              <Route path="/reset-password-user" element={<UserEmailReset />} />
+              <Route path="/reset-password-user" element={ <UserEmailReset />} />
 
               {/* <Route path="/my-vehicles" element={<MyVehicles/>} /> */}
               // rutas protegidas usuario
@@ -49,9 +50,9 @@ function App() {
               </Route>
 
 
-              <Route path="/register-client" element={<RegisterClient />} />
+              <Route path="/register-client" element={ <RegisterClient />}  />
               <Route path="/sign-in-client" element={<LoginClient />} />
-              <Route path="/reset-password-client" element={<ClientEmailReset />} />
+              <Route path="/reset-password-client" element={ <ClientEmailReset />}/>
 
               // rutas protegidas cliente
               <Route element={<ProtectedRoutesClient />}>

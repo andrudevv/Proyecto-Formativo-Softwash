@@ -38,10 +38,10 @@ class UserService {
   async login(email, password) {
     const user = await User.findOne({
       attributes:{exclude: ['recoveryToken']},
-      include:{
-        model:Municipality,
-        as: "Municipality",
-      },
+      // include:{
+      //   model:Municipality,
+      //   as: "Municipality",
+      // },
        where: { email: email } });
     // en caso de querer mostrar el error en especifico de cada campo se habilitan estos condicionales, la siguiente que esta habilitada es para mayor seguridad sin confirmar el campo erroneo , exigiendo al usuario su atencion en los datos ingresados
     if (!user) {
@@ -59,23 +59,27 @@ class UserService {
   }
 
 
-  // async findProfile(id){
+  async findProfile(id){
     
-  //   const findUser = await User.findOne({
-  //     attributes:{exclude:['password','recoveryToken']},
-  //     where:{id:id}});
-  //   if (!findUser) {
-  //     throw new Error("usuario no encontrado");
-  //   }
-  //   // const findC= await municipality.findName(findUser.municipalityId);
-  //   // if (!findC) {
-  //   //   throw new Error("municipio no encontrado");
-  //   // }
-  //   // findUser.municipalityId = findC;
+    const findUser = await User.findOne({
+      attributes:{exclude:['password','role','recoveryToken']},
+      include:{
+        model:Municipality,
+        as: "Municipality",
+      },
+      where:{id:id}});
+    if (!findUser) {
+      throw new Error("usuario no encontrado");
+    }
+    // const findC= await municipality.findName(findUser.municipalityId);
+    // if (!findC) {
+    //   throw new Error("municipio no encontrado");
+    // }
+    // findUser.municipalityId = findC;
     
-  //   return findUser
+    return findUser
     
-  // }
+  }
 
   async sendEmailForgot(email) {
     const user = await User.findOne({ where: { email: email } });
@@ -120,7 +124,13 @@ class UserService {
 
 
   async findOne(id) {
-    const user = await User.findOne({where: {id:id}});
+    const user = await User.findOne({
+      attributes:{exclude: ['recoveryToken','password']},
+      include:{
+        model:Municipality,
+        as: "Municipality",
+      },
+      where: {id:id}});
     if (!user) {
       throw new Error("usuario no encontrado");
     }

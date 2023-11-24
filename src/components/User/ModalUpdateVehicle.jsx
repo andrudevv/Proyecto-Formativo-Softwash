@@ -1,33 +1,32 @@
-import React from 'react';
-import { useState } from 'react';
-export default function VehicleRegistrationModal({
-  errors,
-  onSubmit,
+import React,{ useEffect } from "react";
+
+
+export default function ModalUpdateVehicle({
+    errors,
+    onSubmit,
   isOpen,
   title,
-  message,
+  
   buttons,
   register,
-  setValue
-
+  handleSubmit,
+  editingVehicle,
+  setValue, reset
 }) {
-  const formatPlate = (value) => {
-    const cleanedValue = value.replace(/-/g, '');
-    let formattedValue = cleanedValue.substring(0, 3);
-    if (cleanedValue.length > 3) {
-      formattedValue += `-${cleanedValue.substring(3)}`;
-    }
-    return formattedValue;
-  };
-
-  const handlePlateChange = (event) => {
-    const inputValue = event.target.value;
-    const formattedValue = formatPlate(inputValue);
-    setValue('plate',formattedValue);
-  };
-  if (!isOpen) return null;
+    useEffect(() => {
+        if (editingVehicle) {
+          // Establece los valores iniciales del formulario con los datos del vehículo que se está editando
+          Object.keys(editingVehicle).forEach((key) => {
+            setValue(key, editingVehicle[key]);
+          });
+        } else {
+          // Si no hay un vehículo en edición, simplemente resetea el formulario
+          reset();
+        }
+      }, [editingVehicle, setValue, reset]);
 
 
+    if (!isOpen) return null;
   return (
     <div id='modal-component-container' className='fixed z-10 inset-0'>
       <div className='modal-flex-container flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
@@ -44,16 +43,16 @@ export default function VehicleRegistrationModal({
               
 
               <div className='modal-content text-center mt-3 sm:mt-0 sm:ml-4 sm:text-left'>
-                <h3 className='text-lg font-medium text-gray-900'>{title}</h3>
+                <h3 className='text-lg font-medium text-center mb-10 text-gray-900'>{title}</h3>
                 <div className='modal-text my-2'>
-                  <p className='text-gray-500 text-sm'>{message}</p>
+                  
                 </div>
-                <form onSubmit={onSubmit}>
+                <form onSubmit={handleSubmit((values) => onSubmit(values, editingVehicle))}>
                 {/* Agregar campos de registro de vehículo */}
                 <div className='flex flex-col'>
                   <label className='font-semibold text-gray-700'>Placa</label>
-                  <input type="text" {...register('plate', { required: true,pattern:/^[A-Z]{3}-\d{2}[A-Z]?$/ })} maxLength={7} 
-          onChange={handlePlateChange} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="ABC-123" />
+                  <input type="text" {...register('plate', { required: true,pattern:/^[A-Z]{3}-\d{2}[A-Z\d]?$/ })} maxLength={7} minLength={6} 
+           className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="ABC-123(carro)  / ABC-12A(moto)" />
                     {errors.plate && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}
@@ -77,7 +76,7 @@ export default function VehicleRegistrationModal({
 
                 <div className='flex flex-col'>
                   <label className='font-semibold text-gray-700'>Tipo de Vehículo</label>
-                  <input type="text" {...register('typeVehicle', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="carro" />
+                  <input type="text" {...register('typeVehicle', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="carro / moto" />
                     {errors.typeVehicle && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}
@@ -95,7 +94,7 @@ export default function VehicleRegistrationModal({
                 onClick={() => button.onClick && button.onClick()}
                 className={`${
                   index > 0 ? 'ml-3' : ''
-                } w-full inline-flex justify-center rounded-md border border-gray-300 shadow-md px-4 py-2 bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-200 sm:w-auto sm:text-sm ${button.styles}`}
+                }  w-full justify-center rounded-md border shadow-md px-4 py-2  sm:w-auto sm:text-sm ${button.estilos}`}
               >
                 {button.text}
               </button>
@@ -104,5 +103,5 @@ export default function VehicleRegistrationModal({
         </div>
       </div>
     </div>
-  );
+  )
 }

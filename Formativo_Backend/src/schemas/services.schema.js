@@ -2,10 +2,10 @@ const Joi = require("joi");
 
 const id = Joi.number().integer();
 const name = Joi.string();
-const duraction = Joi.string();
+const duration = Joi.string();
 const description = Joi.string();
 const price = Joi.number().integer();
-const typeVehicle = Joi.string().valid("carro", "moto");
+const typeVehicles = Joi.string().valid("carro", "moto");
 
 const getServiceSchema = Joi.object({
   id: id.required(),
@@ -17,18 +17,18 @@ const getQuery = Joi.object({
 });
 const createServiceShema = Joi.object({
   name: name.required(),
-  duraction: duraction.required(),
+  duration: duration.required(),
   description: description.required(),
   price: price.required(),
-  typeVehicle: typeVehicle.required(),
+  typeVehicles: typeVehicles.required(),
 });
 
 const updateServiceShema = Joi.object({
   name: name,
-  duraction: duraction,
+  duration: duration,
   description: description,
   price: price,
-  typeVehicle: typeVehicle,
+  typeVehicles: typeVehicles,
 });
 
 module.exports = {

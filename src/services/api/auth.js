@@ -2,7 +2,7 @@
 import Axios from "../axios";
 
 const API = "http://localhost:4000/api";
-
+ //////////////////////// USUARIO  ///////////////////////////
 // export const registerRequest = (user) => Axios.post(`${API}/register`, user);
 
 // /registrarse  para usuario
@@ -12,10 +12,26 @@ export const registerRequest = (user) =>
 // /validar para usuario
 export const loginRequest = (user) => Axios.post(`${API}/users/login`, user);
 
-//verificar token
+// ruta para actualizar vehiculo
+export const updateVehicleRequest = (id,vehicle) => Axios.patch(`${API}/vehicle/${id}`,vehicle)
 
+// ruta para traer vehiculos del usuario
+export const getVehiclesUser = () => Axios.get(`${API}/users/profile-user-vehicle`);
+// ruta para eliminar un vehiculo
+export const deleteVehicleUser = (id) =>Axios.delete(`${API}/vehicle/${id}`);
+
+// ruta para crear vehiculo
+export const createNewVehicle = (newVehicle) => Axios.post(`${API}/vehicle/create-vehicle`, newVehicle);
+
+export const getUserProfile = () => Axios.get(`${API}/users/profile-user`);
+
+// ruta para traer todas las citas del usuario
+export const getAppointments = () => Axios.get(`${API}/appointment/my-appointments`);
 // export const verifyTokenRequest = () => Axios.get(`${API}/users/verify`);
 export const verifyTokenRequest = () => Axios.get(`${API}/users/verify-user`);
+
+//ruta para actualzar datos del usuario
+export const updateUser = (userUpdate) => Axios.patch(`${API}/users/`, userUpdate)
 
 export const resetPassword = (data) =>
   Axios.post(`${API}/users/forgot-password`, data)
@@ -34,6 +50,9 @@ export const resetPassword = (data) =>
 // export const verifyTokenRequest = () => Axios.get(`${API}/verify`);
 // export const logoutRequest = () => Axios.post(`${API}/logout`);
 
+
+
+///////////////////////////////CLIENTE ////////////////////////////
 export const registerClientRequest = (user) =>
   Axios.post(`${API}/client/register-client`, user)
    
@@ -42,9 +61,21 @@ export const registerClientRequest = (user) =>
 export const loginClientRequest = (user) =>
   Axios.post(`${API}/client/login-client`, user);
 
-//verificar token
+
+  // ruta para traer los datos del cliente
+export const getClientProfile = () => Axios.get(`${API}/client/profile-client`);
 
 
+//ruta para traer los servicios del lavadero
+export const getServicesLaudry = () => Axios.get(`${API}/service`);
+// ruta para actualizar servicio
+export const updateService = (id, dataUpdate) => Axios.patch(`${API}/service/${id}`, dataUpdate);
+// ruta para crear servicio
+ export const createService = (newService) => Axios.post(`${API}/service/create-service`,newService);
+// ruta para eliminar servicio
+export const deleteService = (id) => Axios.delete(`${API}/service/${id}`);
+// ruta para actualizar datos del lavadero
+export const updateClient = (dataClient) => Axios.patch(`${API}/client`, dataClient);
 export const clientVerifyTokenRequest = () => Axios.get(`${API}/client/verify`);
 
 export const resetPasswordClient = (data) =>

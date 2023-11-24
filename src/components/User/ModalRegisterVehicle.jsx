@@ -1,11 +1,11 @@
 import React from 'react';
-import { useState } from 'react';
-export default function ServiceRegistrationModal({
+
+export default function VehicleRegistrationModal({
   errors,
   onSubmit,
   isOpen,
   title,
-  message,
+
   buttons,
   register,
   setValue
@@ -44,48 +44,41 @@ export default function ServiceRegistrationModal({
               
 
               <div className='modal-content text-center mt-3 sm:mt-0 sm:ml-4 sm:text-left'>
-                <h3 className='text-lg font-medium text-gray-900'>{title}</h3>
+                <h3 className='text-lg font-medium text-center mb-10 text-gray-900'>{title}</h3>
                 <div className='modal-text my-2'>
-                  <p className='text-gray-500 text-sm'>{message}</p>
+                  
                 </div>
                 <form onSubmit={onSubmit}>
                 {/* Agregar campos de registro de vehículo */}
                 <div className='flex flex-col'>
-                  <label className='font-semibold text-gray-700'>Nombre</label>
-                  <input type="text" {...register('name', { required: true})}  
-           className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="Lavado ligero" />
-                    {errors.name && (
-                      <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
+                  <label className='font-semibold text-gray-700'>Placa</label>
+                  <input type="text" {...register('plate', { required: true, pattern:/^[A-Z]{3}-\d{2}[A-Z\d]?$/ })} maxLength={7} minLength={6}
+          onChange={handlePlateChange} className="mt-1 p-2 uppercase border border-gray-300 rounded-md" placeholder="ABC-123 / ABC-12A" />
+                    {errors.plate && (
+                      <p className=" right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}
                 </div>
 
                 <div className='flex flex-col'>
-                  <label className='font-semibold text-gray-700'>Duracion</label>
-                  <input type="text" {...register('duration', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="30 minutos" />
-                    {errors.duration && (
-                      <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
+                  <label className='font-semibold text-gray-700'>Modelo</label>
+                  <input type="number" {...register('model', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="2000" />
+                    {errors.model && (
+                      <p className=" right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}
                 </div>
 
                 <div className='flex flex-col'>
-                  <label className='font-semibold text-gray-700'>Descripcion</label>
-                  <input type="text" {...register('description', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="lavado completo" />
-                    {errors.description && (
+                  <label className='font-semibold text-gray-700'>Color</label>
+                  <input type="text" {...register('color', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="Azul" />
+                    {errors.color && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}
                 </div>
 
-                <div className='flex flex-col'>
-                  <label className='font-semibold text-gray-700'>Precio</label>
-                  <input type="number" {...register('price', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="25000" />
-                    {errors.price && (
-                      <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
-                    )}
-                </div>
                 <div className='flex flex-col'>
                   <label className='font-semibold text-gray-700'>Tipo de Vehículo</label>
-                  <input type="text" {...register('typeVehicles', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="carro" />
-                    {errors.typeVehicles && (
+                  <input type="text" {...register('typeVehicle', { required: true })} className="mt-1 lowercase p-2 border border-gray-300 rounded-md" placeholder="carro" />
+                    {errors.typeVehicle && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}
                 </div>
@@ -102,7 +95,7 @@ export default function ServiceRegistrationModal({
                 onClick={() => button.onClick && button.onClick()}
                 className={`${
                   index > 0 ? 'ml-3' : ''
-                } w-full inline-flex justify-center rounded-md border border-gray-300 shadow-md px-4 py-2 bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-200 sm:w-auto sm:text-sm ${button.styles}`}
+                }  w-full justify-center rounded-md border shadow-md px-4 py-2  sm:w-auto sm:text-sm ${button.estilos}`}
               >
                 {button.text}
               </button>
