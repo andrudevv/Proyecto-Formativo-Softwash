@@ -9,6 +9,10 @@ import { registerRequest,
     updateUser,
     getUserProfile,
     getAppointments,
+    FindLaundry,
+    availabilityFound,
+    registerAppointment,
+    getProfileWithServices,
     deleteVehicleUser } from "../services/api/auth";
 import Cookies from "js-cookie";
 export const AuthUserContext = createContext()
@@ -64,6 +68,22 @@ export const AuthUserProvider = ({ children }) => {
 
         }
     }
+    const createAppointment = async (data) =>{
+        try {
+            const stateCreated = await registerAppointment(data);
+            return stateCreated.message
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
+    const getAvailability = async (idService, date) =>{
+        try {
+            const findAvailability = await availabilityFound(idService, date);
+            return findAvailability.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
     const getAppointmentsUser = async () => {
         try {
             const resp = await getAppointments();
@@ -72,7 +92,22 @@ export const AuthUserProvider = ({ children }) => {
             setRegisterErrors(error.response.data)
         }
     }
-
+    const searchLaundry = async (filteredQuery) =>{
+        try {
+            const filter = await FindLaundry(filteredQuery);
+            return filter.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
+    const getVehiclesAppointment = async () =>{
+        try {
+            const getVehicles = await getVehiclesUser();
+            return getVehicles.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
     const getProfile = async () =>{
         try {
             const objUser  = await getUserProfile();
@@ -89,7 +124,14 @@ export const AuthUserProvider = ({ children }) => {
             setRegisterErrors(error.response.data)
         }
     }
-
+    const ViewProfileLaundry  = async (id) =>{
+        try {
+            const responseData = await getProfileWithServices(id);
+            return responseData.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
     const createVehicle = async (newVehicle) => {
         try {
             const response = await createNewVehicle(newVehicle);
@@ -178,6 +220,11 @@ export const AuthUserProvider = ({ children }) => {
             createVehicle,
             deleteVehicle,
             getVehicles,
+            createAppointment,
+            getVehiclesAppointment,
+            searchLaundry,
+            ViewProfileLaundry,
+            getAvailability,
             getAppointmentsUser,
             getProfile,
             resetEmail,

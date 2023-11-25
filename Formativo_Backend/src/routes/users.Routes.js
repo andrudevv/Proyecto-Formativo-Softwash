@@ -149,7 +149,7 @@ userRouter.get(
   }
 );
 
-// falta incluir traer vehiculos y citas
+
 userRouter.get(
   "/profile-user",
   authRequiredUser,
@@ -224,7 +224,7 @@ userRouter.patch(
 
 // ver el verfil del lavadero
 userRouter.get(
-  "/view-profile/",
+  "/view-profile/:id",
   authRequiredUser,
   // checkLaundry,
   // validatorHandler(createLaundrySchema, "body"),

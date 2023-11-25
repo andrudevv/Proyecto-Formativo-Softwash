@@ -43,6 +43,14 @@ export const resetPassword = (data) =>
       throw error;
     });
 
+// ruta para crear la cita    
+export const registerAppointment = (appointment) => Axios.post(`${API}/appointment/create-appointment` , appointment)
+
+// ruta para obtener disponibilidad segun el id del servicio y fecha
+export const availabilityFound = (idService, date) => Axios.get(`${API}/appointment/${idService}/${date}`)
+
+//ruta para obtener servicios del lavadero seleccionado
+export const getProfileWithServices = (id) => Axios.get(`${API}/users/view-profile/${id}`);
 // /actualizar para recuperar clave en el usuario
 
 // /restablecer  ruta para correo restablecer ingresando correo
@@ -89,6 +97,8 @@ export const resetPasswordClient = (data) =>
       throw error;
     });
 
+
+export const FindLaundry = (queryFind) => Axios.get(`${API}/client/`,{ params: queryFind});
 // export const getDepartment = () => {
 //   Axios.get(`${API}/users/getDepartments`)
 //     .then((Response) => {

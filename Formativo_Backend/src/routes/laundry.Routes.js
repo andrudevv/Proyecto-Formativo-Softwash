@@ -89,9 +89,10 @@ laundryRouter.get(
   validatorHandler(getLaundryQuery, "query"),
   async (req, res, next) => {
     try {
-      const query = req.query
+      const query = req.query;
+      console.log(query);
       const findDepartments = await Laundry.findAllsWhere(query);
-      res.status(201).json({ message: findDepartments });
+      res.status(201).json(findDepartments);
     } catch (error) {
       next(error);
       return res.status(400).json([error.message]);

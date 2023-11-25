@@ -10,7 +10,10 @@ class LaundryService {
   // consulta para traer todos los lavaderos segun departamento y ciudad
   async findAllsWhere(query) {
     
-    const options = {attributes: ["id","name", "address", "phone", "aperture", "closing"],
+    const options = {attributes: ["id","name", "address", "phone", "aperture", "closing", "rutLaundry", "municipalityId"],
+    include: { 
+      model: Municipality,
+     },
   where:{membership:true}
 };
 
@@ -34,8 +37,9 @@ class LaundryService {
 
     }]
     }
-    const {limit , offset} = query;
-    if(limit && offset){
+    const {limit = 5}= query
+    const {offset} = query;
+    if(offset){
       options.limit = parseInt(limit);
       options.offset = parseInt(limit * offset);
     }
@@ -87,6 +91,9 @@ class LaundryService {
   async findLaundry(id) {
     const findLaundry = await Laundry.findOne({
       attributes:{exclude:['password','membership','recoveryToken']},
+      include:{
+        model:Service,
+      },
       where:{id:id}});
     if (!findLaundry) {
       throw new Error("no se pudo obtener informacion del lavadero");

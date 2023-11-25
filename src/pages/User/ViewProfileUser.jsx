@@ -41,7 +41,7 @@ export default function MyVehicles() {
         updateUserProfile } = useAuth();
     const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm();
     const [selectedVehicleId, setSelectedVehicleId] = useState(null);
-    const [loading, setLoading] = useState(false);   //cambiar a true despues cuando se implemente la consulta en tiempo real
+    const [loading, setLoading] = useState(false);   
     const [isModalDelete, setIsModalDelete] = useState(false);
     const [update, setUpdate] = useState(false);
     const [updateProfile, setUpdateProfile] = useState(false);
@@ -201,6 +201,7 @@ export default function MyVehicles() {
         };
         getUser();
         fetchData();
+        window.scrollTo(0, 0);
     }, []);
     return (
         <>
@@ -236,7 +237,7 @@ export default function MyVehicles() {
                     },
                 ]} />
             <ModalUpdateVehicle
-                onSubmit={handleModalUpdate} setValue={setValue} reset={reset} editingVehicle={editingVehicle} handleSubmit={handleSubmit} isOpen={update} title={'Editar vehiculo'} 
+                onSubmit={handleModalUpdate} setValue={setValue} reset={reset} editingVehicle={editingVehicle} handleSubmit={handleSubmit} isOpen={update} title={'Editar vehiculo'}
                 register={register} errors={errors} buttons={[
                     {
                         text: "Editar",
@@ -253,7 +254,7 @@ export default function MyVehicles() {
             <VehicleRegistrationModal onSubmit={onsubmit} isOpen={create}
                 title="Registrar vehiculo"
                 setValue={setValue}
-                
+
                 buttons={[
                     {
                         text: "Registrar",

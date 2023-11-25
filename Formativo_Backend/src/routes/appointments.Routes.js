@@ -49,7 +49,7 @@ appointmentRouter.post(
       res.status(201).json({ message: "Registro de cita exitoso ", rta });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: error.message });
+      return res.status(500).json([ error.message ]);
     }
     (err, res) => {
       res.status(400).json({ error: err.message });
@@ -109,7 +109,7 @@ appointmentRouter.get(
       res.status(201).json(findAppointments);
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: error.message });
+      return res.status(500).json([error.message]);
     }
     (err, res) => {
       res.status(400).json({ error: err.message });
@@ -155,7 +155,7 @@ appointmentRouter.get(
       res.status(200).json(appointments);
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: error.message });
+      return res.status(500).json([error.message]);
     }
     (err, res) => {
       res.status(400).json({ error: err.message });
@@ -183,7 +183,7 @@ appointmentRouter.patch(
       res.status(200).json(updateMyppointments);
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ message: error.message });
+      return res.status(500).json([error.message]);
     }
     (err, res) => {
       res.status(400).json({ error: err.message });

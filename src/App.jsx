@@ -20,10 +20,12 @@ import Footer from "./components/Footer";
 import MyAppointmentUser from "./pages/User/MyAppointmentUser";
 import ModalRegisterVehicle from "./components/User/ModalRegisterVehicle";
 import ViewProfileClient from "./pages/Client/ViewProfileClient";
+import FindLaundry from "./pages/User/FindLaundry";
+import ViewProfileLaundry from "./pages/User/ViewProfileLaundry";
+import CreateAppointment from "./pages/User/CreateAppointment";
 
 function App() {
   return (
-
 
     <AuthUserProvider>
       <AuthClientProvider>
@@ -44,9 +46,10 @@ function App() {
                 <Route path="view-profile-user" element={<ViewProfile />} />
                 <Route path="home-user" element={<HomeUsers />} />
                 <Route path="logout" element={<h1>hasta pronto </h1>} />
-                <Route path="find-laundry" element={<h1>buscar labaderos con el filtro</h1>} />
+                <Route path="search" element={<FindLaundry/>} />
                 <Route path="my-appointments" element={<MyAppointmentUser />} />
-                <Route path="view-profile-laundry" element={<h1>perfil del lavadero</h1>} />
+              <Route path="profile-laundry/:id" element={<ViewProfileLaundry/>} />
+              <Route path="appointment/create-appointment/:id/:name" element={<CreateAppointment/>} />
               </Route>
 
 

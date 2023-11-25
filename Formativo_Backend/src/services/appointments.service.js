@@ -93,7 +93,10 @@ class AppointmentService {
         "No puedes agendar esta cita porque ya hay una cita pendiente para este vehículo y servicio."
       );
     }
-    this.search(data, user);
+    const canregister =  await  this.search(data, user);
+    if(!canregister){
+      throw new Error("Error al guardar");
+    }
     const save = await Appointment.create(data);
     if (save[0] === 0) {
       throw new Error("Error al guardar");
@@ -279,13 +282,18 @@ class AppointmentService {
     }
     const hours = await this.findAllAbilityByDate(
       findLaundry.dataValues.id,
-      dt,
-      findLaundry.dataValues.ability
+      dt
     );
-    return { hours };
+
+   const ability = {"ability": findLaundry.dataValues.ability,
+  "aperture": findLaundry.dataValues.aperture,
+"closing": findLaundry.dataValues.closing}
+    
+    
+    return  {hours, ability} ;
   }
   // una parte de buscar disponibilidad junto con findAbilityByService
-  async findAllAbilityByDate(id, date, limit) {
+  async findAllAbilityByDate(id, date) {
     const availability = await Appointment.findAll({
       attributes: [
         "time",
@@ -308,8 +316,6 @@ class AppointmentService {
       ],
       where: { date: date },
       group: ["time"],
-      having: Sequelize.literal(`cantidad <= ${limit}`),
-      replacements: { limit: limit },
     });
     return availability;
   }

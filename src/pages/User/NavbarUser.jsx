@@ -26,6 +26,7 @@ export default function NavbarUser() {
     <div className="flex items-center mt-2 md:mt-0 md:ml-6">
       <div className="hidden md:flex space-x-4">
         <button className="text-white hover:text-cyan-400"><Link to="/home-user" className=" font-Pathway Gothic One font-bold mx-4">Inicio</Link></button>
+        <button className="text-white hover:text-cyan-400"><Link to="/search" className=" font-Pathway Gothic One font-bold mx-4">Buscar lavaderos</Link></button>
         <button className="text-white hover:text-cyan-400"><Link to="/my-appointments" className="font-Pathway Gothic One font-bold mx-4">Citas</Link></button>
         <button className="text-white hover:text-cyan-400"><Link to="/view-profile-user" className="font-Pathway Gothic One font-bold mx-4">Mi perfil</Link></button>
         <span className="text-white rounded-md  shadow-md shadow-cyan-200 px-6 font-bold">!Hola {user.name}</span>

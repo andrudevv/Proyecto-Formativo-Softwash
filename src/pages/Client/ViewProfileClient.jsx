@@ -202,6 +202,7 @@ console.log(service);
 
         getServicesLaundry();
         getProfile();
+        window.scrollTo(0, 0);
     }, []);
     return (
 
