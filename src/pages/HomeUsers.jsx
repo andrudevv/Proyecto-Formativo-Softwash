@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FiMenu } from "react-icons/fi";
 import Footer from "../components/Footer";
-// import publicidad from '../img/publicidad.jpg'
 
 function HomeUsers() {
   const callouts = [
@@ -42,7 +41,7 @@ function HomeUsers() {
             <h1 className="text-3xl font-Pathway Gothic One bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300 hover:text-blue-500 text-center mt-2 mb-6">
               BIENVENIDO A SOFTWASH
             </h1>
-        
+        {/* <img src={imagepubli} alt="" /> */}
             <p className="text-2xl font-Pathway Gothic One text-gray-700 text-center">
               Creamos soluciones innovadoras para simplificar la vida de los
               propietarios de vehículos y mejorar la industria de los lavaderos
@@ -113,12 +112,6 @@ function HomeUsers() {
               Conoce nuestras redes sociales
             </a>
           </button>
-        </div>
-      </div>
-      <div className="max-w-screen-2xl mt-0 space-y-8 p-8 mb-4">
-        <div className=" bg-blue-100 p-4 mb-8">
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nostrum numquam ipsam deserunt, recusandae pariatur repellendus necessitatibus architecto perferendis blanditiis tenetur dolor nisi quas accusamus doloribus aliquam fuga ad delectus vel?Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem deserunt beatae fuga voluptatum, quibusdam eum eos officia earum fugiat libero non porro ullam aut inventore veritatis optio at dolorem. Magni?Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus nostrum perspiciatis, officia magnam explicabo quae voluptates dolor id nulla accusantium iure fugit. Debitis nam suscipit aperiam sint, voluptatem cupiditate excepturi!Lorem
-        </p>
         </div>
       </div>
     </div>
