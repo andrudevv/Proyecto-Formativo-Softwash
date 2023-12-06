@@ -26,7 +26,7 @@ function LoginUser() {
      
       <form
         onSubmit={onSubmit}
-        className="bg-gray-200 bg-opacity-70 shadow-xl shadow-blue-500 rounded-lg absolute w-5/12 p-10"
+        className="bg-gray-200 bg-opacity-75 shadow-xl shadow-blue-500 rounded-lg absolute w-5/12 p-10"
       >
         {registerErrors.map((error, i) => (
           <div className="flex justify-center items-center">

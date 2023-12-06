@@ -36,14 +36,23 @@ function HomeUsers() {
   return (
     <>
     <div className="flex flex-col items-center justify-start min-h-screen">
-      <div className="flex flex-col items-center justify-start">
+      <div className="flex flex-col items-center justify-start">  
         <div className="max-h-2xl rounded-mdmy-4 mx-20  ">
-          <div className="mx-auto max-w-3xl py-4 sm:py-8 lg:max-w-none px-4">
-            <h1 className="text-3xl font-Pathway Gothic One bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300 hover:text-blue-500 text-center mt-2 mb-6">
-              BIENVENIDO
-            </h1>
-        {/* <img src={imagepubli} alt="" className="w-10 h-10" /> */}
-            <p className="text-2xl font-Pathway Gothic One text-gray-700 text-center">
+          <div className="mx-auto max-w-3xl py-4 sm:py-8 lg:max-w-none px-4 ">
+            
+          <div>
+      <div className="rounded-10 overflow-hidden">
+        <div className="h-10 bg-white rounded-full text-center"></div>
+        <div className="h-12 bg-blue-600 rounded-t-full text-center"><h1 className="text-color text-xl p-5">BIENVENIDO A SOFTWASH</h1></div>
+        <div>
+          
+        </div>
+      </div>
+    </div>
+
+
+
+            <p className="text-2xl font-Pathway Gothic One text-color text-center bg-blue-600 border-2 border-blue-600  p-8">
               Creamos soluciones innovadoras para simplificar la vida de los
               propietarios de vehículos y mejorar la industria de los lavaderos
               de autos en la cuidad de Armenia. Nuestra principal actividad es
@@ -106,16 +115,6 @@ function HomeUsers() {
           Tendrás la ubicación real del lavadero deseado.
         </h3>
       </div>
-      <div className="max-w-screen-2xl mt-0 space-y-8 p-8 mx-auto">
-        <div className="border border-zinc-400 p-4 mb-8">
-          <button>
-            <a href="https://web.facebook.com/?locale=es_LA&_rdc=1&_rdr">
-              Conoce nuestras redes sociales
-            </a>
-          </button>
-        </div>
-      </div>
-     
     </div>
   
     </>
