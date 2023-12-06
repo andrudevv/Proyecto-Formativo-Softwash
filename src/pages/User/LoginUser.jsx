@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/UserContext";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import img from "../../img/fondoo.jpg";
+import img from "../../img/Softwash.jpg";
 function LoginUser() {
   const {
     register,
@@ -23,13 +23,10 @@ function LoginUser() {
   return (
     <div className="flex  items-center justify-center h-screen ">
       <img src={img} alt="Background" />
-      <div
-        className="
-"
-      ></div>
+     
       <form
         onSubmit={onSubmit}
-        className="bg-gray-200 bg-opacity-80 shadow-xl shadow-blue-500 rounded-lg absolute w-5/12 p-10"
+        className="bg-gray-200 bg-opacity-70 shadow-xl shadow-blue-500 rounded-lg absolute w-5/12 p-10"
       >
         {registerErrors.map((error, i) => (
           <div className="flex justify-center items-center">
