@@ -5,6 +5,7 @@ import {RxDotFilled} from 'react-icons/rx'
 // import Footer from "../components/Footer";
 import imgtitulo from "../img/TituloWash2.png"
 import imgolas from "../img/olasWash.png"
+import imgCorte from "../img/CorteWash.png"
 
 function HomeUsers() {
   const callouts = [
@@ -72,6 +73,9 @@ function HomeUsers() {
             </p>
           </div>
 
+          <img  className="w-full h-full object-cover mt-20" src={imgCorte} alt="corte"/>
+
+
           <div className="">
             <h2 className="text-4xl font-Pathway Gothic One text-color text-center  mt-5">
               Conoce lavaderos cercanos
@@ -79,8 +83,8 @@ function HomeUsers() {
 
 
 
-            <div className="max-w-[1400px] h-[600px] w-full m-auto py-16 px-4 relative group">
-              <div style={{backgroundImage: `url(${callouts[currentIndex].imageSrc})`}} className="w-full h-full rounded-2xl bg-center bg-cover duration-500"></div>
+            <div className="max-w-[1400px] h-[500px] w-full m-auto py-16 px-4 relative group">
+              <div style={{backgroundImage: `url(${callouts[currentIndex].imageSrc})`}} className="w-full h-full rounded-2xl bg-center bg-cover duration-200"></div>
               {/* flecha derecha */}
               <div className="absolute hidden group-hover:block  top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
                 <BsChevronCompactLeft onClick={prevSlide} size={30}/>
@@ -99,25 +103,7 @@ function HomeUsers() {
       </div>
 
       
-      <div className="p-4  bg-blue-900">
-        <h2 className="text-3xl font-Pathway Gothic One text-color text-center">
-          ¿Qué puedes hacer en nuestra página?
-        </h2>
-        <p className="text-2xl font-Pathway Gothic One text-color text-center bg-blue-900 border-blue-900  p-8">
-          <br />
-          <br />
-          Podrás apartar la cita en el lavadero de su preferencia y en la
-          disponibilidad deseada según lo disponga el lavadero.
-          <br />
-          Encontrarás múltiples servicios para cada tipo de vehículo según así
-          lo brinde el lavadero.
-          <br />
-          Seguro y confiable al realizar las citas.
-          <br />
-          Tendrás la ubicación real del lavadero deseado.
-        </p>
-        
-      </div>
+    
       <img  className="w-full h-full object-cover mt-20" src={imgolas} alt="titulo"/>
     </div>
   
