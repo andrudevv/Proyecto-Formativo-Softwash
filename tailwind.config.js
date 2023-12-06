@@ -39,6 +39,7 @@ export default {
         //color  HOME
 
         'fondo-texto': '#103E4B',
+        'fondo-corte': '#1C3886',
       }
     },
   },
