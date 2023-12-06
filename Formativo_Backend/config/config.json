@@ -1,21 +1,21 @@
 {
   "development": {
     "username": "root",
-    "password": "zyzz",
+    "password": "root",
     "database": "Proyecto_Softwash",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "zyzz",
+    "password": "root",
     "database": "Proyecto_Softwash",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
-    "password": "zyzz",
+    "password": "root",
     "database": "Proyecto_Softwash",
     "host": "127.0.0.1",
     "dialect": "mysql"

@@ -8,6 +8,7 @@
     "start": "nodemon src/index",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint",
+    "sequelize": "sequelize",
     "migrations:generate": "sequelize-cli migration:generate --name",
     "migrations:run": "sequelize-cli db:migrate",
     "migrations:revert": "sequelize-cli db:migrate:undo",
