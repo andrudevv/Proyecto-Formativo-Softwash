@@ -23,7 +23,7 @@ async function conexionDB() {
   try {
     await setUpModels(sequelize); // Configurar los modelos utilizando la función setUpModels
 
-    // await sequelize.sync(); // Sincronizar los modelos con la base de datos
+    //  await sequelize.sync(); // Sincronizar los modelos con la base de datos
 
     console.log('Modelo sincronizado correctamente con la base de datos');
   } catch (error) {
