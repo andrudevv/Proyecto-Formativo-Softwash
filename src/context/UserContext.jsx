@@ -70,8 +70,8 @@ export const AuthUserProvider = ({ children }) => {
     }
     const createAppointment = async (data) =>{
         try {
-            const stateCreated = await registerAppointment(data);
-            return stateCreated.message
+            await registerAppointment(data);
+            return true;
         } catch (error) {
             setRegisterErrors(error.response.data)
         }
