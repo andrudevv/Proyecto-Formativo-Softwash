@@ -4,7 +4,7 @@ import {BsChevronCompactLeft,BsChevronCompactRight} from 'react-icons/bs'
 // import { FiMenu } from "react-icons/fi";
 // import Footer from "../components/Footer";
 import imgtitulo from "../img/TituloWash2.png"
-import imgolas from "../img/olasWash.png"
+/* import imgolas from "../img/olasWash.png" */
 import imgCorte from "../img/CorteWash.png"
 
 function HomeUsers() {
@@ -104,7 +104,7 @@ function HomeUsers() {
 
       
     
-      <img  className="w-full h-full object-cover mt-20" src={imgolas} alt="titulo"/>
+      {/* <img  className="w-full h-full object-cover mt-20" src={imgolas} alt="titulo"/> */}
     </div>
   
     </>
