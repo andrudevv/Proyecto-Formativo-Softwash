@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {BsChevronCompactLeft,BsChevronCompactRight} from 'react-icons/bs'
-import {RxDotFilled} from 'react-icons/rx'
+// import {RxDotFilled} from 'react-icons/rx'
 // import { FiMenu } from "react-icons/fi";
 // import Footer from "../components/Footer";
 import imgtitulo from "../img/TituloWash2.png"

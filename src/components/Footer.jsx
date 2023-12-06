@@ -2,6 +2,7 @@ import React from 'react';
 import whatsapp from '../img/whatsapp.png';
 import facebook from '../img/facebook.png';
 import instagram from '../img/instagram.png';
+
 const Footer = () => {
   return (
     <footer className=" bg-blue-800 text-white py-6">
