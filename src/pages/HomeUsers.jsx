@@ -40,7 +40,7 @@ function HomeUsers() {
         <div className="max-h-2xl rounded-mdmy-4 mx-20  ">
           <div className="mx-auto max-w-3xl py-4 sm:py-8 lg:max-w-none px-4">
             <h1 className="text-3xl font-Pathway Gothic One bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-300 hover:text-blue-500 text-center mt-2 mb-6">
-              BIENVENIDO A SOFTWASH
+              BIENVENIDO
             </h1>
         {/* <img src={imagepubli} alt="" className="w-10 h-10" /> */}
             <p className="text-2xl font-Pathway Gothic One text-gray-700 text-center">
