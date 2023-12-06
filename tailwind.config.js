@@ -33,6 +33,12 @@ export default {
 
         //blue-700
         'button-neutral': '#0369a1',
+
+
+
+        //color  HOME
+
+        'fondo-texto': '#103E4B',
       }
     },
   },
