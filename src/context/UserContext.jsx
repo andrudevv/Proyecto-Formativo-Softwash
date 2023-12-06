@@ -27,7 +27,6 @@ export const AuthUserProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [isAuthenticatedUser, setIsAuthenticatedUser] = useState(false);
     const [registerErrors, setRegisterErrors] = useState([]);
-    const [successMessage, setSuccessMessage] = useState("");
 
     const [loading, setLoading] = useState(false);
 
@@ -46,9 +45,10 @@ export const AuthUserProvider = ({ children }) => {
         try {
             const res = await registerRequest(user);
             setUser(res.data);
+            console.log(res);
             setIsAuthenticatedUser(true);
             setRegisterErrors([]);
-            setSuccessMessage(res.data.name);
+            return true;
         } catch (error) {
             setRegisterErrors(error.response.data);
         }
@@ -124,7 +124,7 @@ export const AuthUserProvider = ({ children }) => {
             setRegisterErrors(error.response.data)
         }
     }
-    const ViewProfileLaundry  = async (id) =>{
+    const ViewProfileLaundryId  = async (id) =>{
         try {
             const responseData = await getProfileWithServices(id);
             return responseData.data;
@@ -167,7 +167,7 @@ export const AuthUserProvider = ({ children }) => {
         }
     }
     const logout = () => {
-        Cookies.remove("token");
+        Cookies.remove("tokenUser");
         setUser(null);
         setIsAuthenticatedUser(false);
     };
@@ -223,12 +223,11 @@ export const AuthUserProvider = ({ children }) => {
             createAppointment,
             getVehiclesAppointment,
             searchLaundry,
-            ViewProfileLaundry,
+            ViewProfileLaundryId,
             getAvailability,
             getAppointmentsUser,
             getProfile,
             resetEmail,
-            successMessage,
            
         }}>
             {children}

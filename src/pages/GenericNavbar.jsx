@@ -19,6 +19,7 @@ export default function GenericNavbar() {
             <div className="flex items-center mt-2 md:mt-0 md:ml-6">
 
                 <div className="hidden md:flex space-x-4">
+                    <button className="text-white hover:text-cyan-400 "><Link className="font-bold mx-4" to="/">Inicio</Link></button>
                     <button className="text-white hover:text-cyan-400 "><Link className="font-bold mx-4" to="/sign-in-user">Iniciar Sesión</Link></button>
                     <button className="text-white hover:text-cyan-400 "><Link className="font-bold mr-4" to="/register-user">Registrarse</Link></button>
                 </div>

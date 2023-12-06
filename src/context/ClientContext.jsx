@@ -27,7 +27,6 @@ export const AuthClientProvider = ({ children }) => {
     const [client, setCLient] = useState(null)
     const [isAuthenticatedClient, setIsAuthenticatedClient] = useState(false);
     const [registerErrors, setRegisterErrors] = useState([]);
-    const [successMessage, setSuccessMessage] = useState("");
 
     // const [departments, setDepartments] = useState([]);
     // const [municipalities, setMunicipalities] = useState([]);
@@ -52,8 +51,7 @@ export const AuthClientProvider = ({ children }) => {
             setCLient(res.data);
             setIsAuthenticatedClient(true);
             setRegisterErrors([]);
-            setSuccessMessage(res.data.name);
-    
+            return true;
             
         } catch (error) {
             setRegisterErrors(error.response.data);
@@ -73,7 +71,7 @@ export const AuthClientProvider = ({ children }) => {
         }
     }
     const logout = () => {
-        Cookies.remove("token");
+        Cookies.remove("tokenClient");
         setCLient(null);
         setIsAuthenticatedClient(false);
     };
@@ -175,7 +173,7 @@ export const AuthClientProvider = ({ children }) => {
             logout,
             loading,
             resetEmail,
-            successMessage,
+            
             
         }}>
             {children}

@@ -34,19 +34,20 @@ class AppointmentService {
   // antes de crear la cita verifica que haya disponibilidad, tambien antes de actualizar
   async search(dt, user) {
     try {
-      
       const validateUser = await Vehicle.findOne({
         where: { userId: user, id: dt.vehicleId },
       });
       if (!validateUser) {
         throw new Error("No tiene permiso para reservar  en este vehiculo");
       }
-      
+
       const findLimit = await this.findLimitLaundry(dt.serviceId);
-      if (!findLimit || !findLimit.findLaundryByService.dataValues) {
+
+      if (!findLimit || !findLimit.dataValues) {
         return { message: "Lavadero no encontrado." };
       }
-      const lId = findLimit.findLaundryByService.dataValues.id;
+      const ability = findLimit.dataValues.ability;
+      const lId = findLimit.dataValues.id;
       const searchAbility = await Appointment.findAll({
         attributes: [
           "time",
@@ -65,8 +66,11 @@ class AppointmentService {
         },
         group: ["time"],
       });
-      const ability = findLimit.findLaundryByService.dataValues.ability;
-      const cantidad = searchAbility[0].dataValues.cantidad;
+      let cantidad = 0;
+      if (searchAbility.length != 0) {
+         cantidad = searchAbility[0].dataValues.cantidad;
+      }
+      
       if (searchAbility.length === 0) {
         return true;
       } else {
@@ -93,8 +97,8 @@ class AppointmentService {
         "No puedes agendar esta cita porque ya hay una cita pendiente para este vehículo y servicio."
       );
     }
-    const canregister =  await  this.search(data, user);
-    if(!canregister){
+    const canregister = await this.search(data, user);
+    if (!canregister) {
       throw new Error("Error al guardar");
     }
     const save = await Appointment.create(data);
@@ -116,19 +120,18 @@ class AppointmentService {
         },
         {
           model: Service,
-          attributes:["name"],
-          include:[
+          attributes: ["name"],
+          include: [
             {
-              model:Laundry,
-              attributes:["address"],
-            }
-          ]
-
+              model: Laundry,
+              attributes: ["address"],
+            },
+          ],
         },
       ],
     });
-    
-    return findAppointments ;
+
+    return findAppointments;
   }
 
   // buscar la disponibilidad y id de lavadero por medio de un servicio para crear o actualizar citas
@@ -147,7 +150,7 @@ class AppointmentService {
     if (!findLaundryByService) {
       throw new Error("Lavadero no encontrado");
     }
-    return { findLaundryByService };
+    return findLaundryByService;
   }
 
   //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -285,12 +288,13 @@ class AppointmentService {
       dt
     );
 
-   const ability = {"ability": findLaundry.dataValues.ability,
-  "aperture": findLaundry.dataValues.aperture,
-"closing": findLaundry.dataValues.closing}
-    
-    
-    return  {hours, ability} ;
+    const ability = {
+      ability: findLaundry.dataValues.ability,
+      aperture: findLaundry.dataValues.aperture,
+      closing: findLaundry.dataValues.closing,
+    };
+
+    return { hours, ability };
   }
   // una parte de buscar disponibilidad junto con findAbilityByService
   async findAllAbilityByDate(id, date) {
@@ -321,27 +325,26 @@ class AppointmentService {
   }
 
   //servicio para actualizar la cita del lado del usuario
-  async updateMyAppointment(user, id, changes) {
-    const appointmentUser = await Appointment.findOne({
-      where:{id:id}
-    });
-    if (!appointmentUser) {
-      throw new Error("No se encontro la cita");
-    }
-    this.search(changes,user)
+  // async updateMyAppointment(user, id, changes) {
+  //   const appointmentUser = await Appointment.findOne({
+  //     where:{id:id}
+  //   });
+  //   if (!appointmentUser) {
+  //     throw new Error("No se encontro la cita");
+  //   }
+  //   this.search(changes,user)
 
+  //   const updateAppointment = await Appointment.update(changes, {
 
-    const updateAppointment = await Appointment.update(changes, {
-      
-      where: { id: id },
-    });
-    console.log(updateAppointment);
-    if (updateAppointment[0] === 0) {
-      throw new Error("No hay datos para actualizar");
-    }
+  //     where: { id: id },
+  //   });
+  //   console.log(updateAppointment);
+  //   if (updateAppointment[0] === 0) {
+  //     throw new Error("No hay datos para actualizar");
+  //   }
 
-    return { message: "Cita actualizada correctamente", update: true };
-  }
+  //   return { message: "Cita actualizada correctamente", update: true };
+  // }
 
   async delete(id) {
     const laundry = await this.findOne(id);

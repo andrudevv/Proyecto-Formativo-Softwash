@@ -13,7 +13,7 @@ function RegisterClient() {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { signUpClient, registerErrors, successMessage } = clientAuth();
+    const { signUpClient, registerErrors } = clientAuth();
     const [departments, setDepartments] = useState([]);
     const [municipalities, setMunicipalities] = useState([]);
     const navigate = useNavigate();
@@ -24,21 +24,16 @@ function RegisterClient() {
         const rta = await signUpClient(values);
         if (rta) {
             setIsModalOpen(true);
-            // toast.success('!Registro exitoso. ', { theme: "light" })
             const timer = setTimeout(() => {
-                // Redirige a la página deseada
                 setIsModalOpen(false)
                 navigate("/home-client")
-                // <Redirect to="/home-user" />;;
             }, 3000);
             return () => clearTimeout(timer);
         }
 
     })
 
-    // const openModal = () => {
-    //     setIsModalOpen(true);
-    // }
+    
     const getMunicipalities = (id) => {
         Axios.get(`http://localhost:4000/api/users/get-municipality/${id}`)
             .then((Response) => {
@@ -92,7 +87,7 @@ function RegisterClient() {
                     </div>)) }
 
 
-            <ModelRegister isOpen={isModalOpen} title={'Registro exitoso'} message={successMessage} />
+            <ModelRegister isOpen={isModalOpen} title={'Registro exitoso'}  />
 
 
 

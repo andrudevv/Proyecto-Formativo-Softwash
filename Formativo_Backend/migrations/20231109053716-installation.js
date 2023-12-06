@@ -1,7 +1,7 @@
 'use strict';
 
 
-
+const img = '../src/images/logoServices.jpg'
 const { MUNICIPALITY_TABLE } = require('../src/db/models/municipality.models.js');
 const { USER_TABLE } = require('../src/db/models/user.models.js');
 const { VEHICLE_TABLE} = require('../src/db/models/vehicle.models.js');
@@ -158,6 +158,10 @@ up:  async (queryInterface, Sequelize) => {
       address: {
         allowNull: false,
         type: Sequelize.DataTypes.STRING,
+      },imageUrl:{
+        type: Sequelize.DataTypes.STRING,
+        allowNull: true,
+        defaultValue: img
       },
       phone: {
         allowNull: false,
@@ -277,6 +281,10 @@ up:  async (queryInterface, Sequelize) => {
       duration: {
         type: Sequelize.DataTypes.TEXT,
         allowNull: false,
+      }, imgService:{
+        type:Sequelize.DataTypes.STRING,
+        allowNull: true,
+        defaultValue: img
       },
       description: {
         type: Sequelize.DataTypes.TEXT,
