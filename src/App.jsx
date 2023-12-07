@@ -49,7 +49,7 @@ function App() {
                 <Route path="search" element={<FindLaundry/>} />
                 <Route path="my-appointments" element={<MyAppointmentUser />} />
               <Route path="profile-laundry/:id" element={<ViewProfileLaundry/>} />
-              <Route path="appointment/create-appointment/:id/:name" element={<CreateAppointment/>} />
+              <Route path="appointment/create-appointment/:id/:name/:price" element={<CreateAppointment/>} />
               </Route>
 
 

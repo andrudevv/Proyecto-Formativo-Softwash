@@ -3,6 +3,7 @@ const {DEPARTMENT_TABLE} = require('./department.models.js');
 const { MUNICIPALITY_TABLE } = require('./municipality.models.js');
 // import { MUNICIPALITY_TABLE } from "./municipality.models.js";
 const LAUNDRY_TABLE = "laundry";
+const img ='../images/logoServices.jpg'
 
 const LaundrySchema = {
   id: {
@@ -44,6 +45,10 @@ const LaundrySchema = {
     allowNull: false,
     type: DataTypes.BOOLEAN,
     defaultValue: true 
+  },imageUrl:{
+    type:DataTypes.STRING,
+    allowNull: true,
+    defaultValue: img
   },
   ability: {
     allowNull: false,

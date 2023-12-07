@@ -1,8 +1,7 @@
 const {Model, DataTypes, Sequelize} = require('sequelize');
 
 const {LAUNDRY_TABLE} = require('./laundry.models.js');
-
-
+const img ='./logoServices.jpg'
 const SERVICE_TABLE = 'services';
 
 const ServiceSchema = {
@@ -27,6 +26,11 @@ const ServiceSchema = {
   price: {
     type: DataTypes.INTEGER,
     allowNull: false,
+  },
+  imgService:{
+    type:DataTypes.STRING,
+    allowNull: true,
+    defaultValue: img
   },
   createdAt: {
     allowNull: false,

@@ -13,7 +13,7 @@ export default function VehicleRegistrationModal({
 }) {
   const formatPlate = (value) => {
     const cleanedValue = value.replace(/-/g, '');
-    let formattedValue = cleanedValue.substring(0, 3);
+    let formattedValue = cleanedValue.substring(0, 3).toUpperCase();
     if (cleanedValue.length > 3) {
       formattedValue += `-${cleanedValue.substring(3)}`;
     }
@@ -23,6 +23,7 @@ export default function VehicleRegistrationModal({
   const handlePlateChange = (event) => {
     const inputValue = event.target.value;
     const formattedValue = formatPlate(inputValue);
+    
     setValue('plate',formattedValue);
   };
   if (!isOpen) return null;
@@ -61,7 +62,7 @@ export default function VehicleRegistrationModal({
 
                 <div className='flex flex-col'>
                   <label className='font-semibold text-gray-700'>Modelo</label>
-                  <input type="number" {...register('model', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="2000" />
+                  <input type="number" {...register('model', { required: true })} maxLength={4} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="2000" />
                     {errors.model && (
                       <p className=" right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}

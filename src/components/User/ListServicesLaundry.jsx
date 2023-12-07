@@ -30,7 +30,7 @@ export default function ListServicesLaundry({ services,registerErrors }) {
                     </div>
                 </div>))}
             {!services || loading ?
-                (<Spinner />) : (
+                (<Spinner />) : services.length > 0 ?(
                     <>
                     <h2 className='w-full flex justify-center items-center text-4xl mt-32'>servicios</h2>
                     <div className="grid grid-cols-1 gap-5 space-y-5  ">
@@ -40,13 +40,17 @@ export default function ListServicesLaundry({ services,registerErrors }) {
 
                     </div>
                     </>
-                )}
+                ) : <>
+                <div className="grid grid-cols-1 gap-5 space-y-5  ">
+                <h2 className='w-full flex justify-center items-center text-4xl mt-32'>No tiene servicios</h2>
+                </div>
+                </>}
         </>
     )
 }
 
 const ListServices = ({ service }) => {
-    const { id, name, duration, description, price, typeVehicles } = service;
+    const {id, name, duration, description, price, typeVehicles } = service;
 
     return (
         <> 
@@ -77,7 +81,7 @@ const ListServices = ({ service }) => {
 
                     
                     <div className='flex justify-center items-center col-span-2'>
-              <Link to={`/appointment/create-appointment/${id}/${name}`} className=' w-full'>
+              <Link to={`/appointment/create-appointment/${id}/${name}/${price}`} className=' w-full'>
             <button className='w-1/4  text-blue-700 border-solid border-2 transition delay-150 duration-300 ease-in-out hover:scale-110 border-blue-600 hover:bg-button-primary rounded-xl hover:text-black '  >Reservar cita</button>
             </Link>
             </div>

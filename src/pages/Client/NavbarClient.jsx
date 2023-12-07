@@ -27,8 +27,8 @@ const logoutClient = () => {
     <div className="flex items-center mt-2 md:mt-0 md:ml-6">
       <div className="hidden md:flex space-x-4">
         <button className="text-white hover:text-cyan-400"><Link to="/home-client" className="font-Pathway Gothic One font-bold mx-4">Inicio</Link></button>
-        <button className="text-white hover:text-cyan-400"><Link to="/appointments" className="font-Pathway Gothic One font-bold mx-4">Citas</Link></button>
-        <button className="text-white hover:text-cyan-400"><Link to="/appointments" className="font-Pathway Gothic One font-bold mx-4">otra cosa</Link></button>
+        <button className="text-white hover:text-cyan-400"><Link to="/view-appoinments-today" className="font-Pathway Gothic One font-bold mx-4">Citas</Link></button>
+        <button className="text-white hover:text-cyan-400"><Link to="/home-client" className="font-Pathway Gothic One font-bold mx-4">otra cosa</Link></button>
         <button className="text-white hover:text-cyan-400"><Link to="/view-profile-client" className="font-Pathway Gothic One font-bold mx-4">Perfil</Link></button>
         <span className="text-white rounded-md  shadow-md shadow-cyan-200 px-6 ">!Hola, {client.name}</span>
         <button className="text-white hover:text-cyan-400"  onClick={logoutClient}><Link to="/" className="font-Pathway Gothic One mr-4">Cerrar Sesion</Link></button>

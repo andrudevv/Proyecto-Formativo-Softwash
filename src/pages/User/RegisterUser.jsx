@@ -9,7 +9,7 @@ import ModelRegister from "../../components/ModalRegister";
 function RegisterUser() {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { signup, registerErrors, successMessage } = useAuth()
+  const { signup, registerErrors } = useAuth()
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [departments, setDepartments] = useState([]);
@@ -18,14 +18,12 @@ function RegisterUser() {
 
   const onSubmit = handleSubmit(async (values) => {
     const rta = await signup(values);
+    console.log(rta);
     if(rta) {
       setIsModalOpen(true);
-      // toast.success('!Registro exitoso. ', { theme: "light" })
       const timer = setTimeout(() => {
-          // Redirige a la página deseada
           setIsModalOpen(false)
           navigate("/home-user")
-          // <Redirect to="/home-user" />;;
       }, 3000);
       return () => clearTimeout(timer);
   }
@@ -65,7 +63,6 @@ function RegisterUser() {
   }, []);
   return (
     <>
-
       {registerErrors.map((error, i) => (
                     <div className="flex justify-center items-center">
                         <div id='modal-component-container' className='fixed  h-52  z-10  top-0'>
@@ -82,7 +79,7 @@ function RegisterUser() {
                         </div>
                     </div>)) }
 
-                    <ModelRegister isOpen={isModalOpen} title={'Registro exitoso'} message={successMessage} />
+                    <ModelRegister isOpen={isModalOpen} title={'Registro exitoso'}  />
            
       <div className='flex justify-center '>
         <div className='flex flex-col sm:flex-row sm:w-[85%]  mt-6  bg-gray-200 rounded-lg shadow-lg  shadow-gray-400   relative z-0'>

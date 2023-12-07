@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
-const {verifyToken} = require('../lib/jwt.js');
-const {createAccessToken} = require('../lib/jwt.js');
-const sendEmailForgot = require('../utils/clientResetPassword.js');
+const { verifyToken } = require("../lib/jwt.js");
+const { createAccessToken } = require("../lib/jwt.js");
+const sendEmailForgot = require("../utils/clientResetPassword.js");
 const { Laundry, Municipality, Service } = require("../db/models/index.js");
 const MunicipalityService = require("../services/municipality.service.js");
 const municipality = new MunicipalityService();
@@ -9,46 +9,58 @@ class LaundryService {
   constructor() {}
   // consulta para traer todos los lavaderos segun departamento y ciudad
   async findAllsWhere(query) {
-    
-    const options = {attributes: ["id","name", "address", "phone", "aperture", "closing", "rutLaundry", "municipalityId"],
-    include: { 
-      model: Municipality,
-     },
-  where:{membership:true}
-};
+    const options = {
+      attributes: [
+        "id",
+        "name",
+        "address",
+        "phone",
+        "aperture",
+        "closing",
+        "rutLaundry",
+        "municipalityId",
+      ],
+      include: {
+        model: Municipality,
+      },
+      where: { membership: true },
+    };
 
-    const {department} = query;
-    if(department){
-      options.include =[
+    const { department } = query;
+    if (department) {
+      options.include = [
         {
           model: Municipality,
           where: { departmentId: parseInt(department) },
         },
-      ]
+      ];
     }
-    const { municipality} = query;
-    if(municipality){
-      options.where= {...options.where, municipalityId : municipality};
+    const { municipality } = query;
+    if (municipality) {
+      options.where = { ...options.where, municipalityId: municipality };
     }
-    
-    const {typeVehicles} = query;
-    if(typeVehicles){
-      options.include = [{model: Service, attributes:[],where : { typeVehicles: typeVehicles}
 
-    }]
+    const { typeVehicles } = query;
+    if (typeVehicles) {
+      options.include = [
+        {
+          model: Service,
+          attributes: [],
+          where: { typeVehicles: typeVehicles },
+        },
+      ];
     }
-    const {limit = 5}= query
-    const {offset} = query;
-    if(offset){
+    const { limit = 5 } = query;
+    const { offset } = query;
+    if (offset) {
       options.limit = parseInt(limit);
       options.offset = parseInt(limit * offset);
     }
-    
+
     // const {typeVehicles} = query;
     // if (typeVehicles){
     //   options.where.typeVehicles = typeVehicles;
     // }
-
 
     const where = await Laundry.findAll(options);
 
@@ -75,26 +87,23 @@ class LaundryService {
     return findLaundry;
   }
 
-
-  
- //servicio para el verify , verifica los datos de las cookies para manipular frontend
+  //servicio para el verify , verifica los datos de las cookies para manipular frontend
   async findOne(id) {
-    const findLaundry = await Laundry.findOne({where: {id:id}});
+    const findLaundry = await Laundry.findOne({ where: { id: id } });
     if (!findLaundry) {
       throw new Error("lavadero no encontrado ");
     }
     return findLaundry;
   }
- 
 
   //servicio de usuario para ver el perfil del lavadero
   async findLaundry(id) {
     const findLaundry = await Laundry.findOne({
-      attributes:{exclude:['password','membership','recoveryToken']},
-      include:{
-        model:Service,
-      },
-      where:{id:id}});
+      attributes: { exclude: ["password", "membership", "recoveryToken"] },
+      include: [{ model: Service }, { model: Municipality }],
+
+      where: { id: id },
+    });
     if (!findLaundry) {
       throw new Error("no se pudo obtener informacion del lavadero");
     }
@@ -135,7 +144,7 @@ class LaundryService {
   //servicio para registrarse el cliente
   async regiterClient(body) {
     const laundryFound = await Laundry.findOne({
-      attributes:['email','id'],
+      attributes: ["email", "id"],
       where: { email: body.email },
     });
     if (laundryFound) {
@@ -153,37 +162,39 @@ class LaundryService {
   //servicio para que el cliente actualice sus datos excepto contraseña
   async updateClient(id, changes) {
     const laundry = await Laundry.findOne({
-      attributes:['email','id'],
-       where: { id: id } });
+      attributes: ["email", "id"],
+      where: { id: id },
+    });
     if (!laundry) {
       throw new Error("El cliente no existe");
     }
-    if(laundry.dataValues.email !== changes.email){
+    if (laundry.dataValues.email !== changes.email) {
       const existingEmail = await Laundry.findOne({
-        where: { email: changes.email},
+        where: { email: changes.email },
       });
-      if(existingEmail){
-        throw new Error('Correo electronico en uso')
+      if (existingEmail) {
+        throw new Error("Correo electronico en uso");
       }
-    }else{
+    } else {
       delete changes.email;
     }
 
     const [update] = await Laundry.update(changes, {
-      where:{ id: id },
+      where: { id: id },
     });
 
     if (update === 0) {
       throw new Error("No hay datos para actualizar");
     }
-    return { message: "Actualizacion exitosa", update:true };
+    return { message: "Actualizacion exitosa", update: true };
   }
 
   //servicio para que el cliente recupere la contraseña en caso de olvidarla
   async sendEmailForgot(email) {
     const laundry = await Laundry.findOne({
-      attributes:['id','rutLaundry','name','email','recoveryToken'],
-       where: { email: email } });
+      attributes: ["id", "rutLaundry", "name", "email", "recoveryToken"],
+      where: { email: email },
+    });
     if (!laundry) {
       throw new Error("El correo electrónico no existe");
     }
@@ -193,31 +204,35 @@ class LaundryService {
       clientName: laundry.name,
     });
     const updateRecovery = await Laundry.update(
-      { recoveryToken: token }, 
-      { where: { id: laundry.id } } 
-      );
-    if(updateRecovery[0] === 1){
+      { recoveryToken: token },
+      { where: { id: laundry.id } }
+    );
+    if (updateRecovery[0] === 1) {
       const sendEmail = await sendEmailForgot(email, token);
-      if(!sendEmail){
-        throw new Error('Error al enviar el correo de recuperacion');
+      if (!sendEmail) {
+        throw new Error("Error al enviar el correo de recuperacion");
       }
-
     }
-    return { message: `Se ha enviado un correo de recuperación al correo: ${email}` }
+    return {
+      message: `Se ha enviado un correo de recuperación al correo: ${email}`,
+    };
   }
-//servicio que permite cambiar la contraseña por medio de la recuperacion
-  async changePassword(token, newPassword){
+  //servicio que permite cambiar la contraseña por medio de la recuperacion
+  async changePassword(token, newPassword) {
     try {
       const payload = verifyToken(token);
       const laundry = await Laundry.findByPk(payload.id);
       if (laundry.recoveryToken !== token) {
-        throw new Error('no autorizado')
+        throw new Error("no autorizado");
       }
       const hash = await bcrypt.hash(newPassword, 10);
-      await Laundry.update({recoveryToken: null, password: hash},{where : {id: laundry.id}});
-      return { message: 'contraseña actualizada' };
+      await Laundry.update(
+        { recoveryToken: null, password: hash },
+        { where: { id: laundry.id } }
+      );
+      return { message: "contraseña actualizada" };
     } catch (error) {
-      throw new Error('no autorizado')
+      throw new Error("no autorizado");
     }
   }
   //servicio para eliminar, por el momento no se usara
