@@ -23,6 +23,9 @@ import ViewProfileClient from "./pages/Client/ViewProfileClient";
 import FindLaundry from "./pages/User/FindLaundry";
 import ViewProfileLaundry from "./pages/User/ViewProfileLaundry";
 import CreateAppointment from "./pages/User/CreateAppointment";
+import RescheduleAppointmens from "./pages/Client/RescheduleAppointmens";
+import AppointmentsClient from "./pages/Client/AppointmentsClient";
+import UpdateAppointment from "./pages/Client/UpdateAppointment";
 
 function App() {
   return (
@@ -62,9 +65,11 @@ function App() {
                 <Route path="/home-client" element={<h1>iniciado correctamente cliente</h1>} />
                 <Route path="/my-services" element={<h1>servicios</h1>} />
                 <Route path="/view-profile-client" element={<ViewProfileClient />} />
-                <Route path="/view-appoinments" element={<h1>ver citas por filtro de fecha</h1>} />
-                <Route path="/view-appoinments-today" element={<h1>ver citas para hoy , para tomar asistencia y pasar a proceso</h1>} />
-                <Route path="/view-appoinments-process" element={<h1>ver las citas que estan siendo atendidas</h1>} />
+                <Route path="/view-appointments" element={<AppointmentsClient/>} />
+                <Route path="/missed-appointments" element={<RescheduleAppointmens/>} />
+                <Route path="/reschedule-appointment/:id" element={<UpdateAppointment/>}  />
+                <Route path="/view-appointments-today" element={<h1>ver citas para hoy , para tomar asistencia y pasar a proceso</h1>} />
+                <Route path="/view-appointments-process" element={<h1>ver las citas que estan siendo atendidas</h1>} />
                 <Route path="/logout" element={<h1>hasta pronto </h1>} />
               </Route>
             </Routes>

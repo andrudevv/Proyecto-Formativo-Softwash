@@ -50,7 +50,7 @@ export const registerAppointment = (appointment) => Axios.post(`${API}/appointme
 export const availabilityFound = (idService, date) => Axios.get(`${API}/appointment/${idService}/${date}`)
 
 //ruta para obtener servicios del lavadero seleccionado
-export const getProfileWithServices = (id) => Axios.get(`${API}/users/view-profile/${id}`);
+export const getProfileWithServices = (id,query) => Axios.get(`${API}/users/view-profile/${id}`,{params: query});
 // /actualizar para recuperar clave en el usuario
 
 // /restablecer  ruta para correo restablecer ingresando correo
@@ -97,7 +97,18 @@ export const resetPasswordClient = (data) =>
       throw error;
     });
 
+//ruta para filtro de citas segun fecha y estado
+export const FindAppointments = (date, state) => Axios.get(`${API}/appointment/get-appointments/${date}`,{ params: state});
 
+
+//ruta para filtrar las citas no asistidas, por fecha o placa
+export const FindAppointmentsAbsence = (query) => Axios.get(`${API}/appointment/get-appointments-absence/`,{ params: query});
+
+
+//ruta para actualizar la cita confirmando asistencia
+export const sendToProcess = (id, state) => Axios.patch(`${API}/appointment/my-appointments/${id}`, state);
+
+//ruta para el filtro de los lavaderos del lado del usuario
 export const FindLaundry = (queryFind) => Axios.get(`${API}/client/`,{ params: queryFind});
 // export const getDepartment = () => {
 //   Axios.get(`${API}/users/getDepartments`)

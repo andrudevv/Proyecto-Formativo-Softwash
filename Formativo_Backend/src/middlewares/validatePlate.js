@@ -29,7 +29,15 @@ function validatePlateCar(placa) {
     throw new Error("ingrese una placa valida para carros");
   }
 }
+function validatePlate(placa) {
+  const regexPlate = /^[A-Z]{3}-\d{2}[A-Z\d]?$/;
 
+  if (regexPlate.test(placa)) {
+    return placa;
+  } else {
+    return false;
+  }
+}
 function validatePlateMotorcycle(placa) {
   const regexMotorcycle = /^[A-Z]{3}-\d{2}[A-Z]?$/;
 
@@ -51,4 +59,4 @@ function validatePlateMotorcycle(placa) {
 }
 
 
-module.exports = {validateType}
+module.exports = {validateType, validatePlate}

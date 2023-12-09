@@ -25,6 +25,17 @@ laundryRouter.post(
     try {
       const body = req.body;
       const newClient = await Laundry.regiterClient(body);
+      const token = await createAccessToken({
+        id: newClient.id,
+        rut: newClient.rutLaundry,
+        username: newClient.name,
+        membership: newClient.membership,
+      });
+      res.cookie("tokenClient", token, {
+        // httpOnly: process.env.NODE_ENV !== "development",
+        secure: true,
+        sameSite: "none",
+      });
       // await register(newClient.email, newClient.name);
       res.status(201).json(newClient);
     } catch (error) {
@@ -90,7 +101,6 @@ laundryRouter.get(
   async (req, res, next) => {
     try {
       const query = req.query;
-      console.log(query);
       const findDepartments = await Laundry.findAllsWhere(query);
       res.status(201).json(findDepartments);
     } catch (error) {

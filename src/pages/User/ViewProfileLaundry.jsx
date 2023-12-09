@@ -3,6 +3,7 @@ import ListServicesLaundry from '../../components/User/ListServicesLaundry'
 import { useAuth } from '../../context/UserContext';
 import Spinner from '../../components/SpinnerLoading';
 import { useParams } from 'react-router-dom';
+import NavPagination from '../../components/NavPagination';
 import { toast } from 'react-toastify';
 export default function ViewProfileLaundry() {
     const { ViewProfileLaundryId, registerErrors } = useAuth();
@@ -11,13 +12,23 @@ export default function ViewProfileLaundry() {
     const [loading, setLoading] = useState(false);
     const [img, setImg] = useState(null);
     const { id } = useParams();
-
+    const [styleOnMax, setStyleOnMax] = useState('flex');
+    const [page, setPage] = useState(0);
     useEffect( () => {
         // setLoading(true)
         const getData = async (id) => {
             try {
                 setLoading(true)
-                const rta = await ViewProfileLaundryId(id);
+                const query = {
+                    offset:page
+                }
+                const rta = await ViewProfileLaundryId(id, query);
+                if(rta.length < 5){
+                    setStyleOnMax('hidden')
+                }else{
+                    setStyleOnMax('flex')
+                }
+                
                 setDataServices(rta);
                 console.log(rta);
                 setServices(rta.Services);
@@ -39,7 +50,7 @@ export default function ViewProfileLaundry() {
 
         getData(id);
         window.scrollTo(0, 0);
-    }, [id]);
+    }, [id,page, styleOnMax]);
 
    
     // const{ name, address, aperture, closing, phone, rutLaundry, Municipality } = dataServices;
@@ -98,7 +109,9 @@ export default function ViewProfileLaundry() {
             </div>
 
                 {!services || loading ? (<Spinner />) : (<ListServicesLaundry registerErrors={registerErrors} services={services} />)}
-
+                <div className='w-full flex justify-center mt-8'>
+                            <NavPagination styles={'flex justify-center '}   styleOnMax={styleOnMax} page={page} setPage={setPage} />
+                        </div>
 
             </>
 

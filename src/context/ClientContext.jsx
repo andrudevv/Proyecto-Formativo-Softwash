@@ -8,7 +8,10 @@ import { registerClientRequest,
     getServicesLaudry,
     updateService,
     deleteService,
-    createService
+    createService,
+    FindAppointments,
+    sendToProcess,
+    FindAppointmentsAbsence
  } from "../services/api/auth";
 import Cookies from "js-cookie";
 
@@ -81,6 +84,39 @@ export const AuthClientProvider = ({ children }) => {
             return findServices.data;
         } catch (error) {
             setRegisterErrors(error.response.data)
+        }
+    }
+    const getAppointments = async (date,state) =>{
+        try {
+            const foundAppointments = await FindAppointments(date, state);
+            return foundAppointments.data;
+            
+        } catch (error) {
+            setRegisterErrors(error.response)
+        }
+    }
+    const sendAbsence = async (id, state) =>{
+        try {
+            const absence = await sendToProcess(id, state);
+            return absence.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
+    const sendProcess = async (id, state) =>{
+        try {
+            const responseProcess = await sendToProcess(id, state); 
+            return responseProcess.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
+    const findAbsence = async (query)=>{
+        try {
+            const findAppointments = await FindAppointmentsAbsence(query);
+            return findAppointments.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
         }
     }
     const newService = async (service) =>{
@@ -173,7 +209,10 @@ export const AuthClientProvider = ({ children }) => {
             logout,
             loading,
             resetEmail,
-            
+            getAppointments,
+            sendProcess,
+            sendAbsence,
+            findAbsence
             
         }}>
             {children}

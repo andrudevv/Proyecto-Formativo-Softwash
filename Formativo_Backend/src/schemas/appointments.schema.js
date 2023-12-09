@@ -5,7 +5,6 @@ const amount = Joi.number().integer();
 const date = Joi.date().iso();
 const time = Joi.string();
 const observations = Joi.string();
-const state = Joi.string();
 const vehicleId = Joi.number().integer();
 const serviceId = Joi.number().integer();
 
@@ -21,7 +20,9 @@ const createAppointmentSchema = Joi.object({
     "number.empty": "El Servicio no puede estar vacio",
   }),
 });
-
+const patchAppointmentState  = Joi.object({
+  state : Joi.string(),
+})
 const patchAppointment = Joi.object({
   date: date,
   time: time,
@@ -45,6 +46,9 @@ const getAbilitySchema = Joi.object({
 const getByQuery = Joi.object({
   limit: Joi.string(),
   offset: Joi.string(),
+  state: Joi.string(),
+  plate: Joi.string(),
+date : Joi.date()
 });
 const getByDate = Joi.object({
   date: date.required().messages({
@@ -60,4 +64,5 @@ module.exports = {
   getByQuery,
   patchAppointmentParams,
   patchAppointment,
+  patchAppointmentState
 };

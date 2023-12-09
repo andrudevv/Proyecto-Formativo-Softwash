@@ -6,7 +6,7 @@ const {
   validateHour12,
   validateDate,
 } = require("../middlewares/validateTime.js");
-
+const { validatePlate } = require("../middlewares/validatePlate.js");
 const {
   getByDate,
   getAbilitySchema,
@@ -14,10 +14,14 @@ const {
   getByQuery,
   patchAppointmentParams,
   patchAppointment,
+  patchAppointmentState,
 } = require("../schemas/appointments.schema.js");
 const { validatorHandler } = require("../middlewares/validator.handler.js");
 const { checkUser, checkLaundry } = require("../middlewares/auth.handler.js");
-const {authRequiredClient, authRequiredUser} = require("../middlewares/validateToken.js");
+const {
+  authRequiredClient,
+  authRequiredUser,
+} = require("../middlewares/validateToken.js");
 
 const appointment = new AppointmentService();
 const appointmentRouter = express.Router();
@@ -49,7 +53,7 @@ appointmentRouter.post(
       res.status(201).json({ message: "Registro de cita exitoso ", rta });
     } catch (error) {
       console.error(error);
-      return res.status(500).json([ error.message ]);
+      return res.status(500).json([error.message]);
     }
     (err, res) => {
       res.status(400).json({ error: err.message });
@@ -68,7 +72,7 @@ appointmentRouter.get(
       const userId = req.user.id;
       const myappointments = await appointment.findMyAppointments(userId);
       // const rt = await appointment.getCitas(date);
-      
+
       // console.log(formattedResult);
 
       // const dt = rt.date;
@@ -79,7 +83,7 @@ appointmentRouter.get(
       res.status(200).json(myappointments);
     } catch (error) {
       console.error(error);
-      return res.status(500).json([ error.message]);
+      return res.status(500).json([error.message]);
     }
     (err, res) => {
       res.status(400).json({ error: err.message });
@@ -105,7 +109,47 @@ appointmentRouter.get(
           message:
             "error en el formato de fecha por favor ingrese una fecha valida o proxima fecha a partir de la fecha actual ",
         });
-      const findAppointments = await appointment.findAllAppointments(id, date, query);
+      const findAppointments = await appointment.findAllAppointments(
+        id,
+        date,
+        query
+      );
+      res.status(201).json(findAppointments);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json([error.message]);
+    }
+    (err, res) => {
+      res.status(400).json({ error: err.message });
+    };
+  }
+);
+
+// filtrar por fecha o placa para buscar
+appointmentRouter.get(
+  "/get-appointments-absence/",
+  authRequiredClient,
+  checkLaundry,
+  validatorHandler(getByQuery, "query"),
+  async (req, res) => {
+    try {
+      const query = req.query;
+      const id = req.user.id;
+      const { plate } = query;
+
+      if (plate) {
+        const validate = await validatePlate(plate);
+        if (!validate) {
+          return res.status(404).json({
+            message: "error en la placa, ingrese una placa valida ",
+          });
+        }
+      }
+      console.log(query);
+      const findAppointments = await appointment.findAllAppointmentsAbsence(
+        id,
+        query
+      );
       res.status(201).json(findAppointments);
     } catch (error) {
       console.error(error);
@@ -163,6 +207,30 @@ appointmentRouter.get(
   }
 );
 
+// ruta para actualizar el estado de la cita que se haya asistido
+appointmentRouter.patch(
+  "/my-appointments/:id",
+  authRequiredClient,
+  // checkUser,
+  validatorHandler(patchAppointmentParams, "params"),
+  validatorHandler(patchAppointmentState, "body"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const userId = req.user.id;
+      const body = req.body;
+      const updateMyppointmentsState =
+        await appointment.updateMyAppointmentState(id, userId, body);
+      res.status(201).json(updateMyppointmentsState);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json([error.message]);
+    }
+    (err, res) => {
+      res.status(400).json({ error: err.message });
+    };
+  }
+);
 
 appointmentRouter.patch(
   "/my-appointments/:id",
