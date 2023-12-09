@@ -95,10 +95,9 @@ function HomeUsers() {
                 <BsChevronCompactRight onClick={nextSlide} size={30}/>
               </div>
             </div>
-      
-
-
+    
           </div>
+          <h1 className=" text-color text-center">SOFTWASH</h1>
         </div>
       </div>
 
