@@ -38,7 +38,6 @@ export default function FindLaundry() {
    
     useEffect(() => {
         
-        onSubmitSearch();
       }, [page, styleOnMax]);
     return (
         <div>

@@ -59,7 +59,7 @@ const ServiceSchema = {
 class Service extends Model {
 
   static associate(models) {
-    this.belongsTo(models.laundry, { foreignKey: 'laundryId'});
+    this.belongsTo(models.laundry, { foreignKey: 'laundryId' });
     this.belongsToMany(models.Vehicle, {
         as: 'Vehicle',
         through: models.Appointment,

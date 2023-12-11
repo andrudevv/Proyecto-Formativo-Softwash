@@ -53,7 +53,7 @@ userRouter.post(
         document: newUser.documentUser,
         username: newUser.name,
       });
-      res.cookie("token", token, {
+      res.cookie("tokenUser", token, {
         // httpOnly: process.env.NODE_ENV !== "development",
         secure: true,
         sameSite: "none",
@@ -227,11 +227,12 @@ userRouter.get(
   "/view-profile/:id",
   authRequiredUser,
   // checkLaundry,
-  // validatorHandler(createLaundrySchema, "body"),
+  // validatorHandler(createLaundrySchema, "query"),
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const viewLaundry = await Laundry.findLaundry(id);
+      const query = req.query;
+      const viewLaundry = await Laundry.findLaundry(id, query);
       return res.status(200).json(viewLaundry);
     } catch (error) {
       next(error);

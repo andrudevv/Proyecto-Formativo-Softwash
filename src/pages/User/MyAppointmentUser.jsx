@@ -69,7 +69,6 @@ export default function MyAppointmentUser() {
     const fields = [
         "date", "amount", "time", "observations", "Vehicle.plate", "Service.name", "state", "Service.laundry.address",
     ]
-    // {fields , fieldsMapping, data,buttonActions,stylesTable,stylesThead,stylesTbody, styleActions}
     return (
         <>
             <div className='flex justify-center items-center mb-10 h-[70vh]'>

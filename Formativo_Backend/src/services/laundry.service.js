@@ -2,13 +2,15 @@ const bcrypt = require("bcryptjs");
 const { verifyToken } = require("../lib/jwt.js");
 const { createAccessToken } = require("../lib/jwt.js");
 const sendEmailForgot = require("../utils/clientResetPassword.js");
-const { Laundry, Municipality, Service } = require("../db/models/index.js");
+const { Laundry, Municipality, Service, User } = require("../db/models/index.js");
 const MunicipalityService = require("../services/municipality.service.js");
+const { query } = require("express");
 const municipality = new MunicipalityService();
 class LaundryService {
   constructor() {}
   // consulta para traer todos los lavaderos segun departamento y ciudad
   async findAllsWhere(query) {
+   
     const options = {
       attributes: [
         "id",
@@ -97,17 +99,26 @@ class LaundryService {
   }
 
   //servicio de usuario para ver el perfil del lavadero
-  async findLaundry(id) {
-    const findLaundry = await Laundry.findOne({
+  async findLaundry(id, query) {
+    const options = {
       attributes: { exclude: ["password", "membership", "recoveryToken"] },
-      include: [{ model: Service }, { model: Municipality }],
+      include: [
+        { model: Service },
+        { model: Municipality },
+      ],
 
       where: { id: id },
-    });
+    };
+    const { limit = 5 } = query;
+    const { offset } = query;
+    if (offset) {
+      options.include[0].limit = parseInt(limit);
+      options.include[0].offset = parseInt(limit * offset);
+    }
+    const findLaundry = await Laundry.findOne(options);
     if (!findLaundry) {
       throw new Error("no se pudo obtener informacion del lavadero");
     }
-
     return findLaundry;
   }
 

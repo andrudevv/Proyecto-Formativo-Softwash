@@ -124,9 +124,9 @@ export const AuthUserProvider = ({ children }) => {
             setRegisterErrors(error.response.data)
         }
     }
-    const ViewProfileLaundryId  = async (id) =>{
+    const ViewProfileLaundryId  = async (id, query) =>{
         try {
-            const responseData = await getProfileWithServices(id);
+            const responseData = await getProfileWithServices(id, query);
             return responseData.data;
         } catch (error) {
             setRegisterErrors(error.response.data);

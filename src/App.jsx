@@ -13,9 +13,11 @@ import ClientEmailReset from "./utils/ClientEmailReset";
 import { AuthClientProvider} from "./context/ClientContext";
 import ViewProfile from "./pages/User/ViewProfileUser";
 import ProtectedRoutesClient from "./routes/ProtectedRoutesClient";
+import HomeUser from "./pages/User/HomeUser";
 import HomeUsers from "./pages/HomeUsers";
 import NotFound404 from "./pages/NotFound404";
 import Footer from "./components/Footer";
+import HomeServicesClient from "./pages/Client/HomeServicesClient";
 
 import MyAppointmentUser from "./pages/User/MyAppointmentUser";
 import ModalRegisterVehicle from "./components/User/ModalRegisterVehicle";
@@ -23,6 +25,9 @@ import ViewProfileClient from "./pages/Client/ViewProfileClient";
 import FindLaundry from "./pages/User/FindLaundry";
 import ViewProfileLaundry from "./pages/User/ViewProfileLaundry";
 import CreateAppointment from "./pages/User/CreateAppointment";
+import RescheduleAppointmens from "./pages/Client/RescheduleAppointmens";
+import AppointmentsClient from "./pages/Client/AppointmentsClient";
+import UpdateAppointment from "./pages/Client/UpdateAppointment";
 
 function App() {
   return (
@@ -44,7 +49,7 @@ function App() {
               // rutas protegidas usuario
               <Route element={<ProtectedRoutesUser />}>
                 <Route path="view-profile-user" element={<ViewProfile />} />
-                <Route path="home-user" element={<HomeUsers />} />
+                <Route path="home-user" element={<HomeUser />} />
                 <Route path="logout" element={<h1>hasta pronto </h1>} />
                 <Route path="search" element={<FindLaundry/>} />
                 <Route path="my-appointments" element={<MyAppointmentUser />} />
@@ -59,12 +64,11 @@ function App() {
 
               // rutas protegidas cliente
               <Route element={<ProtectedRoutesClient />}>
-                <Route path="/home-client" element={<h1>iniciado correctamente cliente</h1>} />
-                <Route path="/my-services" element={<h1>servicios</h1>} />
+                <Route path="/home-client" element={<HomeServicesClient/>} />
                 <Route path="/view-profile-client" element={<ViewProfileClient />} />
-                <Route path="/view-appoinments" element={<h1>ver citas por filtro de fecha</h1>} />
-                <Route path="/view-appoinments-today" element={<h1>ver citas para hoy , para tomar asistencia y pasar a proceso</h1>} />
-                <Route path="/view-appoinments-process" element={<h1>ver las citas que estan siendo atendidas</h1>} />
+                <Route path="/view-appointments" element={<AppointmentsClient/>} />
+                <Route path="/missed-appointments" element={<RescheduleAppointmens/>} />
+                <Route path="/reschedule-appointment/:id" element={<UpdateAppointment/>}  />
                 <Route path="/logout" element={<h1>hasta pronto </h1>} />
               </Route>
             </Routes>

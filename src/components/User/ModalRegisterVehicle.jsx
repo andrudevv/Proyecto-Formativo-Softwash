@@ -11,6 +11,18 @@ export default function VehicleRegistrationModal({
   setValue
 
 }) {
+  const motoPattern = /^[A-Z]{3}-\d{2}[A-Z]?$/;
+  const carroPattern = /^[A-Z]{3}-\d{3}$/;
+  const getPlateType = (plate) => {
+    if (motoPattern.test(plate)) {
+      return 'moto';
+    } else if (carroPattern.test(plate)) {
+      return 'carro';
+    } else {
+      // Si no coincide con ninguna expresión regular conocida
+      return 'placa desconocida';
+    }
+  };
   const formatPlate = (value) => {
     const cleanedValue = value.replace(/-/g, '');
     let formattedValue = cleanedValue.substring(0, 3).toUpperCase();
@@ -23,9 +35,17 @@ export default function VehicleRegistrationModal({
   const handlePlateChange = (event) => {
     const inputValue = event.target.value;
     const formattedValue = formatPlate(inputValue);
+<<<<<<< HEAD
     
     setValue('plate',formattedValue);
+=======
+    const plateType = getPlateType(formattedValue.toUpperCase())
+
+    setValue('typeVehicle',plateType)
+    setValue('plate',formattedValue.toUpperCase());
+>>>>>>> 881036bed9b26e0cf087f15452a2a1583cf8bf1e
   };
+ 
   if (!isOpen) return null;
 
 
@@ -62,7 +82,12 @@ export default function VehicleRegistrationModal({
 
                 <div className='flex flex-col'>
                   <label className='font-semibold text-gray-700'>Modelo</label>
+<<<<<<< HEAD
                   <input type="number" {...register('model', { required: true })} maxLength={4} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="2000" />
+=======
+                  <input type="number" {...register('model', {required: true,pattern:/^[0-9]*$/  })}  max={4}
+                  className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="2000" />
+>>>>>>> 881036bed9b26e0cf087f15452a2a1583cf8bf1e
                     {errors.model && (
                       <p className=" right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}

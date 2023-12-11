@@ -68,9 +68,9 @@ class AppointmentService {
       });
       let cantidad = 0;
       if (searchAbility.length != 0) {
-         cantidad = searchAbility[0].dataValues.cantidad;
+        cantidad = searchAbility[0].dataValues.cantidad;
       }
-      
+
       if (searchAbility.length === 0) {
         return true;
       } else {
@@ -221,35 +221,74 @@ class AppointmentService {
     const options = {
       include: [
         {
+          model: Vehicle,
+          attributes: ["plate"],
+        },
+        {
           model: Service,
-          attributes: [],
-          include: [
-            {
-              model: Laundry,
-              attributes: [],
-              where: { id: id },
-            },
-          ],
+          attributes: ["name"],
+          where: { laundryId: id },
+          // include: [
+          //   {
+          //     model: Laundry,
+          //     attributes: [],
+          //     where: { id: id },
+          //   },
+          // ],
         },
       ],
-      where: {
-        date: date,
-      },
+      where: { date: date },
     };
-
-    const { limit, offset } = query;
+    const { limit = 10, offset } = query;
     if (limit && offset) {
       options.limit = parseInt(limit);
       options.offset = parseInt(limit * offset);
     }
-
+    const { state } = query;
+    if (state) {
+      options.where.state = state ;
+    }
+   
     const findAppointments = await Appointment.findAll(options);
 
-    if (findAppointments.length === 0) {
-      throw new Error("No tienes citas para esta fecha");
-    }
+    return findAppointments;
+  }
+  async findAllAppointmentsAbsence(id, query) {
+    const options = {
+      include: [
+        {
+          model: Vehicle,
+          attributes: ["plate"],
+        },
+        {
+          model: Service,
+          attributes: ["name"],
+          where: { laundryId: id },
+         
+        },
+      ],
+      
+    };
 
-    return { Appointments: findAppointments };
+    const { date } = query;
+    if (date) {
+      options.where = {...options.where , date:date };
+    }
+    const { limit = 5, offset } = query;
+    if (limit && offset) {
+      options.limit = parseInt(limit);
+      options.offset = parseInt(limit * offset);
+    }
+    const { state } = query;
+    if (state) {
+      options.where =  {...options.where, state: state} ;
+    }
+    const { plate } = query;
+    if (plate) {
+      options.include[0].where = {plate: plate};
+    }
+    const findAppointments = await Appointment.findAll(options);
+    return findAppointments;
   }
 
   // disponibilidad segun lavadero (pendiente)
@@ -265,10 +304,7 @@ class AppointmentService {
     }
     return findhour;
 
-    // console.log("findhour",findhour);
-    // const find = await Appointment.findAll({ where: { date: dt} });
-    // if (!find) return console.log("no hay citas asignadas");
-    // return { find };
+ 
   }
 
   // una parte de buscar disponibilidad junto con el otro servicio findAllAvilityByDate
@@ -307,21 +343,41 @@ class AppointmentService {
         {
           model: Service,
           attributes: [],
-          include: [
-            {
-              model: Laundry,
-              attributes: [],
-              where: {
-                id: id, // Filtra por el ID del lavadero
-              },
-            },
-          ],
+          where: { laundryId: id },
+          // include: [
+          //   {
+          //     model: Laundry,
+          //     attributes: [],
+          //     where: {
+          //       id: id, // Filtra por el ID del lavadero
+          //     },
+          //   },
+          // ],
         },
       ],
       where: { date: date },
       group: ["time"],
     });
     return availability;
+  }
+  //ruta para encontrar cita y actualizarla
+  async findAppointmentForReschedule(id, clientId) {
+    const findAppointments = Appointment.findOne({
+      include: [
+        {
+          model: Service,
+          where: {
+            laundryId: clientId,
+          },
+        },
+      ],
+      where: { id: id },
+    });
+    if (!findAppointments) {
+      throw new Error("No se encontró la cita");
+    }
+
+    return findAppointments;
   }
 
   //servicio para actualizar la cita del lado del usuario
@@ -346,6 +402,71 @@ class AppointmentService {
   //   return { message: "Cita actualizada correctamente", update: true };
   // }
 
+  async updateMyAppointmentState(idAppointment, idClient, newState) {
+    const findAppointment = await Appointment.findOne({
+      include: [
+        {
+          model: Service,
+          where: {
+            laundryId: idClient,
+          },
+        },
+      ],
+      where: { id: idAppointment },
+    });
+    console.log(findAppointment);
+    if (!findAppointment) {
+      throw new Error("La cita no se encontró");
+    }
+    const [updateAppointment] = await Appointment.update(newState, {
+      where: { id: idAppointment },
+    });
+    if (updateAppointment === 0) {
+      throw new Error("Error al actualizar el estado de la cita");
+    }
+    console.log(updateAppointment);
+    return true;
+  }
+
+  //servicio para actualizar la cita con todos los datos
+  async rescheduleAppointment(idAppointment, idClient, newData) {
+    const options = {
+      include: [
+        {
+          model: Service,
+          where: { laundryId: idClient },
+        },
+      ],
+      where: { id: idAppointment },
+    };
+    const find = Appointment.findOne(options);
+    if (!find) {
+      throw new Error("No se encontro la cita");
+    }
+    const [updateAppointment] = await Appointment.update(newData, options);
+    if (updateAppointment === 0) {
+      throw new Error("Error al actualizar la cita");
+    }
+    return true;
+  }
+  async deleteAppointment(idAppointment, idClient){
+    const options = {
+      include: [{
+        model: Service,
+        where: { laundryId: idClient },
+      }],
+      where: { id: idAppointment }
+    }
+    const deleted = Appointment.findOne(options)
+    if(!deleted){
+      throw new Error('No se encontro la cita');
+    }
+    const deleteAppointment = await Appointment.destroy(options)
+    if(deleteAppointment === 0){
+      throw new Error('No se pudo eliminar la cita');
+    }
+    return true;
+  }
   async delete(id) {
     const laundry = await this.findOne(id);
     await laundry.destroy();

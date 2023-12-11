@@ -8,7 +8,14 @@ import { registerClientRequest,
     getServicesLaudry,
     updateService,
     deleteService,
-    createService
+    createService,
+    FindAppointments,
+    sendToProcess,
+    FindAppointmentsAbsence,
+    findAppointmentForReschedule,
+    updateAndReschedule,
+    availabilityFoundClient,
+    appointmentDeleted
  } from "../services/api/auth";
 import Cookies from "js-cookie";
 
@@ -57,9 +64,6 @@ export const AuthClientProvider = ({ children }) => {
             setRegisterErrors(error.response.data);
         }
     }
-
-
-
     const signIn = async (user) => {
         try {
             const res = await loginClientRequest(user);
@@ -79,6 +83,71 @@ export const AuthClientProvider = ({ children }) => {
         try {
             const findServices = await getServicesLaudry();
             return findServices.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
+    const getAppointments = async (date,state) =>{
+        try {
+            const foundAppointments = await FindAppointments(date, state);
+            return foundAppointments.data;
+            
+        } catch (error) {
+            setRegisterErrors(error.response)
+        }
+    }
+    const sendAbsence = async (id, state) =>{
+        try {
+            const absence = await sendToProcess(id, state);
+            return absence.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
+    const sendProcess = async (id, state) =>{
+        try {
+            const responseProcess = await sendToProcess(id, state); 
+            return responseProcess.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
+    const findAbsence = async (query)=>{
+        try {
+            const findAppointments = await FindAppointmentsAbsence(query);
+            return findAppointments.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
+    const findAppointment= async (id)=>{
+        try {
+            const find = await findAppointmentForReschedule(id);
+            return find.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
+    const updateAppointment = async (idAppointment,appointment)=>{
+        try {
+            const update = await updateAndReschedule(idAppointment,appointment);
+            return update.data
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
+    const deleteAppointment = async (idAppointment) =>{
+        try {
+            const wasDeleted = await appointmentDeleted(idAppointment);
+            return wasDeleted.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
+    const getAvailability = async (idService, date)=>{
+        try {
+            const findAvailability = await availabilityFoundClient(idService, date);
+            return findAvailability.data;
         } catch (error) {
             setRegisterErrors(error.response.data)
         }
@@ -173,7 +242,14 @@ export const AuthClientProvider = ({ children }) => {
             logout,
             loading,
             resetEmail,
-            
+            getAppointments,
+            sendProcess,
+            sendAbsence,
+            findAbsence,
+            findAppointment,
+            updateAppointment,
+            getAvailability,
+            deleteAppointment
             
         }}>
             {children}

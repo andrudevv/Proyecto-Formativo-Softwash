@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {BsChevronCompactLeft,BsChevronCompactRight} from 'react-icons/bs'
+<<<<<<< HEAD
 // import {RxDotFilled} from 'react-icons/rx'
 // import { FiMenu } from "react-icons/fi";
 // import Footer from "../components/Footer";
@@ -7,6 +8,9 @@ import imgtitulo from "../img/TituloWash2.png"
 /* import imgolas from "../img/olasWash.png" */
 import imgCorte from "../img/CorteWash.png"
 
+=======
+import imgtitulo from "../img/TituloWash2.png"
+>>>>>>> 881036bed9b26e0cf087f15452a2a1583cf8bf1e
 function HomeUsers() {
   const callouts = [
     {
@@ -56,14 +60,14 @@ function HomeUsers() {
     <div className="items-center justify-start min-h-screen ">
     
       <div className="items-center justify-start">  
-        <div className="max-h-2xl rounded-mdmy-4 bg-blue-700">
-          <div className="">
+        <div className="max-h-2xl rounded-md ">
+          <div className="w-auto -mx-24">
         <div>
-        <img  className="w-full h-full object-cover" src={imgtitulo} alt="titulo"/>
+        <img  className=" h-full object-cover" src={imgtitulo} alt="titulo"/>
         </div>
 
       
-            <p className="text-2xl font-Pathway Gothic One text-color text-center bg-blue-700 border-blue-700  p-8">
+            <p className="text-2xl font-Pathway Gothic One text-white text-center bg-blue-700 border-blue-700  p-8">
               Creamos soluciones innovadoras para simplificar la vida de los
               propietarios de vehículos y mejorar la industria de los lavaderos
               de autos en la cuidad de Armenia. Nuestra principal actividad es
@@ -77,7 +81,7 @@ function HomeUsers() {
 
 
           <div className="">
-            <h2 className="text-4xl font-Pathway Gothic One text-color text-center  mt-5">
+            <h2 className="text-4xl font-Pathway Gothic One text-black text-center  mt-5">
               Conoce lavaderos cercanos
             </h2>
 
