@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const { verifyToken } = require("../lib/jwt.js");
 const { createAccessToken } = require("../lib/jwt.js");
 const sendEmailForgot = require("../utils/clientResetPassword.js");
-const { Laundry, Municipality, Service } = require("../db/models/index.js");
+const { Laundry, Municipality, Service, User } = require("../db/models/index.js");
 const MunicipalityService = require("../services/municipality.service.js");
 const { query } = require("express");
 const municipality = new MunicipalityService();
@@ -10,6 +10,7 @@ class LaundryService {
   constructor() {}
   // consulta para traer todos los lavaderos segun departamento y ciudad
   async findAllsWhere(query) {
+   
     const options = {
       attributes: [
         "id",

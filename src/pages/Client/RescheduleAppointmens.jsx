@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import ContentTable from '../../components/ContentTable'
 import ButtonAction from '../../components/ButtonAction'
+import ContentTableAppointment from '../../components/Client/ContentTableAppointment'
 import DatePicker from 'react-datepicker';
 import NavPagination from '../../components/NavPagination';
 import { clientAuth } from '../../context/ClientContext';
-import { Navigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+import ReusableModals from '../../components/ReusableModals';
+import { ToastContainer, toast } from 'react-toastify';
 const stylesTable = 'w-full bg-white-100 mb-6 border border-gray-300';
 const stylesThead = 'bg-red-100';
 const stylesTbody = 'bg-red-200';
@@ -27,11 +29,12 @@ export default function () {
     const [dataAbsence, setDataAbsence] = useState(null);
     const [inputPlate, setInputPlate] = useState(null);
     const [permitted, setPermitted] = useState(false);
+    const [appointmentDelete, setAppointmentDelete] = useState(null);
+    const [ modalDelete, setModalDelete] = useState(false);
     const [page, setPage] = useState(0);
-
-    const { findAbsence, registerErrors } = clientAuth();
+    const { findAbsence, registerErrors,deleteAppointment } = clientAuth();
     const [styleOnMax, setStyleOnMax] = useState('flex');
-
+    const navigate = useNavigate();
     const findAppointmentsAbsence = async () => {
         const query = {
             state: "no asistió",
@@ -49,11 +52,8 @@ export default function () {
         } else {
             setStyleOnMax('flex')
         }
-
         setDataAbsence(findData);
-
-
-
+        console.log(findData);
         setSelectedDate(null);
         setSelectedDateFormatted(null);
         setInputPlate(null);
@@ -67,7 +67,6 @@ export default function () {
         }
         return formattedValue;
     };
-
     const handlePlateChange = plate => {
         const inputValue = plate.target.value;
         const formattedValue = formatPlate(inputValue);
@@ -75,8 +74,6 @@ export default function () {
 
         setInputPlate(formattedValue.toUpperCase());
     }
-
-
     const handleDateChange = date => {
         const formatted = date.toLocaleDateString('es-CO');
         const partes = formatted.split('/');
@@ -87,9 +84,26 @@ export default function () {
         setSelectedDate(date)
         setSelectedDateFormatted(dateFotmatted)
     };
+    const handleModalAppointmentDelete =(id)=>{
+        setModalDelete(true)
+        setAppointmentDelete(id);
 
+    }
+    const closeModalDelete = () =>{
+        setModalDelete(false);
+    }
+    const handleDeleteAppointment = async (id) =>{
+        const wasDeleted = await deleteAppointment(id);
+        if(wasDeleted){
+            toast.success('Cita eliminada con exito' , {theme: 'light'});
+        }
+        findAppointmentsAbsence();
+        setModalDelete(false);
+        setAppointmentDelete(null);
+    }
     const handleModalReschedule =(id) =>{
-        
+        const link = `/reschedule-appointment/${id}`
+        navigate(link)
     }
     const customButtons = [
 
@@ -98,16 +112,15 @@ export default function () {
             tipo: "button",
             onClick: handleModalReschedule,
             estilos: "bg-green-500 hover:bg-green-700 min-w-[70%] text-white font-bold h-auto py-1  px-2 rounded ",
+            
         }, {
             text: "eliminar",
             tipo: "button",
-            onClick: 'handleModalMissed',
+            onClick: handleModalAppointmentDelete,
             estilos: "bg-red-500 hover:bg-red-700 min-w-[70%] text-white font-bold py-1 px-2  rounded ",
         },
-        // Agrega más botones según sea necesario
     ];
     useEffect(() => {
-
         if (permitted) {
             findAppointmentsAbsence();
         }
@@ -129,13 +142,27 @@ export default function () {
                         </div>
                     </div>
                 </div>))}
+                <ToastContainer/>
+                <ReusableModals  isOpen={modalDelete}
+                    onClose={closeModalDelete}
+                    title="Eliminar Cita"
+                    message={'¿Seguro que quiere eliminar la cita?'}
+                    buttons={[
+                        {
+                            text: 'Cancelar',
+                            onClick: closeModalDelete,
+                            styles: 'bg-gray-300 hover:bg-gray-400 text-gray-800',
+                        }, {
+                            text: 'Eliminar',
+                            onClick: () => handleDeleteAppointment(appointmentDelete),
+                            styles: 'bg-red-500 hover:bg-red-600 text-black font-bold',
+                        }
+                    ]}/>
             <div className='flex justify-center text-2xl font-bold mt-8 mb-6'><h2>Citas perdidas pendientes por reagendar</h2></div>
             <h2 className='w-full justify-center text-center font-bold'>Buscar por:</h2>
             <div className='w-full h-12 bg-blue-200 flex justify-around'>
-
                 <section className='flex items-center'>
                     <label className='text-lg' > Selecciona la Fecha:</label>
-                    {/* <input type="text" className=' rounded-lg mx-2 text-center' placeholder='Fecha'/> */}
                     <DatePicker
                         selected={selectedDate}
                         onChange={handleDateChange}
@@ -149,8 +176,6 @@ export default function () {
                     <input type="text" value={inputPlate} pattern={/^[A-Z]{3}-\d{2}[A-Z\d]?$/} maxLength={7} minLength={6} onChange={handlePlateChange} className='rounded-lg mx-2 text-center' placeholder='Placa' />
                 </section>
                 <button className='bg-yellow-400 flex items-center rounded-lg w-24 justify-center my-1' onClick={findAppointmentsAbsence}>Buscar</button>
-
-
             </div>
             {!dataAbsence ? (<div>
                 <div className='flex justify-center items-center bg-blue-100 h-52 mt-6 text-2xl'>
@@ -159,7 +184,7 @@ export default function () {
             </div>) : dataAbsence.length === 0 ? <div className='flex justify-center items-center bg-blue-100 h-52 mt-6 text-2xl'>
                 <h2 className='font-semibold'>No hay resultados</h2>
             </div> : <> <div>
-                <ContentTable fields={fields} data={dataAbsence} fieldsMapping={fieldsMapping}
+                <ContentTableAppointment fields={fields} data={dataAbsence} fieldsMapping={fieldsMapping}
                     buttonActions={(id) => customButtons.map((button, index) => (<ButtonAction key={index} {...button} onClick={() => button.onClick(id)} />))}
                     stylesTable={stylesTable} stylesThead={stylesThead} stylesTbody={stylesTbody}
                     styleActions={styleActions} />

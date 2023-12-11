@@ -6,18 +6,20 @@ import { useAuth } from '../../context/UserContext';
 import DatePicker from 'react-datepicker';
 import Spinner from '../../components/SpinnerLoading'
 import 'react-datepicker/dist/react-datepicker.css';
-import { ToastContainer, toast } from 'react-toastify';
+import ModelRegister from '../../components/ModalRegister';
 export default function CreateAppointment() {
-    const { getVehiclesAppointment, getAvailability, createAppointment } = useAuth();
+    const { getVehiclesAppointment, getAvailability, createAppointment, registerErrors } = useAuth();
     const { handleSubmit, formState: { errors }, register } = useForm();
     // const [createAppointment, setCreateAppointment] = useState(null);
     const [selectedOption, setSelectedOption] = useState();
     const [myVehicles, setMyVehicles] = useState([]);
-    const [availability, setAvailability] = useState([]);
+    const [availability, setAvailability] = useState(null);
     const [loading, setLoading] = useState(true);
     const [dateService, setDateService] = useState({});
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedHour, setSelectedHour] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const { id, name, price } = useParams();
     const navigate = useNavigate();
 
@@ -28,10 +30,7 @@ export default function CreateAppointment() {
 
     }
 
-    // if(selectedDate){
-    //     handleDateChange()
-    // }
-    console.log(dateService);
+
     const handleDateChange = async (date) => {
         const formattedDate = date ? format(date, 'yyyy-MM-dd') : null;
         setSelectedDate(formattedDate);
@@ -42,6 +41,7 @@ export default function CreateAppointment() {
                 const apertureLaundry = availabilityFound.ability.aperture;
                 const closingLaundry = availabilityFound.ability.closing;
                 const hours = availabilityFound.hours;
+                
                 const generateAvailbility = await generateHour(apertureLaundry, closingLaundry, hours, laundryAvailability);
                 setAvailability(generateAvailbility);
 
@@ -54,7 +54,10 @@ export default function CreateAppointment() {
 
     }
 
-
+    const hourSelected = (id) => {
+        setSelectedHour(id);
+    }
+    // const diasDeshabilitados = [0, 6];
     const generateHour = (startHour, endHour, results, limit) => {
         const horasAsignadas = {};
 
@@ -92,18 +95,22 @@ export default function CreateAppointment() {
         return timeSlots;
     }
     const onSubmitAppointment = handleSubmit(async (Appointment) => {
-        // console.log(Appointment);
-        // Appointment.date = selectedDate;
-        // console.log(Appointment);
+        Appointment = {
+            ...Appointment,
+            time: selectedHour,
+        }
+        console.log(Appointment);
+        
         const response = await createAppointment(Appointment);
+        console.log(Appointment);
         if (response) {
-            toast.success('Cita agendada exitosamente', { theme: "light" })
+            setIsModalOpen(true);
             const timer = setTimeout(() => {
                 navigate("/my-appointments")
             }, 3000);
             return () => clearTimeout(timer);
         }
-        console.log(response)
+
     })
     useEffect(() => {
 
@@ -118,91 +125,123 @@ export default function CreateAppointment() {
 
 
         <>
-            <ToastContainer />
+            {registerErrors.map((error, i) => (
+                <div className="flex justify-center items-center">
+                    <div id='modal-component-container' className='fixed  h-52  z-10  top-0'>
+                        <div className='modal-flex-container flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
+                            <div className='modal-bg-container fixed inset-0 bg-gray-700 bg-opacity-75'></div>
+                            <div className='modal-space-container hidden sm:inline-block sm:align-middle sm:h-screen'></div>
+
+                            <div id='modal-container' className='modal-container inline-block align-bottom  rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full'>
+                                <div className=' bg-red-500 p-2  rounded-lg text-white' key={i}>
+                                    {error}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>))}
+      <ModelRegister isOpen={isModalOpen} title={'Se Agendo la Cita!'} />
+            
             {loading ? (<Spinner />) : (
                 <><div>
-                    <section className=' w-full mt-20 border-dashed py-16 border-2'>
-                        <form onSubmit={onSubmitAppointment} className="flex grid-cols-1 md:grid-cols-2  gap-4 max-w-md mx-auto">
-                            <div className="grid grid-cols-4 gap-4">
+                    <section className=' w-full  py-12 '>
+                        <form onSubmit={onSubmitAppointment} className="w-full  mx-auto border-2 px-2 py-4 shadow-lg shadow-blue-500 rounded-md bg-gray-100">
+                            <div className='flex'>
 
-                                <div className="col-span-2 relative">
+                                <div className="w-1/2 mx-20 py-4 px-8">
 
-                                    <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Fecha <span className="text-red-500">*</span></label>
-                                    <DatePicker
-                                        selected={selectedDate ? new Date(selectedDate + 'T00:00:00') : null}
-                                        onChange={date => { handleDateChange(date), { ...register('date', { value: date = format(date, 'yyyy-MM-dd') }) } }}
-                                        dateFormat="yyyy/MM/dd" // Puedes personalizar el formato de fecha
-                                        // isClearable  // Agrega un botón para borrar la fecha seleccionada
-                                        placeholderText="Selecciona una fecha" minDate={today}
-                                    />
-                                    {/* <input className='hidden' /> */}
-                                    {errors.date && (
-                                        <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
-                                    )}</div>
+                                    <div className="relative  w-full mb-5 group">
 
-                                <div className="col-span-2 relative">
-                                    <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Hora <span className="text-red-500">*</span></label>
+                                        <label className=" mr-4 text-black font-semibold ">Fecha <span className="text-red-500">*</span></label>
+                                        <DatePicker
+                                            className=' w-full  text-gray-900  mt-2   border-2 border-black rounded-lg text-center '
+                                            selected={selectedDate ? new Date(selectedDate + 'T00:00:00') : null}
+                                            // filterDate={date => !diasDeshabilitados.includes(date.getDay())}
+                                            onChange={date => { handleDateChange(date), { ...register('date', { value: date = format(date, 'yyyy-MM-dd') }) } }}
+                                            dateFormat="yyyy/MM/dd" // Puedes personalizar el formato de fecha
+                                            // isClearable  // Agrega un botón para borrar la fecha seleccionada
+                                            placeholderText="Selecciona una fecha" minDate={today}
+                                        />
+                                        {/* <input className='hidden' /> */}
+                                        {errors.date && (
+                                            <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
+                                        )}</div>
 
-                                    <select value={selectedHour} {...register('time', { required: true })}>
-                                        <option value="">Selecciona...</option>
-                                        {Object.entries(availability).map(([hour]) => (
-                                            <option key={hour} value={hour}>
-                                                {hour}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {/* <input {...register('time', { value: selectedHour })} className='hidden' /> */}
 
-                                    {errors.time && (
-                                        <p className="absolute right-0 top-0  text-red-500">&#9888;</p>
-                                    )}
+
+                                    <div className="relative w-full mb-5 group">
+                                        <label className=" text-gray-600 font-semibold">Observaciones</label>
+                                        <textarea type="text" {...register('observations')} className="block  text-gray-900  border-b-2 border-gray-400 w-full px-1 py-1   " placeholder="Tener cuidado con ..." />
+
+                                    </div>
+
+                                    <div className="relative w-full mb-5 group">
+
+                                        <label className=" text-gray-600 font-semibold">Selecciona uno de tus  Vehiculos <span className="text-red-500">*</span></label>
+                                        <select className='w-full m-2' value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)}{...register('vehicleId', { required: true })}>
+                                            <option value="">Selecciona...</option>
+                                            {myVehicles.map((option) => (
+                                                <option key={option.id} value={option.id}>
+                                                    {option.plate}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {/* <input type="number"  className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="ABC-123" /> */}
+                                        {errors.vehicleId && (
+                                            <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
+                                        )}
+                                    </div>
+
+
+                                    <div className="relative w-full mb-5 group">
+                                        <span className=" text-gray-600 font-semibold">Nombre del servicio</span>
+                                        <input  {...register('serviceId', { value: dateService.id })} className="hidden" />
+                                        <label className="block  text-gray-900  border-b-2 border-gray-400 break-all ">{dateService.name}</label>
+                                    </div>
+                                    <div className="relative w-full mb-5 group">
+                                        <span className=" text-gray-600 font-semibold">Total</span>
+                                        <input  {...register('amount', { value: dateService.price })} className="hidden" />
+                                        <label className="block  text-gray-900  border-b-2 border-gray-400 break-all ">{dateService.price}</label>
+                                    </div>
+
+
+
+
+
+
+
+
+                                </div>
+                                <div className='w-1/2 flex max-h-full p-4 '>
+                                    <div className="relative z-0 w-full h-full text-center mb-5 group">
+                                        <label className="  text-black font-semibold mt-2 text-center">Hora <span className="text-red-500">*</span></label>
+                                        <section className='grid grid-cols-2 border-2 mt-4 border-gray-200 p-4 bg-white shadow-md shadow-blue-300 rounded-lg gap-2 h-48 overflow-auto' >
+                                            {/* <input  {...register('time', { required: true, value: selectedHour})} className='hidden' /> */}
+                                            {!availability ? (<div>
+
+                                            </div>) : availability.length === 0 ? <div className='flex col-span-2 w-full justify-center  items-center text-center'><h1 className='bg-blue-200 p-4  rounded-lg font-semibold'>No hay disponibilidad</h1></div> : <>{Object.entries(availability).map(([hour]) => (
+                                                <button key={hour} type='button' value={hour} onClick={() => hourSelected(hour)} className=' border-blue-300 border-2 mt-2 rounded-lg focus:outline-none  focus:bg-blue-400 focus:text-white focus:font-semibold '>
+                                                    {hour}
+                                                </button>
+                                            ))} </>}
+
+
+
+                                        </section>
+                                        {errors.time && (
+                                            <p className="absolute right-0 top-0  text-red-500">&#9888;</p>
+                                        )}
+                                        <div className='my-4  text-center'>
+                                            <span >Hora Seleccionada: <span className='font-bold ' >{selectedHour}</span></span>
+                                        </div>
+
+                                    </div>
+
                                 </div>
 
-                                <div className="col-span-2 relative">
-                                    <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Observaciones</label>
-                                    <input type="text" {...register('observations')} className="w-10/12  mb-2 text-black px-4 py-2 rounded-md" placeholder="Tener cuidado con ..." />
-
-                                </div>
-
-                                <div className="col-span-2 relative">
-
-                                    <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Selecciona un Vehiculo: <span className="text-red-500">*</span></label>
-                                    <select value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)}{...register('vehicleId', { required: true })}>
-                                        <option value="">Selecciona...</option>
-                                        {myVehicles.map((option) => (
-                                            <option key={option.id} value={option.id}>
-                                                {option.plate}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {/* <input type="number"  className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="ABC-123" /> */}
-                                    {errors.vehicleId && (
-                                        <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
-                                    )}
-                                </div>
-
-
-                                <div className="col-span-2 relative">
-                                    <span>Nombre del servicio:</span>
-                                    <input  {...register('serviceId', { value: dateService.id })} className="hidden" />
-                                    <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">{dateService.name}</label>
-                                </div>
-                                <div className="col-span-2 relative">
-                                    <span>Total:</span>
-                                    <input  {...register('amount', { value: dateService.price })} className="hidden" />
-                                    <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">{dateService.price}</label>
-                                </div>
-
-
-
-
-
-                                <div className="col-span-4 ">
-                                    <button type="submit" className="bg-button-primary  shadow-lg shadow-gray-500 text-black transition delay-150 duration-300 ease-in-out hover:bg-blue-400 font-semibold mt-6 h-10 hover:scale-110   w-full rounded   ">Agendar cita</button>
-                                </div>
-
-
-
+                            </div>
+                            <div className="flex w-full justify-center">
+                                <button type="submit" className="bg-button-primary  shadow-lg shadow-gray-500 text-black transition delay-150 duration-300 ease-in-out hover:bg-blue-400 font-semibold my-4 h-12 hover:scale-110   w-1/5 rounded   ">Agendar cita</button>
                             </div>
                         </form>
                     </section>

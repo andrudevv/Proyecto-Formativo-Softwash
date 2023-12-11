@@ -12,7 +12,6 @@ import ModalUpdateVehicle from '../../components/User/ModalUpdateVehicle';
 import { useAuth } from '../../context/UserContext';
 import DataProfile from '../../components/User/DataProfile'
 import ModalUpdateProfileUser from '../../components/User/ModalUpdateProfileUser';
-// const styles = 'justify-center items-center bg-gray-200';
 const stylesTable = 'w-full bg-white-100 mb-6  border border-gray-300';
 const stylesThead = 'bg-gray-400';
 const stylesTbody = 'bg-blue-200';
@@ -29,7 +28,6 @@ const fields = ["plate", "model", "color", "typeVehicle", "acciones"];
 
 
 export default function MyVehicles() {
-    // const [vehicles, setVehicles] = useState([]); 
     const [editingVehicle, setEditingVehicle] = useState(null);
     const {
         updateVehicle,
@@ -41,7 +39,7 @@ export default function MyVehicles() {
         updateUserProfile } = useAuth();
     const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm();
     const [selectedVehicleId, setSelectedVehicleId] = useState(null);
-    const [loading, setLoading] = useState(false);   
+    const [loading, setLoading] = useState(false);
     const [isModalDelete, setIsModalDelete] = useState(false);
     const [update, setUpdate] = useState(false);
     const [updateProfile, setUpdateProfile] = useState(false);
@@ -280,17 +278,16 @@ export default function MyVehicles() {
             <DivContent>
                 <div className='mb-10 h-auto'>
                     {loading ? (
-                        <Spinner /> // Display loader while loading
+                        <Spinner />
                     ) : (
                         <div>
-                            {/* <DivContent className={styles}> */}
+
                             <h1 className="flex justify-center text-2xl font-bold mb-4">MIS VEHICULOS</h1>
                             <ButtonAction estilos={'flex w-24 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-4 w-auto justify-end'} text={'Añadir Vahiculo'} onClick={handleModalCreateOpen} />
                             <ContentTable fields={fields} data={userVehicles} fieldsMapping={fieldsMapping}
                                 buttonActions={(id) => customButtons.map((button, index) => (<ButtonAction key={index} {...button} onClick={() => button.onClick(id)} />))}
                                 stylesTable={stylesTable} stylesThead={stylesThead} stylesTbody={stylesTbody}
                                 styleActions={styleActions} />
-                            {/* </DivContent> */}
 
                             <ReusableModals
                                 isOpen={isModalDelete}
@@ -310,23 +307,12 @@ export default function MyVehicles() {
                                     }
                                 ]}
                             />
-
-
-
                         </div>
                     )}
                 </div>
             </DivContent>
             <div>
-
-
             </div>
-
-
-
-
-
-
         </>
     )
 }

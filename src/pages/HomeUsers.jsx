@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import {BsChevronCompactLeft,BsChevronCompactRight} from 'react-icons/bs'
-import {RxDotFilled} from 'react-icons/rx'
 import imgtitulo from "../img/TituloWash2.png"
-import imgolas from "../img/olasWash.png"
 function HomeUsers() {
   const callouts = [
     {

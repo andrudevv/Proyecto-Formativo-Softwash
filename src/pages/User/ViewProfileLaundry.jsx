@@ -30,7 +30,6 @@ export default function ViewProfileLaundry() {
                 }
                 
                 setDataServices(rta);
-                console.log(rta);
                 setServices(rta.Services);
                 if(rta.imageUrl){
                     setImg(rta.imageUrl)

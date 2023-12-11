@@ -11,7 +11,11 @@ import { registerClientRequest,
     createService,
     FindAppointments,
     sendToProcess,
-    FindAppointmentsAbsence
+    FindAppointmentsAbsence,
+    findAppointmentForReschedule,
+    updateAndReschedule,
+    availabilityFoundClient,
+    appointmentDeleted
  } from "../services/api/auth";
 import Cookies from "js-cookie";
 
@@ -60,9 +64,6 @@ export const AuthClientProvider = ({ children }) => {
             setRegisterErrors(error.response.data);
         }
     }
-
-
-
     const signIn = async (user) => {
         try {
             const res = await loginClientRequest(user);
@@ -117,6 +118,38 @@ export const AuthClientProvider = ({ children }) => {
             return findAppointments.data;
         } catch (error) {
             setRegisterErrors(error.response.data);
+        }
+    }
+    const findAppointment= async (id)=>{
+        try {
+            const find = await findAppointmentForReschedule(id);
+            return find.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
+    const updateAppointment = async (idAppointment,appointment)=>{
+        try {
+            const update = await updateAndReschedule(idAppointment,appointment);
+            return update.data
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
+    const deleteAppointment = async (idAppointment) =>{
+        try {
+            const wasDeleted = await appointmentDeleted(idAppointment);
+            return wasDeleted.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
+    const getAvailability = async (idService, date)=>{
+        try {
+            const findAvailability = await availabilityFoundClient(idService, date);
+            return findAvailability.data;
+        } catch (error) {
+            setRegisterErrors(error.response.data)
         }
     }
     const newService = async (service) =>{
@@ -212,7 +245,11 @@ export const AuthClientProvider = ({ children }) => {
             getAppointments,
             sendProcess,
             sendAbsence,
-            findAbsence
+            findAbsence,
+            findAppointment,
+            updateAppointment,
+            getAvailability,
+            deleteAppointment
             
         }}>
             {children}

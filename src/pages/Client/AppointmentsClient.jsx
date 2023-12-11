@@ -92,7 +92,6 @@ export default function AppointmentsClient() {
     const getSchedule = async () => {
         const currentDate = new Date();
         const date = currentDate.toISOString().split('T')[0];
-        // const date = '2023-12-08'
         const state = {
             state: "pendiente",
             offset: page
