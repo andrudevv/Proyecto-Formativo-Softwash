@@ -104,7 +104,7 @@ function RegisterClient() {
                             <span className="text-white text-center ml-6 mr-6 text-1xl font-semibold">"Innovación que brilla en cada gota. Tu lavadero, nuestra tecnología."
                             </span>
                             <hr className=" shadow-xl shadow-white bg-white w-[70%]" />
-                            <button className="bg-button-primary shadow-lg transition delay-150 duration-300 ease-in-out shadow-blue-400 hover:scale-110 text-black font-semibold  lg:h-10 mt-4 rounded hover:bg-blue-400  md:h-16 w-2/3" ><Link to="/register-user">Registrarse como usuario?</Link></button>
+                            <button className="bg-button-primary shadow-lg transition delay-150 duration-300 ease-in-out shadow-blue-400 hover:scale-110 text-black font-semibold  lg:h-10 mt-4 rounded hover:bg-blue-400  md:h-16 w-2/3" ><Link to="/register-user">Registrarse como usuario</Link></button>
                         </section>
                     </div>
 
