@@ -15,7 +15,9 @@ import { registerClientRequest,
     findAppointmentForReschedule,
     updateAndReschedule,
     availabilityFoundClient,
-    appointmentDeleted
+    appointmentDeleted,
+    getProcessAppointments,
+    sendFinalizedAppointment
  } from "../services/api/auth";
 import Cookies from "js-cookie";
 
@@ -45,7 +47,7 @@ export const AuthClientProvider = ({ children }) => {
         if (registerErrors.length > 0) {
             const timer = setTimeout(() => {
                 setRegisterErrors([]);
-            }, 5000);
+            }, 3000);
             return () => clearTimeout(timer);
         }
     }, [registerErrors]);
@@ -94,6 +96,23 @@ export const AuthClientProvider = ({ children }) => {
             
         } catch (error) {
             setRegisterErrors(error.response)
+        }
+    }
+    const finalizedProcess = async (id)=>{
+        try {
+            const finalized = await sendFinalizedAppointment(id);
+            return finalized.data
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+    }
+    const getProcessAppointment = async()=>{
+        try {   
+            const getToProcess = await getProcessAppointments();
+            return getToProcess.data;
+            
+        } catch (error) {
+            setRegisterErrors(error.response.data);
         }
     }
     const sendAbsence = async (id, state) =>{
@@ -249,7 +268,9 @@ export const AuthClientProvider = ({ children }) => {
             findAppointment,
             updateAppointment,
             getAvailability,
-            deleteAppointment
+            deleteAppointment,
+            getProcessAppointment,
+            finalizedProcess
             
         }}>
             {children}

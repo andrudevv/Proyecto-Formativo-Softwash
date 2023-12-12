@@ -379,28 +379,25 @@ class AppointmentService {
 
     return findAppointments;
   }
+//servicio para traer las citas que tiene el proceso y en el lavado
+  async findProcessAppointments(id){
+    
+    const findProcess = await Appointment.findAll({
+      include:[{
+        model:Service,
+        where: { laundryId: id}
+      },
+    {
+      model: Vehicle,
+    }],
+      where:{
+        state:'en proceso'
+      }
+    });
 
-  //servicio para actualizar la cita del lado del usuario
-  // async updateMyAppointment(user, id, changes) {
-  //   const appointmentUser = await Appointment.findOne({
-  //     where:{id:id}
-  //   });
-  //   if (!appointmentUser) {
-  //     throw new Error("No se encontro la cita");
-  //   }
-  //   this.search(changes,user)
+    return findProcess;
 
-  //   const updateAppointment = await Appointment.update(changes, {
-
-  //     where: { id: id },
-  //   });
-  //   console.log(updateAppointment);
-  //   if (updateAppointment[0] === 0) {
-  //     throw new Error("No hay datos para actualizar");
-  //   }
-
-  //   return { message: "Cita actualizada correctamente", update: true };
-  // }
+  }
 
   async updateMyAppointmentState(idAppointment, idClient, newState) {
     const findAppointment = await Appointment.findOne({
@@ -427,7 +424,17 @@ class AppointmentService {
     console.log(updateAppointment);
     return true;
   }
-
+  //servicio para actualizar la cita a finalizada
+  async appointmentFinalized(id){
+    const state = {state:'finalizado'};
+    const updateA = await Appointment.update(state,{
+      where: {id: id}
+    })
+    if(updateA=== 0){
+      throw new Error('error al actualizar')
+    }
+    return true
+  }
   //servicio para actualizar la cita con todos los datos
   async rescheduleAppointment(idAppointment, idClient, newData) {
     const options = {

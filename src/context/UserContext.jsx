@@ -35,7 +35,7 @@ export const AuthUserProvider = ({ children }) => {
         if (registerErrors.length > 0) {
             const timer = setTimeout(() => {
                 setRegisterErrors([]);
-            }, 5000);
+            }, 3000);
             return () => clearTimeout(timer);
         }
     }, [registerErrors]);

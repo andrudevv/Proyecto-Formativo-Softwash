@@ -7,6 +7,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import ReusableModals from '../../components/ReusableModals'
 import NavPagination from '../../components/NavPagination';
 import ContentTableAppointment from '../../components/Client/ContentTableAppointment';
+import moment from 'moment';
+import ModalError from '../../components/ModalError';
 const stylesTable = 'w-full bg-white-100 mb-6 border border-gray-300';
 const stylesThead = 'bg-gray-400';
 const stylesTbody = 'bg-blue-200';
@@ -90,8 +92,8 @@ export default function AppointmentsClient() {
         // Agrega más botones según sea necesario
     ];
     const getSchedule = async () => {
-        const currentDate = new Date();
-        const date = currentDate.toISOString().split('T')[0];
+        const date  = moment().format('YYYY-MM-DD');
+        console.log(date);
         const state = {
             state: "pendiente",
             offset: page
@@ -124,21 +126,9 @@ export default function AppointmentsClient() {
     return (
 
         <>
-            {registerErrors.map((error, i) => (
-                <div className="flex justify-center items-center">
-                    <div id='modal-component-container' className='fixed  h-52  z-10  top-0'>
-                        <div className='modal-flex-container flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
-                            <div className='modal-bg-container fixed inset-0 bg-gray-700 bg-opacity-75'></div>
-                            <div className='modal-space-container hidden sm:inline-block sm:align-middle sm:h-screen'></div>
-
-                            <div id='modal-container' className='modal-container inline-block align-bottom  rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full'>
-                                <div className=' bg-red-500 p-2  rounded-lg text-white' key={i}>
-                                    {error}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>))}
+           {registerErrors.map((error, i) => (
+            <ModalError isOpen={registerErrors} message={error} key={i} 
+            />))}
             <ToastContainer />
             <div className='flex justify-center mt-8 text-2xl font-bold'>
                 <h2>Control De Citas Diario</h2>

@@ -161,24 +161,45 @@ appointmentRouter.get(
   }
 );
 
-// appointmentRouter.patch(
-//   "/get-vehicle",
-//   validatorHandler(getVehivleSchema, "params"),
-//   validatorHandler(updateVehicleShema, "body"),
-//   async (req, res) => {
-//     try {
-//       const body = req.body;
-//       const rta = await appointment.findByPlate(body.plate);
-//       res.status(201).json({ message: "vehiculo ", rta });
-//     } catch (error) {
-//       console.error(error);
-//       return res.status(500).json({ message: error.message });
-//     }
-//     (err, res) => {
-//       res.status(400).json({ error: err.message });
-//     };
-//   }
-// );
+
+appointmentRouter.get(
+  "/get-process-appointment",
+  authRequiredClient,
+  checkLaundry,
+  async (req, res) => {
+    try {
+      const id = req.user.id;
+      const appointmentProcess = await appointment.findProcessAppointments(id);
+      res.status(201).json(appointmentProcess);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: error.message });
+    }
+    (err, res) => {
+      res.status(400).json({ error: err.message });
+    };
+  }
+);
+
+appointmentRouter.patch(
+  "/update-appointment-finalized/:id",
+  authRequiredClient,
+  checkLaundry,
+  validatorHandler(patchAppointmentParams, "params"),
+  async (req, res) => {
+    try {
+      const {id} = req.params;
+      const updateFinalized = await appointment.appointmentFinalized(id);
+      res.status(201).json(updateFinalized);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: error.message });
+    }
+    (err, res) => {
+      res.status(400).json({ error: err.message });
+    };
+  }
+);
 
 //ruta para traer la cita con los datos para editarla
 appointmentRouter.get(
