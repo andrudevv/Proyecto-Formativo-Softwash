@@ -7,6 +7,7 @@ import { clientAuth } from '../../context/ClientContext';
 import {useNavigate} from 'react-router-dom';
 import ReusableModals from '../../components/ReusableModals';
 import { ToastContainer, toast } from 'react-toastify';
+import ModalError from '../../components/ModalError';
 const stylesTable = 'w-full bg-white-100 mb-6 border border-gray-300';
 const stylesThead = 'bg-red-100';
 const stylesTbody = 'bg-red-200';
@@ -128,20 +129,8 @@ export default function () {
     return (
         <>
             {registerErrors.map((error, i) => (
-                <div className="flex justify-center items-center">
-                    <div id='modal-component-container' className='fixed  h-52  z-10  top-0'>
-                        <div className='modal-flex-container flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
-                            <div className='modal-bg-container fixed inset-0 bg-gray-700 bg-opacity-75'></div>
-                            <div className='modal-space-container hidden sm:inline-block sm:align-middle sm:h-screen'></div>
-
-                            <div id='modal-container' className='modal-container inline-block align-bottom  rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full'>
-                                <div className=' bg-red-500 p-2  rounded-lg text-white' key={i}>
-                                    {error}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>))}
+            <ModalError isOpen={registerErrors} message={error} key={i} 
+            />))}
                 <ToastContainer/>
                 <ReusableModals  isOpen={modalDelete}
                     onClose={closeModalDelete}

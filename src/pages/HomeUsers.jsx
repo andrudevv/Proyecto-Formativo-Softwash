@@ -1,16 +1,6 @@
 import React, { useState } from "react";
 import {BsChevronCompactLeft,BsChevronCompactRight} from 'react-icons/bs'
-<<<<<<< HEAD
-// import {RxDotFilled} from 'react-icons/rx'
-// import { FiMenu } from "react-icons/fi";
-// import Footer from "../components/Footer";
 import imgtitulo from "../img/TituloWash2.png"
-/* import imgolas from "../img/olasWash.png" */
-import imgCorte from "../img/CorteWash.png"
-
-=======
-import imgtitulo from "../img/TituloWash2.png"
->>>>>>> 881036bed9b26e0cf087f15452a2a1583cf8bf1e
 function HomeUsers() {
   const callouts = [
     {

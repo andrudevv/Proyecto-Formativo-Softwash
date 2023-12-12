@@ -69,7 +69,8 @@ export const registerClientRequest = (user) =>
 export const loginClientRequest = (user) =>
   Axios.post(`${API}/client/login-client`, user);
 
-
+//ruta para finalizar una cita del lado del cliente
+export const sendFinalizedAppointment = (id) => Axios.patch(`${API}/appointment/update-appointment-finalized/${id}`);
   // ruta para traer los datos del cliente
 export const getClientProfile = () => Axios.get(`${API}/client/profile-client`);
 
@@ -122,6 +123,9 @@ export const sendToProcess = (id, state) => Axios.patch(`${API}/appointment/my-a
 //ruta para el filtro de los lavaderos del lado del usuario
 export const FindLaundry = (queryFind) => Axios.get(`${API}/client/`,{ params: queryFind});
 
+
+//ruta para traer las citas que el cliente envia a proceso
+export const getProcessAppointments =() => Axios.get(`${API}/appointment/get-process-appointment`);
 //ruta para actualizar o reagendar la cita 
 export const updateAndReschedule = (idAppointment,appointment) => Axios.patch(`${API}/appointment/update-appointment/${idAppointment}`,appointment)
 
