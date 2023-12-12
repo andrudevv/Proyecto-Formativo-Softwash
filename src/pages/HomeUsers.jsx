@@ -67,7 +67,7 @@ function HomeUsers() {
             </p>
           </div>
 
-          <img  className="w-full h-full object-cover mt-20" src={imgCorte} alt="corte"/>
+          <img  className="w-full h-full object-cover mt-20" src={imgtitulo} alt="corte"/>
 
 
           <div className="">
