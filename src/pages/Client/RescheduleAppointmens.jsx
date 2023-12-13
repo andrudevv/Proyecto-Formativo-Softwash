@@ -54,7 +54,6 @@ export default function () {
             setStyleOnMax('flex')
         }
         setDataAbsence(findData);
-        console.log(findData);
         setSelectedDate(null);
         setSelectedDateFormatted(null);
         setInputPlate(null);
@@ -125,6 +124,8 @@ export default function () {
         if (permitted) {
             findAppointmentsAbsence();
         }
+        window.scrollTo(0, 0);
+
     }, [page, styleOnMax]);
     return (
         <>

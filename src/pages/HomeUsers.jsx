@@ -44,6 +44,7 @@ function HomeUsers() {
    const newIndex = isLastSlide ? 0 : currentIndex +1
    setCurrentIndex(newIndex)
   }
+  window.scrollTo(0, 0);
 
   return (
     <>

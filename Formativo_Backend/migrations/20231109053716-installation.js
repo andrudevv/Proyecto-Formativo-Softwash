@@ -5,8 +5,6 @@ const img = '../src/images/logoServices.jpg'
 const { MUNICIPALITY_TABLE } = require('../src/db/models/municipality.models.js');
 const { USER_TABLE } = require('../src/db/models/user.models.js');
 const { VEHICLE_TABLE} = require('../src/db/models/vehicle.models.js');
-const { TYPE_TABLE} = require('../src/db/models/typeEmployee.models.js');
-const { EMPLOYEE_TABLE} = require('../src/db/models/employee.models.js');
 const { LAUNDRY_TABLE } = require('../src/db/models/laundry.models.js');
 const { SERVICE_TABLE} = require('../src/db/models/services.models.js');
 const { APPOINTMENT_TABLE} = require('../src/db/models/appointment.models.js');
@@ -211,60 +209,8 @@ up:  async (queryInterface, Sequelize) => {
       }
     });
     
-    await queryInterface.createTable(TYPE_TABLE, {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.DataTypes.INTEGER
-      },
-      type: {
-        allowNull: false,
-        type: Sequelize.DataTypes.STRING,
-      },
-    });
-    await queryInterface.createTable(EMPLOYEE_TABLE, {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.DataTypes.INTEGER,
-      },
-      name: {
-        allowNull: false,
-        type: Sequelize.DataTypes.STRING,
-      },
-      lastName: {
-        allowNull: false,
-        type: Sequelize.DataTypes.STRING,
-      },
-      phone: {
-        allowNull: true,
-        type: Sequelize.DataTypes.INTEGER,
-      },
-      laundryId:{
-        field: 'laundry_id',
-        allowNull: true,
-        type: Sequelize.DataTypes.INTEGER,
-        references: {
-          model: LAUNDRY_TABLE,
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
-      },
-      typeEmployee: {
-        field: 'type',
-        allowNull: true,
-        type: Sequelize.DataTypes.INTEGER,
-        references: {
-          model: TYPE_TABLE,
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
-      }
-    });
+    
+    
     
     
     await queryInterface.createTable(SERVICE_TABLE, {
@@ -291,7 +237,7 @@ up:  async (queryInterface, Sequelize) => {
         allowNull: false,
       },
       price: {
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.STRING,
         allowNull: false,
       },
       createdAt: {
@@ -386,8 +332,6 @@ up:  async (queryInterface, Sequelize) => {
     await queryInterface.dropTable(LAUNDRY_TABLE);
     await queryInterface.dropTable(SERVICE_TABLE);
     await queryInterface.dropTable(APPOINTMENT_TABLE);
-    await queryInterface.dropTable(EMPLOYEE_TABLE);
-    await queryInterface.dropTable(TYPE_TABLE);
   }
 
 }

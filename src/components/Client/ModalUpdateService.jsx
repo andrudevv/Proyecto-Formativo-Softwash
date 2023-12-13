@@ -14,7 +14,20 @@ export default function ModalUpdateService({
 
 }) {
 
+  const handlePrice = (e) => {
+    const inputValue = e.target.value.replace(/[^0-9]/g, '');
+    if (inputValue === '') {
+      return e.target.value = 0
+    }
+    if (!isNaN(inputValue)) {
+      const numericValue = parseInt(inputValue, 10);
+      const cop = new Intl.NumberFormat().format(numericValue)
 
+      return e.target.value = `${cop}`;
+    } else {
+      return e.target.value = 0;
+    }
+  };
     useEffect(() => {
         if (editingService) {
           
@@ -77,7 +90,7 @@ export default function ModalUpdateService({
 
                 <div className='flex flex-col'>
                   <label className='font-semibold text-gray-700'>Precio</label>
-                  <input type="number" {...register('price', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="25000" />
+                  <input type="text" {...register('price', { required: true })} onChange={handlePrice} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="25000" />
                     {errors.price && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}

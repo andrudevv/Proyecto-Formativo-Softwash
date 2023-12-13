@@ -93,7 +93,6 @@ export default function AppointmentsClient() {
     ];
     const getSchedule = async () => {
         const date  = moment().format('YYYY-MM-DD');
-        console.log(date);
         const state = {
             state: "pendiente",
             offset: page
@@ -117,11 +116,12 @@ export default function AppointmentsClient() {
                 }
             } catch (error) {
                 console.error('Error al obtener las citas agendadas:', error);
-                // Puedes manejar el error aquí, como mostrar un mensaje al usuario.
             }
         };
 
         getTodayAppointments();
+        window.scrollTo(0, 0);
+
     }, [page, styleOnMax]);
     return (
 

@@ -4,7 +4,7 @@ const id = Joi.number().integer();
 const name = Joi.string();
 const duration = Joi.string();
 const description = Joi.string();
-const price = Joi.number().integer();
+const price = Joi.string();
 const typeVehicles = Joi.string().valid("carro", "moto");
 
 const getServiceSchema = Joi.object({

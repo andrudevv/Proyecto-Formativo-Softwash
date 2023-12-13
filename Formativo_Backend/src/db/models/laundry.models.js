@@ -85,7 +85,6 @@ const LaundrySchema = {
 class Laundry extends Model {
   static associate(models) {
     this.belongsTo(models.Municipality, { foreignKey:"municipalityId" });
-    this.hasMany(models.Employee,{foreignKey:"laundryId"})
     this.hasMany(models.Service,{foreignKey:"laundryId"})
   }
   static config(sequelize) {

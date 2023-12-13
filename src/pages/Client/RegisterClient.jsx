@@ -34,7 +34,63 @@ function RegisterClient() {
 
     })
 
-
+    const handleInputNit= (e) =>{
+    
+        const inputValue = e.target.value.replace(/[^0-9]/g, '');
+        if(inputValue === ''){
+          return e.target.value = 0
+        }
+        if(!isNaN(inputValue)){
+          const numericValue = parseInt(inputValue, 10);
+    
+        const minValue = 1;
+        const maxValue = 99999999999; 
+    
+        const clampedValue = Math.min(Math.max(numericValue, minValue), maxValue); 
+        return e.target.value = clampedValue;
+        }else{
+          return e.target.value = 0;
+        }
+       
+      }
+      const handleInputPhone= (e) =>{
+    
+        const inputValue = e.target.value.replace(/[^0-9]/g, '');
+        if(inputValue === ''){
+          return e.target.value = 0
+        }
+        if(!isNaN(inputValue)){
+          const numericValue = parseInt(inputValue, 10);
+    
+        const minValue = 0;
+        const maxValue = 9999999999; 
+    
+        const clampedValue = Math.min(Math.max(numericValue, minValue), maxValue); 
+        return e.target.value = clampedValue;
+        }else{
+          return e.target.value = 0;
+        }
+       
+      }
+      const handleInputCapacity= (e) =>{
+    
+        const inputValue = e.target.value.replace(/[^0-9]/g, '');
+        if(inputValue === ''){
+          return e.target.value = 0
+        }
+        if(!isNaN(inputValue)){
+          const numericValue = parseInt(inputValue, 10);
+    
+        const minValue = 0;
+        const maxValue = 20; 
+    
+        const clampedValue = Math.min(Math.max(numericValue, minValue), maxValue); 
+        return e.target.value = clampedValue;
+        }else{
+          return e.target.value = 0;
+        }
+       
+      }
     const getMunicipalities = (id) => {
         Axios.get(`http://localhost:4000/api/users/get-municipality/${id}`)
             .then((Response) => {
@@ -67,6 +123,8 @@ function RegisterClient() {
         };
 
         fetchData();
+        window.scrollTo(0, 0);
+
     }, []);
     return (
         <>
@@ -93,14 +151,14 @@ function RegisterClient() {
                     <div className='static  md:block bg-blue-700 sm:w-[40%] md:h-[100%] h-[80%] sm:border-t-transparent border-r-gray-200   sm:border-t-[600px] sm:border-r-[50px] rounded-l-lg'></div>
                     <div className='w-full md:w-3/5 bg-gray-200 rounded-lg md:relative z-10'>
                         <section className="p-6">
-                            <h1 className="text-center font-semibold text-lg mt-2 mb-2">Cliente/Lavadero</h1>
+                            <h1 className="text-center font-semibold text-lg mt-2 mb-2">Lavadero</h1>
                             <hr className=" bg-gray-300 shadow-xl shadow-white h-1 ml-6 mr-6 mb-2" />
                             <form onSubmit={onSubmit} className="flex grid-cols-1 md:grid-cols-2  gap-4 max-w-md mx-auto">
                                 <div className="grid grid-cols-4 gap-4">
 
                                     <div className="col-span-2 relative">
                                         <label className=" w-full font-semibold text-black px-4 py-2 rounded-md">Numero de Rut <span className="text-red-500">*</span></label>
-                                        <input type="number" {...register('rutLaundry', { required: true })} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="RUT/NIT" />
+                                        <input type="text" {...register('rutLaundry', { required: true })} onChange={handleInputNit} maxLength={10} minLength={8}  className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="RUT/NIT" />
                                         {errors.rutLaundry && (
                                             <p className="absolute right-0 top-0  text-red-500">&#9888;<span className="text-red-500 hidden lg:inline ">requerido</span></p>
                                         )}</div>
@@ -122,14 +180,14 @@ function RegisterClient() {
                                     </div>
                                     <div className="col-span-2 relative">
                                         <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Telefono <span className="text-red-500">*</span></label>
-                                        <input type="number" {...register('phone', { required: true })} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="Ingrese Tel.." />
+                                        <input type="text" {...register('phone', { required: true })} minLength={10} maxLength={10} onChange={handleInputPhone} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="Ingrese Tel.." />
                                         {errors.phone && (
                                             <p className="absolute right-0 top-0  text-red-500">&#9888;<span className="text-red-500 hidden lg:inline ">requerido</span></p>
                                         )}
                                     </div>
                                     <div className="col-span-2 relative">
                                         <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Capacidad <span className="text-red-500">*</span></label>
-                                        <input type="number" {...register('ability', { required: true })} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="1 o 2 o 3 etc" />
+                                        <input type="text" {...register('ability', { required: true })} minLength={1} maxLength={2}  onChange={handleInputCapacity} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="1 o 2 o 3 etc" />
                                         {errors.ability && (
                                             <p className="absolute right-0 top-0  text-red-500">&#9888;<span className="text-red-500 hidden lg:inline ">requerido</span></p>
                                         )}

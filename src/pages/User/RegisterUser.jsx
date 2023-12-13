@@ -29,6 +29,44 @@ function RegisterUser() {
   }
 
   })
+  const handleInputDoc= (e) =>{
+    
+    const inputValue = e.target.value.replace(/[^0-9]/g, '');
+    if(inputValue === ''){
+      return e.target.value = 0
+    }
+    if(!isNaN(inputValue)){
+      const numericValue = parseInt(inputValue, 10);
+
+    const minValue = 0;
+    const maxValue = 9999999999; 
+
+    const clampedValue = Math.min(Math.max(numericValue, minValue), maxValue); 
+    return e.target.value = clampedValue;
+    }else{
+      return e.target.value = 0;
+    }
+   
+  }
+  const handleInputPhone= (e) =>{
+    
+    const inputValue = e.target.value.replace(/[^0-9]/g, '');
+    if(inputValue === ''){
+      return e.target.value = 0
+    }
+    if(!isNaN(inputValue)){
+      const numericValue = parseInt(inputValue, 10);
+
+    const minValue = 0;
+    const maxValue = 9999999999; 
+
+    const clampedValue = Math.min(Math.max(numericValue, minValue), maxValue); 
+    return e.target.value = clampedValue;
+    }else{
+      return e.target.value = 0;
+    }
+   
+  }
   const getMunicipalities = (id) => {
     Axios.get(`http://localhost:4000/api/users/get-municipality/${id}`)
       .then((Response) => {
@@ -105,7 +143,7 @@ function RegisterUser() {
 
                   <div className="col-span-2 relative">
                     <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Documento <span className="text-red-500">*</span></label>
-                    <input type="number"  {...register('documentUser', { required: true })} className="w-10/12 mb-2 text-black px-4 py-2 rounded-md" placeholder="Cedula" />
+                    <input type="text"  {...register('documentUser', { required: true   })} maxLength={10} minLength={8}  onChange={handleInputDoc  } className="w-10/12 mb-2 text-black px-4 py-2 rounded-md" placeholder="Cedula" />
                     {errors.documentUser && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}</div>
@@ -129,7 +167,7 @@ function RegisterUser() {
 
                   <div className="col-span-2 relative">
                     <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Telefono <span className="text-red-500">*</span></label>
-                    <input type="number" {...register('phone', { required: true })} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="Ingrese Tel.." />
+                    <input type="text" {...register('phone', { required: true })} onChange={handleInputPhone} minLength={10} maxLength={10} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="Ingrese Tel.." />
                     {errors.phone && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}

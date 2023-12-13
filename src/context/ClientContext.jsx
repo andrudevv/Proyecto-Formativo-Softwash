@@ -17,7 +17,8 @@ import { registerClientRequest,
     availabilityFoundClient,
     appointmentDeleted,
     getProcessAppointments,
-    sendFinalizedAppointment
+    sendFinalizedAppointment,
+    changuePhotoClient
  } from "../services/api/auth";
 import Cookies from "js-cookie";
 
@@ -81,11 +82,21 @@ export const AuthClientProvider = ({ children }) => {
         setCLient(null);
         setIsAuthenticatedClient(false);
     };
-    const getServices = async () =>{
+    const getServices = async (query) =>{
         try {
-            const findServices = await getServicesLaudry();
+            const findServices = await getServicesLaudry(query);
             return findServices.data;
         } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    }
+    const updateImgProfile = async(img) =>{
+        try {
+            
+            const updateImg = await changuePhotoClient(img);
+            return updateImg.data;
+        } catch (error) {
+            console.log(error);
             setRegisterErrors(error.response.data)
         }
     }
@@ -270,7 +281,8 @@ export const AuthClientProvider = ({ children }) => {
             getAvailability,
             deleteAppointment,
             getProcessAppointment,
-            finalizedProcess
+            finalizedProcess,
+            updateImgProfile
             
         }}>
             {children}

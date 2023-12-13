@@ -64,7 +64,11 @@ export const getProfileWithServices = (id,query) => Axios.get(`${API}/users/view
 export const registerClientRequest = (user) =>
   Axios.post(`${API}/client/register-client`, user)
    
-
+export const changuePhotoClient = (img) => Axios.patch(`${API}/client/img-profile`,img,{
+  headers: {
+    "Content-Type": "multipart/form-data",
+  }
+})
 // /validar para usuario
 export const loginClientRequest = (user) =>
   Axios.post(`${API}/client/login-client`, user);
@@ -77,7 +81,7 @@ export const getClientProfile = () => Axios.get(`${API}/client/profile-client`);
 //ruta para eliminar la cita del lado del cliente
 export const appointmentDeleted = (idAppointment) => Axios.delete(`${API}/appointment/delete-appointment/${idAppointment}`);
 //ruta para traer los servicios del lavadero
-export const getServicesLaudry = () => Axios.get(`${API}/service`);
+export const getServicesLaudry = (query) => Axios.get(`${API}/service`,{params: query});
 // ruta para actualizar servicio
 export const updateService = (id, dataUpdate) => Axios.patch(`${API}/service/${id}`, dataUpdate);
 // ruta para crear servicio

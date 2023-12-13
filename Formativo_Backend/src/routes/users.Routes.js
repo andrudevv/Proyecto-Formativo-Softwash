@@ -121,42 +121,40 @@ userRouter.post("/change-password/:token", async (req, res, next) => {
 });
 
 // buscar todos los lavaderos segun el usuario realize el filtro
-userRouter.get(
-  "/getlaundrys",
-  authRequiredUser,
-  // checkShared,
-  validatorHandler(getLaundrysSchema, "body"),
-  async (req, res, next) => {
-    try {
-      const body = req.body;
+// userRouter.get(
+//   "/getlaundrys",
+//   authRequiredUser,
+//   checkUser,
+//   validatorHandler(getLaundrysSchema, "body"),
+//   async (req, res, next) => {
+//     try {
+//       const body = req.body;
 
-      const rta = await Laundry.findAllsWhere(
-        body.departmentId,
-        body.municipalityId
-      );
+//       const rta = await Laundry.findAllsWhere(
+//         body.departmentId,
+//         body.municipalityId
+//       );
       
-      res.status(201).json({ message: "lavadero", rta });
-    } catch (error) {
-      console.error(error);
+//       res.status(201).json({ message: "lavadero", rta });
+//     } catch (error) {
+//       console.error(error);
 
-      next(error);
-      return res.status(500).json({ message: error.message });
-    }
-    (err, res) => {
-      // Este middleware manejará los errores generados por el validador
-      res.status(400).json({ error: err.message });
-    };
-  }
-);
+//       next(error);
+//       return res.status(500).json({ message: error.message });
+//     }
+//     (err, res) => {
+//       // Este middleware manejará los errores generados por el validador
+//       res.status(400).json({ error: err.message });
+//     };
+//   }
+// );
 
 
 userRouter.get(
   "/profile-user",
   authRequiredUser,
   checkUser,
-  // checkShared,
-  // checkLaundry,
-  // validatorHandler(createLaundrySchema, "body"),
+ 
   async (req, res, next) => {
     try {
       const user = req.user;
@@ -168,7 +166,6 @@ userRouter.get(
       res.status(400).json([error.message]);
     }
     (err, res) => {
-      // Este middleware manejará los errores generados por el validador
       res.status(400).json({ error: err.message });
     };
   }
@@ -179,9 +176,7 @@ userRouter.get(
   "/profile-user-vehicle",
   authRequiredUser,
   checkUser,
-  // checkShared,
-  // checkLaundry,
-  // validatorHandler(createLaundrySchema, "body"),
+ 
   async (req, res, next) => {
     try {
       const user = req.user;
@@ -226,7 +221,7 @@ userRouter.patch(
 userRouter.get(
   "/view-profile/:id",
   authRequiredUser,
-  // checkLaundry,
+  checkUser,
   // validatorHandler(createLaundrySchema, "query"),
   async (req, res, next) => {
     try {

@@ -23,6 +23,25 @@ export default function VehicleRegistrationModal({
       return 'placa desconocida';
     }
   };
+  const handleInputModel= (e) =>{
+    
+    const inputValue = e.target.value.replace(/[^0-9]/g, '');
+    if(inputValue === ''){
+      return e.target.value = 0
+    }
+    if(!isNaN(inputValue)){
+      const numericValue = parseInt(inputValue, 10);
+
+    const minValue = 0;
+    const maxValue = 2025; 
+
+    const modelValue = Math.min(Math.max(numericValue, minValue), maxValue); 
+    return e.target.value = modelValue;
+    }else{
+      return e.target.value = 0;
+    }
+   
+  }
   const formatPlate = (value) => {
     const cleanedValue = value.replace(/-/g, '');
     let formattedValue = cleanedValue.substring(0, 3).toUpperCase();
@@ -77,7 +96,7 @@ export default function VehicleRegistrationModal({
 
                 <div className='flex flex-col'>
                   <label className='font-semibold text-gray-700'>Modelo</label>
-                  <input type="number" {...register('model', {required: true,pattern:/^[0-9]*$/  })}  max={4}
+                  <input type="text" {...register('model', {required: true,pattern:/^[0-9]*$/  })} onChange={handleInputModel} maxLength={4} minLength={4}
                   className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="2000" />
                     {errors.model && (
                       <p className=" right-0 top-0  text-red-500">&#9888;requerido</p>

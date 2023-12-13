@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import ButtonAction from '../../components/ButtonAction'
 import ContentTable from '../../components/ContentTable'
 import ReusableModals from '../../components/ReusableModals'
@@ -21,7 +21,7 @@ const fieldsMapping = {
     "name": "Nombre",
     "duration": "Duracion",
     "description": "Descripcion",
-    "price": "Precio",
+    "price": "Precio COP",
     "typeVehicles": "Tipo de vehiculo",
     "acciones": "Acciones"
 };
@@ -35,20 +35,26 @@ export default function ViewProfileClient() {
         getServices,
         updateServiceLaundry,
         serviceDelete,
-        newService
+        newService,
+        updateImgProfile
     } = clientAuth();
     const [selectedServiceId, setSelectedServiceId] = useState(null);
     const [serviceSelected, setServiceSelected] = useState(null);
     // const [dataClient, setDataClient] = useState(null)
     const [isModalDelete, setIsModalDelete] = useState(false);
     const [update, setUpdate] = useState(false);
+    const [validateChangue, setValidateChangue] = useState(null);
+    const [ openValidateChange, setOpenValidateChangue] = useState(false);
     const [updateProfile, setUpdateProfile] = useState(false);
     const [createService, setCreateService] = useState(false);
     const [loading, setLoading] = useState(false);
     const [clientData, setClientData] = useState([]);
     const [clientServices, setClientServices] = useState([]);
-    const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm();
+    const [styleOnMax, setStyleOnMax] = useState('flex');
+    const [page, setPage] = useState(0);
 
+    const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm();
+    const fileInputRef = useRef(null);
     // handle para actualizar servicios
     const handleModalUpdateService = handleSubmit(async (editService) => {
         console.log(editService);
@@ -73,6 +79,7 @@ export default function ViewProfileClient() {
 
 
     });
+    
     const handleModalUpdateOpen = (idS) => {
         const serviceToEdit = clientServices.find((service) => service.id === idS);
         setServiceSelected(serviceToEdit);
@@ -137,10 +144,41 @@ console.log(service);
     const handleModalUpdateProfileClose = () => {
         setUpdateProfile(false);
     }
+    const onclickImg = ()=>{
+        fileInputRef.current.click();
+    }
+    const handleUpdateImage = async (img)=>{
+        // const body = {imageUrl: img}
+        setValidateChangue(null);
 
-
-
-
+        const formD = new FormData();
+        formD.append('imageUrl',img)
+        const updateImg = await updateImgProfile(formD);
+        console.log(updateImg);
+        if(updateImg){
+            await getProfile();
+            setOpenValidateChangue(false);
+            toast.success('Se ha cambiado la foto exitosamente', {theme: 'light'});
+        }
+    }
+const handleFileChange = (e)=>{
+    const img= e.target.files[0];
+    if (img) {
+        const allowedTypes = ['image/png', 'image/jpeg'];
+    
+        if (allowedTypes.includes(img.type)) {
+          setValidateChangue(img);
+          setOpenValidateChangue(true);
+        } else {
+          toast.error('Solo se permiten archivos PNG y JPG.',{theme: 'light'});
+        }
+      }
+   
+}
+    const closeValidateChangue = ()=>{
+        setOpenValidateChangue(false);
+        setValidateChangue(null);
+    }
     //  handle para eliminar  servicios
     const handleModalDelete = (id) => {
         setSelectedServiceId(id);
@@ -190,7 +228,15 @@ console.log(service);
     };
     const getServicesLaundry = async () => {
         try {
-            const servicesData = await getServices();
+            const query = {
+                offset: `${page}`
+            }
+            const servicesData = await getServices(query);
+            if(servicesData.length < 5){
+                setStyleOnMax('hidden')
+            }else{
+                setStyleOnMax('flex')
+            }
             setClientServices(servicesData)
         } catch (error) {
             toast.error('Error al obtener servicios del lavadero', { theme: "light" })
@@ -213,7 +259,7 @@ console.log(service);
             <ToastContainer />
 
             <div>
-                {loading || !clientData ? (<Spinner />) : (<><DataProfileClient client={clientData} onClick={handleModalUpdateProfileOpen} /></>)}
+                {loading || !clientData ? (<Spinner />) : (<><DataProfileClient client={clientData} fileInputRef={fileInputRef} handleFileChange={handleFileChange} onclickImg={onclickImg} onClick={handleModalUpdateProfileOpen} /></>)}
             </div>
             <ModalUpdateProfileClient onSubmit={onSubmitUpdateProfile} setValue={setValue} reset={reset} DataUser={clientData} handleSubmit={handleSubmit} isOpen={updateProfile} title={'Actualizar datos del lavadero'} message={'Modificacion de datos'} register={register} errors={errors} buttons={[
                 {
@@ -228,6 +274,24 @@ console.log(service);
                     estilos: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ",
                 },
             ]} />
+             <ReusableModals
+                    isOpen={openValidateChange}
+                    onClose={closeValidateChangue}
+                    title="Actualizar foto"
+                    message={'¿Seguro que quieres cambiar la foto?'}
+                    buttons={[
+                        {
+                            text: 'Cancelar',
+                           onClick: closeValidateChangue,
+                            styles: 'bg-red-500 hover:bg-red-600 text-black font-bold',
+                        },
+                        {
+                            text: 'Cambiar',
+                            onClick: () => handleUpdateImage(validateChangue),
+                            styles: 'bg-gray-300 hover:bg-gray-400 text-gray-800',
+                        }
+                    ]}
+                />
             <ModalUpdateService onSubmit={handleModalUpdateService} setValue={setValue} reset={reset} editingService={serviceSelected} handleSubmit={handleSubmit} isOpen={update} title={'Editar Servicio'} register={register} errors={errors} buttons={[
                 {
                     text: "Editar",
@@ -276,7 +340,7 @@ console.log(service);
                     stylesTable={stylesTable} stylesThead={stylesThead} stylesTbody={stylesTbody}
                     styleActions={styleActions} />
                 {/* </DivContent> */}
-                <NavPagination styles={'w-full flex justify-center'} />
+                <NavPagination styles={'flex justify-center'}  styleOnMax={styleOnMax} page={page} setPage={setPage}/>
                 <ReusableModals
                     isOpen={isModalDelete}
                     onClose={closeModalDelete}

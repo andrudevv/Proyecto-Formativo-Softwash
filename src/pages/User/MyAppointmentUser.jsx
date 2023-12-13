@@ -52,6 +52,8 @@ export default function MyAppointmentUser() {
 
         };
         getAppointments();
+        window.scrollTo(0, 0);
+
     }, [])
 
     const fieldsMapping = {

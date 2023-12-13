@@ -20,7 +20,7 @@ export default function FindLaundry() {
         );
         const findLaundry = {
             ...filteredQuery,
-            offset: `${page}`
+            offset: page
         }
         const responseLaundry = await searchLaundry(findLaundry)
         if(responseLaundry.length < 5){
@@ -37,6 +37,7 @@ export default function FindLaundry() {
     })
    
     useEffect(() => {
+        window.scrollTo(0, 0);
         
       }, [page, styleOnMax]);
     return (
