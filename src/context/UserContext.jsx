@@ -45,7 +45,6 @@ export const AuthUserProvider = ({ children }) => {
         try {
             const res = await registerRequest(user);
             setUser(res.data);
-            console.log(res);
             setIsAuthenticatedUser(true);
             setRegisterErrors([]);
             return true;

@@ -6,10 +6,26 @@ import Spinner from '../SpinnerLoading'
 export default function DataProfileClient({ client, onClick, onclickImg,fileInputRef, handleFileChange}) {
   const [loading, setLoading] = useState(true);
   const [clientD, setClientD] = useState(false);
+  const [hourClosing, setHourClosing] = useState('');
+  const [ hourOpen, setHourOpent] = useState('')
 const img = `http://localhost:4000/api/client/${clientD.imageUrl}`;
+const handleHourClosing = (e)=>{
+  ;
+  const date = new Date(`2000-01-01 ${e}`);
+  const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+  setHourClosing(`${formattedTime}`)
+}
+const handleHourOpen = (e)=>{
+  ;
+  const date = new Date(`2000-01-01 ${e}`);
+  const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+  setHourOpent(`${formattedTime}`)
+}
   useEffect(() => {
     if (client) {
       setClientD(client);
+      handleHourClosing(clientD.closing)
+      handleHourOpen(clientD.aperture)
       setLoading(false);
     }
 
@@ -53,10 +69,10 @@ const img = `http://localhost:4000/api/client/${clientD.imageUrl}`;
           <strong>Capacidad:</strong> {clientD.ability}
         </div>
         <div>
-          <strong>Hora Apertura:</strong> {clientD.aperture}
+          <strong>Hora Apertura:</strong> {hourOpen}
         </div>
         <div>
-          <strong>Hora Cierre:</strong> {clientD.closing}
+          <strong>Hora Cierre:</strong> {hourClosing}
         </div>
         <div>
           <strong>Municipio:</strong> {clientD.municipalityId.name}

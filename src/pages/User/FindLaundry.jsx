@@ -37,6 +37,10 @@ export default function FindLaundry() {
     })
    
     useEffect(() => {
+        if(page > 0){
+
+            onSubmitSearch()
+        }
         window.scrollTo(0, 0);
         
       }, [page, styleOnMax]);

@@ -47,7 +47,7 @@ userRouter.post(
     try {
       const body = req.body;
       const newUser = await service.registerUser(body);
-      // await register(newUser.email, newUser.name);
+      await register(newUser.email, newUser.name);
       const token = await createAccessToken({
         id: newUser.id,
         document: newUser.documentUser,

@@ -227,10 +227,6 @@ up:  async (queryInterface, Sequelize) => {
       duration: {
         type: Sequelize.DataTypes.TEXT,
         allowNull: false,
-      }, imgService:{
-        type:Sequelize.DataTypes.STRING,
-        allowNull: true,
-        defaultValue: img
       },
       description: {
         type: Sequelize.DataTypes.TEXT,

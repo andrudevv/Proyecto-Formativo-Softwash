@@ -17,6 +17,8 @@ function RegisterClient() {
     const { signUpClient, registerErrors } = clientAuth();
     const [departments, setDepartments] = useState([]);
     const [municipalities, setMunicipalities] = useState([]);
+    const [ hourClosing, setHourClosing] = useState(null);
+    const [ hourOpen, setHourOpen] = useState(null);
     const navigate = useNavigate();
 
 
@@ -111,7 +113,20 @@ function RegisterClient() {
                 throw error;
             });
     };
-
+    const handleHourOpen = (e)=>{
+        const dt = `${e.target.value}`;
+        const date = new Date(`2000-01-01 ${dt}`);
+        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+        setHourOpen(`${formattedTime}`)
+        console.log(hourOpen);
+    }
+    const handleHourClosing =( e) =>{
+        const input = e.target.value;
+        const date = new Date(`2000-01-01 ${input}`);
+        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+        setHourClosing(`${formattedTime}`);
+        console.log(hourClosing);
+    }
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -145,7 +160,7 @@ function RegisterClient() {
                             <span className="text-white text-center ml-6 mr-6 text-1xl font-semibold">"Innovación que brilla en cada gota. Tu lavadero, nuestra tecnología."
                             </span>
                             <hr className=" shadow-xl shadow-white bg-white w-[70%]" />
-                            <button className="bg-button-primary shadow-lg transition delay-150 duration-300 ease-in-out shadow-blue-400 hover:scale-110 text-black font-semibold  lg:h-10 mt-4 rounded hover:bg-blue-400  md:h-16 w-2/3" ><Link to="/register-user">Registrarse como usuario</Link></button>
+                            <button className="bg-button-primary shadow-lg transition delay-150 duration-300 ease-in-out shadow-blue-400 hover:scale-110 text-black font-semibold  lg:h-10 mt-4 rounded hover:bg-blue-400  md:h-16 w-2/3" ><Link to="/register-user" className="py-4">Registrarse como usuario</Link></button>
                         </section>
                     </div>
                     <div className='static  md:block bg-blue-700 sm:w-[40%] md:h-[100%] h-[80%] sm:border-t-transparent border-r-gray-200   sm:border-t-[600px] sm:border-r-[50px] rounded-l-lg'></div>
@@ -194,14 +209,14 @@ function RegisterClient() {
                                     </div>
                                     <div className="col-span-2 relative">
                                         <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Horario de Inicio <span className="text-red-500">*</span></label>
-                                        <input type="text" {...register('aperture', { required: true })} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="07:00 AM" />
+                                        <input type="time" {...register('aperture', { required: true, value:hourOpen })}  onChange={handleHourOpen} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="07:00 AM" />
                                         {errors.aperture && (
                                             <p className="absolute right-0 top-0  text-red-500">&#9888;<span className="text-red-500 hidden lg:inline ">requerido</span></p>
                                         )}
                                     </div>
                                     <div className="col-span-2 relative">
                                         <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Horario de cierre <span className="text-red-500">*</span></label>
-                                        <input type="text" {...register('closing', { required: true })} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="05:00 PM" />
+                                        <input type="time" {...register('closing', { required: true, value: hourClosing })} onChange={handleHourClosing} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="05:00 PM" />
                                         {errors.closing && (
                                             <p className="absolute right-0 top-0  text-red-500">&#9888;<span className="text-red-500 hidden lg:inline ">requerido</span></p>
                                         )}

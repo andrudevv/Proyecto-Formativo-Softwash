@@ -27,11 +27,6 @@ const ServiceSchema = {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  imgService:{
-    type:DataTypes.STRING,
-    allowNull: true,
-    defaultValue: img
-  },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
