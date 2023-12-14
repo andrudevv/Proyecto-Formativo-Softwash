@@ -64,12 +64,7 @@ function HomeUsers() {
 
       
             <p className="text-2xl font-Pathway Gothic One text-color text-center bg-blue-700 border-blue-700  p-8">
-              Creamos soluciones innovadoras para simplificar la vida de los
-              propietarios de vehículos y mejorar la industria de los lavaderos
-              de autos en la cuidad de Armenia. Nuestra principal actividad es
-              proporcionar un software de reservas de lavado de autos que
-              revoluciona la forma en que las personas mantienen sus vehículos
-              en perfecto estado.
+            Creamos soluciones innovadoras para simplificar la vida de los propietarios de vehículos y mejorar la industria de los lavaderos de autos en la ciudad de Armenia. Nuestra principal actividad es proporcionar un software de reservas de lavado de autos que revoluciona la forma en que las personas mantienen sus vehículos en perfecto estado.
             </p>
           </div>
 
