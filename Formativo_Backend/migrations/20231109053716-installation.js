@@ -1,7 +1,7 @@
 'use strict';
 
 
-const img = '../src/images/logoServices.jpg'
+const img = 'logoServices.jpg'
 const { MUNICIPALITY_TABLE } = require('../src/db/models/municipality.models.js');
 const { USER_TABLE } = require('../src/db/models/user.models.js');
 const { VEHICLE_TABLE} = require('../src/db/models/vehicle.models.js');
@@ -275,7 +275,7 @@ up:  async (queryInterface, Sequelize) => {
       },
       amount: {
         allowNull: false,
-        type: Sequelize.DataTypes.INTEGER
+        type: Sequelize.DataTypes.STRING
       },
       date: {
         allowNull: false,

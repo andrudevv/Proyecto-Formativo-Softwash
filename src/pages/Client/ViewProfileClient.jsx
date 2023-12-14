@@ -22,7 +22,7 @@ const fieldsMapping = {
     "duration": "Duracion",
     "description": "Descripcion",
     "price": "Precio COP",
-    "typeVehicles": "Tipo de vehiculo",
+    "typeVehicles": "Tipo de vehículo",
     "acciones": "Acciones"
 };
 const fields = ["name", "duration", "description", "price", "typeVehicles", "acciones"];

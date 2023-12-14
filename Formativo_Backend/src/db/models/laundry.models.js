@@ -3,7 +3,7 @@ const {DEPARTMENT_TABLE} = require('./department.models.js');
 const { MUNICIPALITY_TABLE } = require('./municipality.models.js');
 // import { MUNICIPALITY_TABLE } from "./municipality.models.js";
 const LAUNDRY_TABLE = "laundry";
-const img ='../images/logoServices.jpg'
+const img ='logoServices.jpg'
 
 const LaundrySchema = {
   id: {

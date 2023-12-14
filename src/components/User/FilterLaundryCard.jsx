@@ -57,7 +57,7 @@ const BusinessCard = ({ laundry }) => {
             <strong>Telefono:</strong> {phone}
           </p>
           <p>
-            <strong>Municipio:</strong> {Municipality.name}
+            <strong>Municipio:</strong> {Municipality? Municipality.name : 'Municipio'}
           </p>
           <div className='flex justify-center items-center col-span-2'>
             <Link to={`/profile-laundry/${id}`} className=' w-full'>

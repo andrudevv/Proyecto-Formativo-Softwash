@@ -137,7 +137,7 @@ export default function MyVehicles() {
         console.log(newVehicle);
         const response = await createVehicle(newVehicle);
         if (!response) {
-            toast.error(`Error al crear el vehiculo`, { theme: "light" });
+            toast.error(`Error al crear el vehículo`, { theme: "light" });
         } else {
             toast.success(`${response}`, { theme: "light" });
             const update = await getVehicles();
@@ -195,7 +195,7 @@ export default function MyVehicles() {
 
 
             } catch (error) {
-                toast.error(`Error al obtener vehiculos del usuario`, { theme: "light" })
+                toast.error(`Error al obtener vehículos del usuario`, { theme: "light" })
             }
         };
         getUser();
@@ -239,7 +239,7 @@ export default function MyVehicles() {
                     },
                 ]} />
             <VehicleRegistrationModal onSubmit={onsubmit} isOpen={create}
-                title="Registrar vehiculo"
+                title="Registrar vehículo"
                 setValue={setValue}
 
                 buttons={[
@@ -271,8 +271,8 @@ export default function MyVehicles() {
                     ) : (
                         <div>
 
-                            <h1 className="flex justify-center text-2xl font-bold mb-4">MIS VEHICULOS</h1>
-                            <ButtonAction estilos={'flex w-24 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-4 w-auto justify-end'} text={'Añadir Vahiculo'} onClick={handleModalCreateOpen} />
+                            <h1 className="flex justify-center text-2xl font-bold mb-4">MIS VEHíCULOS</h1>
+                            <ButtonAction estilos={'flex w-24 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-4 w-auto justify-end'} text={'Añadir Vehículo'} onClick={handleModalCreateOpen} />
                             <ContentTable fields={fields} data={userVehicles} fieldsMapping={fieldsMapping}
                                 buttonActions={(id) => customButtons.map((button, index) => (<ButtonAction key={index} {...button} onClick={() => button.onClick(id)} />))}
                                 stylesTable={stylesTable} stylesThead={stylesThead} stylesTbody={stylesTbody}
@@ -281,8 +281,8 @@ export default function MyVehicles() {
                             <ReusableModals
                                 isOpen={isModalDelete}
                                 onClose={closeModalDelete}
-                                title="Eliminar vehiculo"
-                                message={'¿Seguro que quiere eliminar el vehiculo?'}
+                                title="Eliminar vehículo"
+                                message={'¿Seguro que quiere eliminar el vehículo?'}
                                 buttons={[
                                     {
                                         text: 'Eliminar',

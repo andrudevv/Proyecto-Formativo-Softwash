@@ -31,7 +31,7 @@ export default function GenericNavbar() {
                     {menuOpen && (
                         <div className="absolute mt-2 w-full bg-custom-pie-pagina p-4 right-0">
                             <div className="flex flex-col space-y-2 items-center"></div>
-                            <button className="text-white"><Link to="/sign-in-user">Iniciar Sesión</Link></button>
+                            <button className="text-white"><Link to="/sign-in-user">Iniciar sesión</Link></button>
                         </div>
                     )}
 

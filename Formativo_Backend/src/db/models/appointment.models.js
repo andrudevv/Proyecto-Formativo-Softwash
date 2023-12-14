@@ -20,8 +20,8 @@ const AppointmentSchema = {
   },
   amount: {
     allowNull: false,
-    type: DataTypes.INTEGER,
-  },
+    type: DataTypes.STRING,
+  }, 
   date: {
     allowNull: false,
     type: DataTypes.DATEONLY,

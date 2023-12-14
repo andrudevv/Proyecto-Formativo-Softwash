@@ -9,7 +9,7 @@ export default function ModelRegister({ isOpen, title }) {
 
         <div className='modal-space-container hidden sm:inline-block sm:align-middle sm:h-screen'></div>
 
-        <div id='modal-container' className='modal-container inline-block align-bottom  bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-1/4'>
+        <div id='modal-container' className='modal-container inline-block align-bottom  bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-2/5'>
           <div className='modal-wrapper bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4'>
             <div className='modal-wrapper-flex  h-24 items-center flex justify-center  '>
               <div class="w-12 h-12 bg-gray-500 rounded-full flex items-center justify-center">

@@ -37,7 +37,7 @@ if(user){
           <strong>Cedula:</strong> {userD.documentUser}
         </div>
         <div>
-          <strong>Telefono:</strong> {userD.phone}
+          <strong>Teléfono:</strong> {userD.phone}
         </div>
         <div>
           <strong>Municipio:</strong> {userD.Municipality.name}

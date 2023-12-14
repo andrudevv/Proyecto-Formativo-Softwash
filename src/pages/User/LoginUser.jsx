@@ -64,19 +64,19 @@ function LoginUser() {
           type="submit"
           className="bg-button-primary shadow-lg shadow-gray-500 text-black transition delay-150 duration-300 ease-in-out hover:bg-blue-400 font-semibold mt-6 h-10 hover:scale-110 w-full rounded"
         >
-          iniciar sesion
+          Iniciar Sesión
         </button>
         <button
           type="button"
           className="bg-button-primary shadow-lg shadow-gray-500 text-black transition delay-150 duration-300 ease-in-out hover:bg-blue-400 font-semibold mt-6 h-10 hover:scale-110 w-full rounded"
         >
-          <Link to="/sign-in-client">iniciar sesion como lavadero</Link>
+          <Link to="/sign-in-client">Iniciar Sesión Como Lavadero</Link>
         </button>
         <a className=" text-cyan-800 font-semibold text-lg mt-4 py-2 px-4 rounded hover:scale110 w-full">
           <Link to="/reset-password-user">Olvido su contraseña?</Link>
         </a>
 
-        {/* <p className="flex gap-x-2 justify-between my-3 ">no tienes una cuenta?  <Link to="/register" className="text-sky-500"> sign up</Link></p> */}
+        
       </form>
     </div>
     </>

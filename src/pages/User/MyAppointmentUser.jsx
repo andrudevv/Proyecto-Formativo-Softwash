@@ -61,10 +61,10 @@ export default function MyAppointmentUser() {
         "time": "Hora",
         "amount": "Total",
         "observations": "Observaciones",
-        "Vehicle.plate": "Vehiculo",
+        "Vehicle.plate": "Vehículo",
         "Service.name": "Servicio",
         "state": "Estado",
-        "Service.laundry.address": "Direccion del lavadero"
+        "Service.laundry.address": "Dirección del lavadero"
 
 
     };

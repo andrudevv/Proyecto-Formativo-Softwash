@@ -8,7 +8,14 @@ export default function DataProfileClient({ client, onClick, onclickImg,fileInpu
   const [clientD, setClientD] = useState(false);
   const [hourClosing, setHourClosing] = useState('');
   const [ hourOpen, setHourOpent] = useState('')
-const img = `http://localhost:4000/api/client/${clientD.imageUrl}`;
+{/* <div className=" md:flex-shrink-0">
+                    <img
+                        className="h-52 w-full object-cover md:w-52"
+                        src="https://via.placeholder.com/150"
+                        alt="Business Image"
+                    />
+                </div> */}
+const img = clientD.imageUrl ? `http://localhost:4000/api/client/${clientD.imageUrl}` : `https://via.placeholder.com/150`  ;
 const handleHourClosing = (e)=>{
   ;
   const date = new Date(`2000-01-01 ${e}`);
@@ -41,7 +48,7 @@ const handleHourOpen = (e)=>{
     <div className="max-w-2xl mx-auto bg-white p-8 rounded-md shadow-md">
       <div className="grid grid-cols-2  gap-10">
         <div className='w-full grid  justify-center col-span-2'>
-          <img src={img} alt="img" className="rounded-md w-[250px] h-[250px] col-span-1  shadow-lg shadow-black"/>
+          <img src={clientD.imageUrl ? `http://localhost:4000/api/client/${clientD.imageUrl}` : `https://via.placeholder.com/200`} alt="img" className="rounded-md w-[250px] h-[250px] col-span-1  shadow-lg shadow-black"/>
           <button onClick={onclickImg} className=' mt-8 shadow-sm shadow-black font-semibold w-auto hover:opacity-100 rounded-md transition-opacity m-4 ease-in-out duration-300 hover:bg-blue-400 hover:text-white'> Cambiar foto</button>
           <input
         type="file"
@@ -63,7 +70,7 @@ const handleHourOpen = (e)=>{
           <strong>Correo:</strong> {clientD.email}
         </div>
         <div>
-          <strong>Telefono:</strong> {clientD.phone}
+          <strong>Teléfono:</strong> {clientD.phone}
         </div>
         <div>
           <strong>Capacidad:</strong> {clientD.ability}

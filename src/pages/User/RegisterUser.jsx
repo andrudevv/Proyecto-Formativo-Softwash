@@ -165,7 +165,7 @@ function RegisterUser() {
                   </div>
 
                   <div className="col-span-2 relative">
-                    <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Telefono <span className="text-red-500">*</span></label>
+                    <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Teléfono <span className="text-red-500">*</span></label>
                     <input type="text" {...register('phone', { required: true })} onChange={handleInputPhone} minLength={10} maxLength={10} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="Ingrese Tel.." />
                     {errors.phone && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>

@@ -17,8 +17,8 @@ function RegisterClient() {
     const { signUpClient, registerErrors } = clientAuth();
     const [departments, setDepartments] = useState([]);
     const [municipalities, setMunicipalities] = useState([]);
-    const [ hourClosing, setHourClosing] = useState(null);
-    const [ hourOpen, setHourOpen] = useState(null);
+    const [hourClosing, setHourClosing] = useState(null);
+    const [hourOpen, setHourOpen] = useState(null);
     const navigate = useNavigate();
 
 
@@ -36,63 +36,63 @@ function RegisterClient() {
 
     })
 
-    const handleInputNit= (e) =>{
-    
+    const handleInputNit = (e) => {
+
         const inputValue = e.target.value.replace(/[^0-9]/g, '');
-        if(inputValue === ''){
-          return e.target.value = 0
+        if (inputValue === '') {
+            return e.target.value = 0
         }
-        if(!isNaN(inputValue)){
-          const numericValue = parseInt(inputValue, 10);
-    
-        const minValue = 1;
-        const maxValue = 99999999999; 
-    
-        const clampedValue = Math.min(Math.max(numericValue, minValue), maxValue); 
-        return e.target.value = clampedValue;
-        }else{
-          return e.target.value = 0;
+        if (!isNaN(inputValue)) {
+            const numericValue = parseInt(inputValue, 10);
+
+            const minValue = 1;
+            const maxValue = 99999999999;
+
+            const clampedValue = Math.min(Math.max(numericValue, minValue), maxValue);
+            return e.target.value = clampedValue;
+        } else {
+            return e.target.value = 0;
         }
-       
-      }
-      const handleInputPhone= (e) =>{
-    
+
+    }
+    const handleInputPhone = (e) => {
+
         const inputValue = e.target.value.replace(/[^0-9]/g, '');
-        if(inputValue === ''){
-          return e.target.value = 0
+        if (inputValue === '') {
+            return e.target.value = 0
         }
-        if(!isNaN(inputValue)){
-          const numericValue = parseInt(inputValue, 10);
-    
-        const minValue = 0;
-        const maxValue = 9999999999; 
-    
-        const clampedValue = Math.min(Math.max(numericValue, minValue), maxValue); 
-        return e.target.value = clampedValue;
-        }else{
-          return e.target.value = 0;
+        if (!isNaN(inputValue)) {
+            const numericValue = parseInt(inputValue, 10);
+
+            const minValue = 0;
+            const maxValue = 9999999999;
+
+            const clampedValue = Math.min(Math.max(numericValue, minValue), maxValue);
+            return e.target.value = clampedValue;
+        } else {
+            return e.target.value = 0;
         }
-       
-      }
-      const handleInputCapacity= (e) =>{
-    
+
+    }
+    const handleInputCapacity = (e) => {
+
         const inputValue = e.target.value.replace(/[^0-9]/g, '');
-        if(inputValue === ''){
-          return e.target.value = 0
+        if (inputValue === '') {
+            return e.target.value = 0
         }
-        if(!isNaN(inputValue)){
-          const numericValue = parseInt(inputValue, 10);
-    
-        const minValue = 0;
-        const maxValue = 20; 
-    
-        const clampedValue = Math.min(Math.max(numericValue, minValue), maxValue); 
-        return e.target.value = clampedValue;
-        }else{
-          return e.target.value = 0;
+        if (!isNaN(inputValue)) {
+            const numericValue = parseInt(inputValue, 10);
+
+            const minValue = 0;
+            const maxValue = 20;
+
+            const clampedValue = Math.min(Math.max(numericValue, minValue), maxValue);
+            return e.target.value = clampedValue;
+        } else {
+            return e.target.value = 0;
         }
-       
-      }
+
+    }
     const getMunicipalities = (id) => {
         Axios.get(`http://localhost:4000/api/users/get-municipality/${id}`)
             .then((Response) => {
@@ -113,14 +113,14 @@ function RegisterClient() {
                 throw error;
             });
     };
-    const handleHourOpen = (e)=>{
+    const handleHourOpen = (e) => {
         const dt = `${e.target.value}`;
         const date = new Date(`2000-01-01 ${dt}`);
         const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
         setHourOpen(`${formattedTime}`)
         console.log(hourOpen);
     }
-    const handleHourClosing =( e) =>{
+    const handleHourClosing = (e) => {
         const input = e.target.value;
         const date = new Date(`2000-01-01 ${input}`);
         const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
@@ -143,11 +143,9 @@ function RegisterClient() {
     }, []);
     return (
         <>
-
             {registerErrors.map((error, i) => (
-            <ModalError isOpen={registerErrors} message={error} key={i} 
-            />))}
-            
+                <ModalError isOpen={registerErrors} message={error} key={i}
+                />))}
             <ModelRegister isOpen={isModalOpen} title={'Registro exitoso'} />
             <div className='flex justify-center '>
                 <div className='flex flex-col sm:flex-row md:w-[85%]  mt-6  bg-gray-200 rounded-lg shadow-lg  shadow-gray-400   relative z-0'>
@@ -173,7 +171,7 @@ function RegisterClient() {
 
                                     <div className="col-span-2 relative">
                                         <label className=" w-full font-semibold text-black px-4 py-2 rounded-md">Numero de Rut <span className="text-red-500">*</span></label>
-                                        <input type="text" {...register('rutLaundry', { required: true })} onChange={handleInputNit} maxLength={10} minLength={8}  className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="RUT/NIT" />
+                                        <input type="text" {...register('rutLaundry', { required: true })} onChange={handleInputNit} maxLength={10} minLength={8} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="RUT/NIT" />
                                         {errors.rutLaundry && (
                                             <p className="absolute right-0 top-0  text-red-500">&#9888;<span className="text-red-500 hidden lg:inline ">requerido</span></p>
                                         )}</div>
@@ -202,14 +200,14 @@ function RegisterClient() {
                                     </div>
                                     <div className="col-span-2 relative">
                                         <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Capacidad <span className="text-red-500">*</span></label>
-                                        <input type="text" {...register('ability', { required: true })} minLength={1} maxLength={2}  onChange={handleInputCapacity} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="1 o 2 o 3 etc" />
+                                        <input type="text" {...register('ability', { required: true })} minLength={1} maxLength={2} onChange={handleInputCapacity} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="1 o 2 o 3 etc" />
                                         {errors.ability && (
                                             <p className="absolute right-0 top-0  text-red-500">&#9888;<span className="text-red-500 hidden lg:inline ">requerido</span></p>
                                         )}
                                     </div>
                                     <div className="col-span-2 relative">
                                         <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Horario de Inicio <span className="text-red-500">*</span></label>
-                                        <input type="time" {...register('aperture', { required: true, value:hourOpen })}  onChange={handleHourOpen} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="07:00 AM" />
+                                        <input type="time" {...register('aperture', { required: true, value: hourOpen })} onChange={handleHourOpen} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="07:00 AM" />
                                         {errors.aperture && (
                                             <p className="absolute right-0 top-0  text-red-500">&#9888;<span className="text-red-500 hidden lg:inline ">requerido</span></p>
                                         )}
@@ -267,6 +265,16 @@ function RegisterClient() {
                                         </select>
                                     </div>
                                     <div className="col-span-2 ">
+                                        <a
+                                            href="./Terminos_y_condiciones_de_SoftWash.pdf"
+                                            download
+
+                                            className="  text-blue-700 inline-flex items-center"
+                                        >
+
+                                            <input required='true' type="checkbox" className='m-4' name="Terminos" id="" />
+                                            Aceptar Terminos y Condiciones
+                                        </a>
                                         <button type="submit" className="bg-button-primary shadow-lg shadow-gray-500 text-black transition delay-150 duration-300 ease-in-out hover:bg-blue-400 font-semibold mt-6 h-10 hover:scale-110  w-full rounded   ">Registrarse</button>
                                     </div>
                                 </div>

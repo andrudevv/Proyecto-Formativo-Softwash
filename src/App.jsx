@@ -36,7 +36,7 @@ function App() {
       <AuthClientProvider>
         <BrowserRouter>
           <Navbar />
-          <main className=" pt-20 container mx-auto min-h-screen">
+          <main className=" pt-20  mx-auto min-h-screen">
             <Routes>
               <Route path="/" element={<HomeUsers />} />
               <Route path="/sign-in-user"  element={ <LoginUser />} />

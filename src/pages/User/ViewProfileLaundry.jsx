@@ -56,7 +56,6 @@ export default function ViewProfileLaundry() {
     }, [id, page, styleOnMax]);
 
 
-    // const{ name, address, aperture, closing, phone, rutLaundry, Municipality } = dataServices;
 
     return (
         <>
@@ -80,7 +79,7 @@ export default function ViewProfileLaundry() {
                             <strong>Nit:</strong> {dataServices ? dataServices.rutLaundry : 'Nit'}
                         </p>
                         <p className="mt-2">
-                            <strong>Direccion:</strong> {dataServices ? dataServices.address : 'Direccion'}
+                            <strong>Dirección:</strong> {dataServices ? dataServices.address : 'Dirección'}
                         </p>
                         <p className="mt-2">
                             <strong>Abierto:</strong> {dataServices ? dataServices.aperture : ' horario de apertura'}
@@ -89,7 +88,7 @@ export default function ViewProfileLaundry() {
                             <strong>Cerrado:</strong> {dataServices ? dataServices.closing : 'horario de cierre '}
                         </p>
                         <p>
-                            <strong>Telefono:</strong> {dataServices ? dataServices.phone : 'telefono'}
+                            <strong>Teléfono:</strong> {dataServices ? dataServices.phone : 'teléfono'}
                         </p>
                         <p>
                             <strong>Municipio:</strong> {dataServices ? dataServices.Municipality.name : 'nombre municipio'}

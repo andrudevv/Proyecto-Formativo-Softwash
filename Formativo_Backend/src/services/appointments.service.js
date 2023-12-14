@@ -92,11 +92,20 @@ class AppointmentService {
         serviceId: data.serviceId,
       },
     });
-    if (existingAppointment && existingAppointment.state === "pendiente") {
+    if (existingAppointment && existingAppointment.state === "pendiente" || existingAppointment.state === "no asitió" ) {
       throw new Error(
         "No puedes agendar esta cita porque ya hay una cita pendiente para este vehículo y servicio."
       );
     }
+    if(existingAppointment && existingAppointment.state === 'finalizado'){
+      let updateData = {
+        ...data,
+        state:'pendiente'
+      }
+      const appointment= await Appointment.update(updateData,{where:{id:existingAppointment.id }});
+      return { message: "Cita agendada con exito", appointment}
+    }
+    
     const canregister = await this.search(data, user);
     if (!canregister) {
       throw new Error("Error al guardar");

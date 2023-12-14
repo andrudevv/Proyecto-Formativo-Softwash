@@ -31,7 +31,7 @@ vehicleRouter.post(
         });
       body.plate = rtaPlate;
       await vehicle.create(body, user.id);
-      res.status(201).json({ message: "Registro de vehiculo exitoso "});
+      res.status(201).json({ message: "Registro de vehículo exitoso "});
     } catch (error) {
       console.error(error);
       return res.status(500).json([error.message]);

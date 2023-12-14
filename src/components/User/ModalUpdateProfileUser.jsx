@@ -107,7 +107,7 @@ export default function ModalUpdateProfileUser({
                   </div>
 
                   <div className='col-span-2 flex flex-col relative'>
-                    <label className='font-semibold text-gray-700'>Telefono</label>
+                    <label className='font-semibold text-gray-700'>Teléfono</label>
                     <input type="number" {...register('phone', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="lavado rapido" />
                     {errors.phone && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>

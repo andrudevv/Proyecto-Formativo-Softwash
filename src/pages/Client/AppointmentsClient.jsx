@@ -67,7 +67,6 @@ export default function AppointmentsClient() {
         }
     }
     const handleModalAbsence = (id) => {
-        console.log('no asistio', id);
         setAbsence(true);
         setIdProcess(id);
     }

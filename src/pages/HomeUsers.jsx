@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {BsChevronCompactLeft,BsChevronCompactRight} from 'react-icons/bs'
 import imgtitulo from "../img/TituloWash2.png"
+import imgCorte from '../img/corteWash.png'
 function HomeUsers() {
   const callouts = [
     {
@@ -44,7 +45,7 @@ function HomeUsers() {
    const newIndex = isLastSlide ? 0 : currentIndex +1
    setCurrentIndex(newIndex)
   }
-  window.scrollTo(0, 0);
+  
 
   return (
     <>
@@ -52,16 +53,16 @@ function HomeUsers() {
     
       <div className="items-center justify-start">  
         <div className="max-h-2xl rounded-md ">
-          <div className="w-auto -mx-24">
-        <div>
+          <div className="w-auto ">
+        <div >
         <img  className=" h-full object-cover" src={imgtitulo} alt="titulo"/>
         </div>
-
+        
       
             <p className="text-2xl font-Pathway Gothic One text-white text-center bg-blue-700 border-blue-700  p-8">
               Creamos soluciones innovadoras para simplificar la vida de los
               propietarios de vehículos y mejorar la industria de los lavaderos
-              de autos en la cuidad de Armenia. Nuestra principal actividad es
+              de autos en la ciudad de Armenia. Nuestra principal actividad es
               proporcionar un software de reservas de lavado de autos que
               revoluciona la forma en que las personas mantienen sus vehículos
               en perfecto estado.
@@ -87,33 +88,15 @@ function HomeUsers() {
                 <BsChevronCompactRight onClick={nextSlide} size={30}/>
               </div>
             </div>
-      
-
+            
 
           </div>
         </div>
       </div>
 
       
-      <div className="p-4  bg-blue-900">
-        <h2 className="text-3xl font-Pathway Gothic One text-color text-center">
-          ¿Qué puedes hacer en nuestra página?
-        </h2>
-        <p className="text-2xl font-Pathway Gothic One text-color text-center bg-blue-900 border-blue-900  p-8">
-          <br />
-          <br />
-          Podrás apartar la cita en el lavadero de su preferencia y en la
-          disponibilidad deseada según lo disponga el lavadero.
-          <br />
-          Encontrarás múltiples servicios para cada tipo de vehículo según así
-          lo brinde el lavadero.
-          <br />
-          Seguro y confiable al realizar las citas.
-          <br />
-          Tendrás la ubicación real del lavadero deseado.
-        </p>
-        
-      </div>
+      <img  className="w-full h-full object-cover mt-20" src={imgCorte} alt="corte"/>
+      
     </div>
   
     </>

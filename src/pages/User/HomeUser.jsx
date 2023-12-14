@@ -98,7 +98,7 @@ export default function HomeUser() {
             <button className="flex justify-center bg-blue-200 hover:bg-blue-400 rounded-md">{callouts[currentIndex].description}</button>
             <span>Abierto: {callouts[currentIndex].abierto}</span>
             <span>Cerrado: {callouts[currentIndex].cerrado}</span>
-            <span>Telefono: {callouts[currentIndex].telefono}</span>
+            <span>Teléfono: {callouts[currentIndex].telefono}</span>
             <span>Municipio: {callouts[currentIndex].municipio}</span>
             
         </div>

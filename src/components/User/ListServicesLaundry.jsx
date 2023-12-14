@@ -45,13 +45,7 @@ const ListServices = ({ service }) => {
         <> 
         <div className="w-full mt-16 mx-auto bg-white-100 bg-opacity-20 p-4 rounded-xl overflow-hidden shadow-md">
             <div className="md:flex">
-                <div className=" md:flex-shrink-0">
-                    <img
-                        className="h-52 w-full object-cover md:w-52"
-                        src="https://via.placeholder.com/150"
-                        alt="Business Image"
-                    />
-                </div>
+                
                 <div className="w-full  grid grid-cols-2 gap-5 pl-8 pr-8 text-center">
 
                     <h2 className="text-lg col-span-2 font-semibold text-center">{name}</h2>
@@ -65,7 +59,7 @@ const ListServices = ({ service }) => {
                         <strong>Precio:</strong> {price}
                     </p>
                     <p>
-                        <strong>Para Vehiculos:</strong> {typeVehicles}
+                        <strong>Para Vehículos:</strong> {typeVehicles}
                     </p>
 
                     
