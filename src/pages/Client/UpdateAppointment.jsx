@@ -129,6 +129,8 @@ export default function UpdateAppointment() {
     } catch (error) {
       console.log('Error al traer los datos de la cita', error)
     }
+    window.scrollTo(0, 0);
+
   }, [id])
   return (
     <> 

@@ -24,13 +24,8 @@ const ServiceSchema = {
     allowNull: false,
   },
   price: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
-  },
-  imgService:{
-    type:DataTypes.STRING,
-    allowNull: true,
-    defaultValue: img
   },
   createdAt: {
     allowNull: false,

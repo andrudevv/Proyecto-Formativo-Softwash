@@ -21,10 +21,11 @@ class LaundryService {
         "closing",
         "rutLaundry",
         "municipalityId",
+        "imageUrl"
       ],
-      include: {
+      include: [{
         model: Municipality,
-      },
+      }],
       where: { membership: true },
     };
 
@@ -52,22 +53,17 @@ class LaundryService {
         },
       ];
     }
-    const { limit = 5 } = query;
-    const { offset } = query;
+    const { offset, limit = 5 } = query;
     if (offset) {
       options.limit = parseInt(limit);
       options.offset = parseInt(limit * offset);
     }
 
-    // const {typeVehicles} = query;
-    // if (typeVehicles){
-    //   options.where.typeVehicles = typeVehicles;
-    // }
 
     const where = await Laundry.findAll(options);
 
     if (where.length === 0) {
-      throw new Error("No se encontraron coincidencias");
+      throw new Error("No se encontraron Lavaderos");
     }
     return where;
   }
@@ -109,8 +105,7 @@ class LaundryService {
 
       where: { id: id },
     };
-    const { limit = 5 } = query;
-    const { offset } = query;
+    const { offset, limit = 5  } = query;
     if (offset) {
       options.include[0].limit = parseInt(limit);
       options.include[0].offset = parseInt(limit * offset);
@@ -170,6 +165,14 @@ class LaundryService {
     return newLaundry;
   }
 
+  //servicio para actualizar la imagen del lavadero
+  async updateImgClient (id,img){
+    const updateImg = Laundry.update(img,{where: {id: id}})
+    if(!updateImg){
+      throw new Error('error al actualizar la imagen')
+    }
+    return true
+  }
   //servicio para que el cliente actualice sus datos excepto contraseña
   async updateClient(id, changes) {
     const laundry = await Laundry.findOne({

@@ -17,7 +17,7 @@ app.use(cors({
     credentials: true, // This is important as it allows us to send cookies along with the request
 }));
 conexionDB();
-app.use(express.static(path.join(__dirname, 'images')))
+// app.use(express.static(path.join(__dirname, '../../uploads')));
 app.use(morgan('dev'));
 app.use(express.json())
 app.use(cookieParser());

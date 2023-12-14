@@ -20,8 +20,9 @@ export default function FindLaundry() {
         );
         const findLaundry = {
             ...filteredQuery,
-            offset: `${page}`
+            offset: page
         }
+        console.log(findLaundry);
         const responseLaundry = await searchLaundry(findLaundry)
         if(responseLaundry.length < 5){
             setStyleOnMax('hidden')
@@ -30,13 +31,19 @@ export default function FindLaundry() {
         }
         if (responseLaundry.length === 0) {
             setNotFound('no se encontraron resultados');
-
+            
         }
         setFilterLaundry(responseLaundry);
+        console.log(filterLaundry);
 
     })
    
     useEffect(() => {
+        if(page > 0){
+
+            onSubmitSearch()
+        }
+        window.scrollTo(0, 0);
         
       }, [page, styleOnMax]);
     return (

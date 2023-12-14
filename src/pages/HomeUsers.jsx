@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
-import imgtitulo from "../img/TituloWash2.png";
-import imgCorte from "../img/CorteWash.png";
+import {BsChevronCompactLeft,BsChevronCompactRight} from 'react-icons/bs'
+import imgtitulo from "../img/TituloWash2.png"
 function HomeUsers() {
   const callouts = [
     {
@@ -32,79 +31,91 @@ function HomeUsers() {
     },
   ];
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   const prevSlide = () => {
     const isFirstSlide = currentIndex === 0;
-    const newIndex = isFirstSlide ? callouts.length - 1 : currentIndex - 1;
+    const newIndex = isFirstSlide ? callouts.length - 1 : currentIndex -1;
     setCurrentIndex(newIndex);
-  };
+  }
 
   const nextSlide = () => {
-    const isLastSlide = currentIndex === callouts.length - 1;
-    const newIndex = isLastSlide ? 0 : currentIndex + 1;
-    setCurrentIndex(newIndex);
-  };
+   const isLastSlide = currentIndex === callouts.length -1;
+   const newIndex = isLastSlide ? 0 : currentIndex +1
+   setCurrentIndex(newIndex)
+  }
+  window.scrollTo(0, 0);
 
   return (
     <>
-      <div className="items-center justify-start min-h-screen ">
-        <div className="items-center justify-start">
-          <div className="max-h-2xl rounded-md ">
-            <div className="w-auto -mx-24">
-              <div>
-                <img
-                  className="w-full h-full object-cover"
-                  src={imgtitulo}
-                  alt="corte"
-                />
-              </div>
-
-              <p className="text-2xl font-Pathway Gothic One text-white text-center bg-blue-700 border-blue-700  p-8">
-                Creamos soluciones innovadoras para simplificar la vida de los
-                propietarios de vehículos y mejorar la industria de los
-                lavaderos de autos en la cuidad de Armenia. Nuestra principal
-                actividad es proporcionar un software de reservas de lavado de
-                autos que revoluciona la forma en que las personas mantienen sus
-                vehículos en perfecto estado.
-              </p>
-            </div>
-
-            <img
-              className="w-auto h-auto object-cover"
-              src={imgCorte}
-              alt="corte"
-            />
-
-            <div className="">
-              <h2 className="text-4xl font-Pathway Gothic One text-black text-center  mt-5">
-                Conoce lavaderos cercanos
-              </h2>
-
-              <div className="max-w-[1400px] h-[500px] w-full m-auto py-16 px-4 relative group">
-                <div
-                  style={{
-                    backgroundImage: `url(${callouts[currentIndex].imageSrc})`,
-                  }}
-                  className="w-full h-full rounded-2xl bg-center bg-cover duration-200"
-                ></div>
-                {/* flecha derecha */}
-                <div className="absolute hidden group-hover:block  top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-                  <BsChevronCompactLeft onClick={prevSlide} size={30} />
-                </div>
-
-                {/* flecha izquierda */}
-                <div className="absolute hidden group-hover:block  top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
-                  <BsChevronCompactRight onClick={nextSlide} size={30} />
-                </div>
-              </div>
-            </div>
-            <h1 className=" text-color text-center">SOFTWASH</h1>
-          </div>
+    <div className="items-center justify-start min-h-screen ">
+    
+      <div className="items-center justify-start">  
+        <div className="max-h-2xl rounded-md ">
+          <div className="w-auto -mx-24">
+        <div>
+        <img  className=" h-full object-cover" src={imgtitulo} alt="titulo"/>
         </div>
 
-        {/* <img  className="w-full h-full object-cover mt-20" src={imgolas} alt="titulo"/> */}
+      
+            <p className="text-2xl font-Pathway Gothic One text-white text-center bg-blue-700 border-blue-700  p-8">
+              Creamos soluciones innovadoras para simplificar la vida de los
+              propietarios de vehículos y mejorar la industria de los lavaderos
+              de autos en la cuidad de Armenia. Nuestra principal actividad es
+              proporcionar un software de reservas de lavado de autos que
+              revoluciona la forma en que las personas mantienen sus vehículos
+              en perfecto estado.
+            </p>
+          </div>
+
+          <div className="">
+            <h2 className="text-4xl font-Pathway Gothic One text-black text-center  mt-5">
+              Conoce lavaderos cercanos
+            </h2>
+
+
+
+            <div className="max-w-[1400px] h-[600px] w-full m-auto py-16 px-4 relative group">
+              <div style={{backgroundImage: `url(${callouts[currentIndex].imageSrc})`}} className="w-full h-full rounded-2xl bg-center bg-cover duration-500"></div>
+              {/* flecha derecha */}
+              <div className="absolute hidden group-hover:block  top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                <BsChevronCompactLeft onClick={prevSlide} size={30}/>
+              </div>
+             
+              {/* flecha izquierda */}
+               <div className="absolute hidden group-hover:block  top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer">
+                <BsChevronCompactRight onClick={nextSlide} size={30}/>
+              </div>
+            </div>
+      
+
+
+          </div>
+        </div>
       </div>
+
+      
+      <div className="p-4  bg-blue-900">
+        <h2 className="text-3xl font-Pathway Gothic One text-color text-center">
+          ¿Qué puedes hacer en nuestra página?
+        </h2>
+        <p className="text-2xl font-Pathway Gothic One text-color text-center bg-blue-900 border-blue-900  p-8">
+          <br />
+          <br />
+          Podrás apartar la cita en el lavadero de su preferencia y en la
+          disponibilidad deseada según lo disponga el lavadero.
+          <br />
+          Encontrarás múltiples servicios para cada tipo de vehículo según así
+          lo brinde el lavadero.
+          <br />
+          Seguro y confiable al realizar las citas.
+          <br />
+          Tendrás la ubicación real del lavadero deseado.
+        </p>
+        
+      </div>
+    </div>
+  
     </>
   );
 }

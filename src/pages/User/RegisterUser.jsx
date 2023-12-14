@@ -18,7 +18,6 @@ function RegisterUser() {
 
   const onSubmit = handleSubmit(async (values) => {
     const rta = await signup(values);
-    console.log(rta);
     if(rta) {
       setIsModalOpen(true);
       const timer = setTimeout(() => {
@@ -29,6 +28,44 @@ function RegisterUser() {
   }
 
   })
+  const handleInputDoc= (e) =>{
+    
+    const inputValue = e.target.value.replace(/[^0-9]/g, '');
+    if(inputValue === ''){
+      return e.target.value = 0
+    }
+    if(!isNaN(inputValue)){
+      const numericValue = parseInt(inputValue, 10);
+
+    const minValue = 0;
+    const maxValue = 9999999999; 
+
+    const clampedValue = Math.min(Math.max(numericValue, minValue), maxValue); 
+    return e.target.value = clampedValue;
+    }else{
+      return e.target.value = 0;
+    }
+   
+  }
+  const handleInputPhone= (e) =>{
+    
+    const inputValue = e.target.value.replace(/[^0-9]/g, '');
+    if(inputValue === ''){
+      return e.target.value = 0
+    }
+    if(!isNaN(inputValue)){
+      const numericValue = parseInt(inputValue, 10);
+
+    const minValue = 0;
+    const maxValue = 9999999999; 
+
+    const clampedValue = Math.min(Math.max(numericValue, minValue), maxValue); 
+    return e.target.value = clampedValue;
+    }else{
+      return e.target.value = 0;
+    }
+   
+  }
   const getMunicipalities = (id) => {
     Axios.get(`http://localhost:4000/api/users/get-municipality/${id}`)
       .then((Response) => {
@@ -80,7 +117,7 @@ function RegisterUser() {
               <span className="text-white text-center ml-6 mr-6 text-1xl font-semibold">"Innovación que brilla en cada gota. Tu lavadero, nuestra tecnología."
               </span>
               <hr className=" shadow-xl shadow-white bg-white w-[70%]" />
-              <button className="bg-button-primary shadow-lg shadow-blue-400 hover:scale-110 text-black font-semibold transition delay-150 duration-300 ease-in-out  mt-4 rounded hover:bg-blue-400  sm:h-16  w-2/3" ><Link to="/register-client">Registrarse como Lavadero</Link></button>
+              <button className="bg-button-primary shadow-lg shadow-blue-400 hover:scale-110 text-black font-semibold transition delay-150 duration-300 ease-in-out  mt-4 rounded hover:bg-blue-400  sm:h-16  w-2/3" ><Link to="/register-client" className="py-6">Registrarse como Lavadero</Link></button>
             </section>
           </div>
 
@@ -105,7 +142,7 @@ function RegisterUser() {
 
                   <div className="col-span-2 relative">
                     <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Documento <span className="text-red-500">*</span></label>
-                    <input type="number"  {...register('documentUser', { required: true })} className="w-10/12 mb-2 text-black px-4 py-2 rounded-md" placeholder="Cedula" />
+                    <input type="text"  {...register('documentUser', { required: true   })} maxLength={10} minLength={8}  onChange={handleInputDoc  } className="w-10/12 mb-2 text-black px-4 py-2 rounded-md" placeholder="Cedula" />
                     {errors.documentUser && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}</div>
@@ -129,7 +166,7 @@ function RegisterUser() {
 
                   <div className="col-span-2 relative">
                     <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Telefono <span className="text-red-500">*</span></label>
-                    <input type="number" {...register('phone', { required: true })} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="Ingrese Tel.." />
+                    <input type="text" {...register('phone', { required: true })} onChange={handleInputPhone} minLength={10} maxLength={10} className="w-10/12  text-black  border border-gray-300 px-4 py-2 rounded-md" placeholder="Ingrese Tel.." />
                     {errors.phone && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}

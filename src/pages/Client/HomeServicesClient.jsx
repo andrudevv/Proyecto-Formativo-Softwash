@@ -55,6 +55,8 @@ export default function HomeServicesClient() {
     }
 
     getAppointments();
+    window.scrollTo(0, 0);
+
   }, [])
 
   return (
@@ -80,13 +82,13 @@ export default function HomeServicesClient() {
                         styles: 'bg-green-500 hover:bg-green-600 text-black font-bold',
                     }
                 ]}/>
-      <div className='flex w-full h-12 justify-center mt-4 text-center'>
+      <div className='flex w-full h-12 justify-center mt-10 text-center '>
         <h2 className='font-bold text-2xl'>En proceso</h2>
       </div>
       {loading ? <Spinner /> : dataProcess.length === 0 ? 
       
         <>
-          <div>
+          <div className='flex justify-center items-center mt-20 h-24 bg-blue-100 text-xl'>
             <h1>No hay lavados en proceso</h1>
           </div>
 

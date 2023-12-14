@@ -120,6 +120,7 @@ export default function CreateAppointment() {
             setLoading(false);
         }
         setDateService({ id: id, name: name, price: price });
+        window.scrollTo(0, 0);
 
     }, [id, name, price]);
     return (

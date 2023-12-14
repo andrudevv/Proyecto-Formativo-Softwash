@@ -18,6 +18,8 @@ function LoginClient() {
     if (isAuthenticatedClient) {
       navigate("/home-client");
     }
+    window.scrollTo(0, 0);
+
   }, [isAuthenticatedClient]);
   return (
     <>

@@ -14,6 +14,7 @@ export default function ModalUpdateProfileUser({
   handleSubmit,
   reset
 }) {
+
   const [departments, setDepartments] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
   const getMunicipalities = (id) => {
@@ -57,9 +58,9 @@ export default function ModalUpdateProfileUser({
     }
     // else{
     //   reset()
-      
+
     // } 
-  }, [DataUser, setValue,reset]);
+  }, [DataUser, setValue, reset]);
   if (!isOpen) return null
   return (
     <div id='modal-component-container' className='fixed z-10 inset-0'>
@@ -114,7 +115,7 @@ export default function ModalUpdateProfileUser({
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}
                   </div>
-                  
+
                   <div className='col-span-2 flex flex-col relative'>
                     <label className='w-full font-semibold text-gray-700'>Correo</label>
                     <input type="text" {...register('email', { required: true })} className="mt-1 p-2 border w-full border-gray-300 rounded-md" placeholder="25000" />

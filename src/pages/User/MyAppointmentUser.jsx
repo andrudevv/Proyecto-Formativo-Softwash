@@ -52,16 +52,18 @@ export default function MyAppointmentUser() {
 
         };
         getAppointments();
+        window.scrollTo(0, 0);
+
     }, [])
 
     const fieldsMapping = {
         "date": "Fecha",
         "time": "Hora",
-        "amount": "total",
+        "amount": "Total",
         "observations": "Observaciones",
         "Vehicle.plate": "Vehiculo",
         "Service.name": "Servicio",
-        "state": "estado",
+        "state": "Estado",
         "Service.laundry.address": "Direccion del lavadero"
 
 

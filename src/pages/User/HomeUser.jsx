@@ -13,6 +13,10 @@ export default function HomeUser() {
           imageAlt:
             "Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug.",
           href: "#",
+          abierto: '06:00 a.m.',
+          cerrado: '05:00 p.m.',
+          telefono: '3245345466',
+          municipio: 'Calarca'
         },
         {
           name: "FERRAUTOS CAR WASH",
@@ -22,6 +26,10 @@ export default function HomeUser() {
           imageAlt:
             "Wood table with porcelain mug, leather journal, brass pen, leather key ring, and a houseplant.",
           href: "#",
+          abierto: '06:00 a.m.',
+          cerrado: '05:00 p.m.',
+          telefono: '3125345466',
+          municipio: 'Tebaida'
         },
         {
           name: "PRONTO WASH",
@@ -30,6 +38,10 @@ export default function HomeUser() {
             "https://elportaldelquindio.com/imgupload/74PRG1_PRONTOWASH-01.jpg",
           imageAlt: "Collection of four insulated travel bottles on wooden shelf.",
           href: "#",
+          abierto: '06:00 a.m.',
+          cerrado: '05:00 p.m.',
+          telefono: '3235345466',
+          municipio: 'Armenia'
         },
       ];
     
@@ -77,17 +89,17 @@ export default function HomeUser() {
 
           <div className="max-w-[1400px] h-[600px] w-full m-auto py-16 px-4 relative group">
             <div  className="w-full h-full rounded-2xl flex items-center justify-center shadow-md shadow-gray-500 border-blue-100 border-2 bg-gray-100 duration-500">
-        <div className="grid grid-cols-1 ">
+        <div className="grid grid-cols-1  text-center ">
             <div className="flex justify-center ">
             <img src={callouts[currentIndex].imageSrc} alt="" className="h-[250px] w-[300px] rounded-xl"/>
 
             </div>
             <h2 className="flex justify-center">{callouts[currentIndex].name}</h2>
-            <a className="flex justify-center">{callouts[currentIndex].description}</a>
-            <span>mas info</span>
-            <span>mas info</span>
-            <span>mas info</span>
-            <span>mas info</span>
+            <button className="flex justify-center bg-blue-200 hover:bg-blue-400 rounded-md">{callouts[currentIndex].description}</button>
+            <span>Abierto: {callouts[currentIndex].abierto}</span>
+            <span>Cerrado: {callouts[currentIndex].cerrado}</span>
+            <span>Telefono: {callouts[currentIndex].telefono}</span>
+            <span>Municipio: {callouts[currentIndex].municipio}</span>
             
         </div>
 

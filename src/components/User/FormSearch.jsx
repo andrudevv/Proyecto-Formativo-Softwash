@@ -1,9 +1,11 @@
 import React,{useState,useEffect} from 'react'
 import Axios from '../../services/axios';
+import ModalError from '../ModalError';
 export default function FormSearch({
     registerErrors,
     onSubmit,
     register,
+
 }) {
 
     const [departments, setDepartments] = useState([]);
@@ -44,21 +46,9 @@ export default function FormSearch({
     }, []);
     return (
         <div>
-            {registerErrors.map((error, i) => (
-                    <div className="flex justify-center items-center">
-                        <div id='modal-component-container' className='fixed  h-52  z-10  top-0'>
-                            <div className='modal-flex-container flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
-                                <div className='modal-bg-container fixed inset-0 bg-gray-700 bg-opacity-75'></div>
-                                <div className='modal-space-container hidden sm:inline-block sm:align-middle sm:h-screen'></div>
-
-                                <div id='modal-container' className='modal-container inline-block align-bottom  rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full'>
-                                    <div className=' bg-red-500 p-2  rounded-lg text-white' key={i}>
-                                        {error}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>))}
+             {registerErrors.map((error, i) => (
+            <ModalError isOpen={registerErrors} message={error} key={i} 
+            />))}
             <form onSubmit={onSubmit} className=" w-full mt-4 ">
                 
                 <h2 className="text-2xl font-semibold mb-6  text-center">Filtro de busqueda</h2>
@@ -88,7 +78,7 @@ export default function FormSearch({
                 </div> 
                 <div className=" w-1/4 text-center">
                     <label className="  font-semibold text-black pr-2 rounded-md">Municipio </label>
-                    <select {...register('municipality')} value="" className="font-Pathway Gothic One w-full  p-2 w- bg-white rounded-md border border-gray-300 focus:ring" placeholder="Municipio">
+                    <select {...register('municipality')} className="font-Pathway Gothic One w-full  p-2 w- bg-white rounded-md border border-gray-300 focus:ring" placeholder="Municipio">
                         <option value="" >Municipio</option>
                         {municipalities.map((department) => (
                             <option

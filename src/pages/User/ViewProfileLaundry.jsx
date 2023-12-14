@@ -15,31 +15,34 @@ export default function ViewProfileLaundry() {
     const { id } = useParams();
     const [styleOnMax, setStyleOnMax] = useState('flex');
     const [page, setPage] = useState(0);
-    useEffect( () => {
+    
+
+    useEffect(() => {
         // setLoading(true)
         const getData = async (id) => {
             try {
                 setLoading(true)
                 const query = {
-                    offset:page
+                    offset: page
                 }
                 const rta = await ViewProfileLaundryId(id, query);
-                if(rta.length < 5){
+                if (rta.Services.length < 5) {
                     setStyleOnMax('hidden')
-                }else{
+                } else {
                     setStyleOnMax('flex')
                 }
-                
+
                 setDataServices(rta);
                 setServices(rta.Services);
-                if(rta.imageUrl){
-                    setImg(rta.imageUrl)
+                if (rta.imageUrl) {
+                    const imgL = `http://localhost:4000/api/client/${rta.imageUrl}`;
+                    setImg(imgL)
                     // setImg( "https://i.pinimg.com/236x/48/93/d1/4893d178fdbab0621bb9e56eba9146f7.jpg")
 
-                }else{
-                    setImg( "https://via.placeholder.com/150")
+                } else {
+                    setImg("https://via.placeholder.com/150")
                 }
-               
+
             } catch (error) {
                 toast.error('Error al traer los datos')
             } finally {
@@ -50,29 +53,29 @@ export default function ViewProfileLaundry() {
 
         getData(id);
         window.scrollTo(0, 0);
-    }, [id,page, styleOnMax]);
+    }, [id, page, styleOnMax]);
 
-   
+
     // const{ name, address, aperture, closing, phone, rutLaundry, Municipality } = dataServices;
-    
+
     return (
         <>
             {registerErrors.map((error, i) => (
-            <ModalError isOpen={registerErrors} message={error} key={i} 
-            />))}
-            {loading ? ( <Spinner />) :  <> <div className="w-full mx-auto bg-white-100 bg-opacity-20 p-4 rounded-xl overflow-hidden shadow-md">
+                <ModalError isOpen={registerErrors} message={error} key={i}
+                />))}
+            {loading ? (<Spinner />) : <> <div className="w-full mx-auto bg-white-100 bg-opacity-20 p-4 rounded-xl overflow-hidden shadow-md">
                 <div className="md:flex flex-col">
                     <div className=" w-full flex justify-center ">
                         <img
-                            className="h-52 w-full object-cover md:w-52"
-                          
+                            className="rounded-md w-[250px] h-[250px] col-span-1  shadow-md shadow-black"
+
                             src={img}
                             alt="imagen lavadero"
                         />
                     </div>
                     <div className=" grid grid-cols-2 gap-5 pl-8 pr-8 text-center">
 
-                        <h2 className="text-lg col-span-2 font-semibold text-center">{dataServices ? dataServices.name : 'nombre'}</h2>
+                        <h2 className="text-lg col-span-2 font-semibold text-center mt-8">{dataServices ? dataServices.name : 'nombre'}</h2>
                         <p className="mt-2 ">
                             <strong>Nit:</strong> {dataServices ? dataServices.rutLaundry : 'Nit'}
                         </p>
@@ -98,8 +101,8 @@ export default function ViewProfileLaundry() {
 
                 {!services || loading ? (<Spinner />) : (<ListServicesLaundry registerErrors={registerErrors} services={services} />)}
                 <div className='w-full flex justify-center mt-8'>
-                            <NavPagination styles={'flex justify-center '}   styleOnMax={styleOnMax} page={page} setPage={setPage} />
-                        </div>
+                    <NavPagination styles={'flex justify-center '} styleOnMax={styleOnMax} page={page} setPage={setPage} />
+                </div>
 
             </>
 

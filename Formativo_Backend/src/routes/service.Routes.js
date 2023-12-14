@@ -63,8 +63,9 @@ serviceRouter.get(
 // ruta para traer los servicios del lavadero que tenga sesion iniciada
 serviceRouter.get("/", authRequiredClient, checkLaundry, async (req, res, next) => {
   try {
+    const query = req.query;
     const user = req.user.id;
-    const servicesFound = await Service.findServicesLaundry(user);
+    const servicesFound = await Service.findServicesLaundry(user, query);
     return res.json(servicesFound);
   } catch (error) {
     next(error);

@@ -13,8 +13,9 @@ class UserService {
   constructor() {}
   //Ruta registro para el usuario
   async registerUser(body) {
+    console.log(body);
     const userFound = await User.findOne({ where: { email: body.email } });
-    if (userFound) {
+    if(userFound) {
       throw new Error("El correo electrónico ya existe");
     }
     const passwordHash = await bcrypt.hash(body.password, 10);

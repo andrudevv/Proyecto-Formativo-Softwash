@@ -47,10 +47,16 @@ class Services {
     return { message: "Servicio creado con exito", create: true };
   }
 
-  async findServicesLaundry(id) {
-    const findServices = await Service.findAll({
+  async findServicesLaundry(id, query) {
+    const options = {
       where: { laundry_id: id },
-    });
+    }
+    const {offset, limit = 10} = query;
+    if (offset) {
+      options.limit = parseInt(limit);
+      options.offset = parseInt(limit * offset);
+    }
+    const findServices = await Service.findAll(options);
     
     return findServices;
   }
