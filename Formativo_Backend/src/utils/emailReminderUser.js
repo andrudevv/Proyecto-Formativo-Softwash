@@ -1,6 +1,5 @@
-
-const nodemailer = require('nodemailer');
-const dotenv = require('dotenv');
+const nodemailer = require("nodemailer");
+const dotenv = require("dotenv");
 dotenv.config();
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -10,13 +9,13 @@ const transporter = nodemailer.createTransport({
   },
 });
 function sendReminderEmail(email, date, time, vehicle) {
-  return new Promise((resolve, reject) => { 
-  // Envía un correo con el token
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: "Recordatorio de Cita",
-    html: `
+  return new Promise((resolve, reject) => {
+    // Envía un correo con el token
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Recordatorio de Cita",
+      html: `
     <html>
       <head>
         <style>
@@ -57,25 +56,27 @@ function sendReminderEmail(email, date, time, vehicle) {
           </div>
           <div class="content">
             <p>
-              Recuerda que tienes una cita programada para el ${date} a las ${time} para el vehículo con detalles: ${JSON.stringify(vehicle)}
+              Recuerda que tienes una cita programada para el ${date} a las ${time} para el vehículo con detalles: ${JSON.stringify(
+        vehicle
+      )}
             </p>
           </div>
         </div>
       </body>
     </html>
     `,
-  };
+    };
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error(error);
-      reject(error);
-    } else {
-      // console.log("registro exitoso: " , info.response );
-      resolve(true);
-    }
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+        reject(error);
+      } else {
+        // console.log("registro exitoso: " , info.response );
+        resolve(true);
+      }
+    });
   });
-} );
 }
 
-module.exports = {sendReminderEmail};
+module.exports = { sendReminderEmail };

@@ -9,7 +9,7 @@ const {
 const { validatorHandler } = require("../middlewares/validator.handler.js");
 const { validateType } = require("../middlewares/validatePlate.js");
 const { checkUser } = require("../middlewares/auth.handler.js");
-const {authRequiredUser} = require("../middlewares/validateToken.js");
+const { authRequiredUser } = require("../middlewares/validateToken.js");
 const vehicle = new VehicleService();
 const vehicleRouter = express.Router();
 
@@ -31,7 +31,7 @@ vehicleRouter.post(
         });
       body.plate = rtaPlate;
       await vehicle.create(body, user.id);
-      res.status(201).json({ message: "Registro de vehiculo exitoso "});
+      res.status(201).json({ message: "Registro de vehiculo exitoso " });
     } catch (error) {
       console.error(error);
       return res.status(500).json([error.message]);

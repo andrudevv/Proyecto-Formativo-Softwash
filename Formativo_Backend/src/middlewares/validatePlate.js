@@ -58,5 +58,4 @@ function validatePlateMotorcycle(placa) {
   }
 }
 
-
-module.exports = {validateType, validatePlate}
+module.exports = { validateType, validatePlate };

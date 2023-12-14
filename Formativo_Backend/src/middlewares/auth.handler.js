@@ -1,5 +1,4 @@
-
-require('dotenv').config();
+require("dotenv").config();
 function checkApiKey(req, res, next) {
   const apiKey = req.headers["api"];
   if (apiKey === config.apikey) {
@@ -30,20 +29,19 @@ function checkLaundry(req, res, next) {
 // }
 function checkUser(req, res, next) {
   const user = req.user;
-  if (user.hasOwnProperty('document')) {
+  if (user.hasOwnProperty("document")) {
     next();
   } else {
     next(new Error("no esta autorizado"));
   }
 }
-function checkShared(req,res, next) {
-      const user = req.user;
-      if (user.hasOwnProperty("document") || user.membership === true ) {
-        next();
-      } else {
-        next(new Error("no esta autorizado"));
-      }
-    
+function checkShared(req, res, next) {
+  const user = req.user;
+  if (user.hasOwnProperty("document") || user.membership === true) {
+    next();
+  } else {
+    next(new Error("no esta autorizado"));
   }
+}
 
-module.exports = {checkApiKey,checkLaundry,checkShared,checkUser };
+module.exports = { checkApiKey, checkLaundry, checkShared, checkUser };

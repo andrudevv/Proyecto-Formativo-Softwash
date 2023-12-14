@@ -6,7 +6,10 @@ const {
   createServiceShema,
   updateServiceShema,
 } = require("../schemas/services.schema.js");
-const {authRequiredClient, authRequiredUser} = require("../middlewares/validateToken.js");
+const {
+  authRequiredClient,
+  authRequiredUser,
+} = require("../middlewares/validateToken.js");
 const { validatorHandler } = require("../middlewares/validator.handler.js");
 const { checkLaundry, checkUser } = require("../middlewares/auth.handler.js");
 
@@ -19,7 +22,7 @@ serviceRouter.post(
   authRequiredClient,
   checkLaundry,
   validatorHandler(createServiceShema, "body"),
-  async (req, res,next) => {
+  async (req, res, next) => {
     try {
       const user = req.user;
       const body = req.body;
@@ -27,7 +30,7 @@ serviceRouter.post(
       res.status(201).json(findLaundry);
     } catch (error) {
       next(error);
-      return res.status(500).json([error.message ]);
+      return res.status(500).json([error.message]);
     }
     (err, res) => {
       res.status(400).json({ error: err.message });
@@ -61,21 +64,26 @@ serviceRouter.get(
 );
 
 // ruta para traer los servicios del lavadero que tenga sesion iniciada
-serviceRouter.get("/", authRequiredClient, checkLaundry, async (req, res, next) => {
-  try {
-    const query = req.query;
-    const user = req.user.id;
-    const servicesFound = await Service.findServicesLaundry(user, query);
-    return res.json(servicesFound);
-  } catch (error) {
-    next(error);
-    res.status(400).json([error.message]);
+serviceRouter.get(
+  "/",
+  authRequiredClient,
+  checkLaundry,
+  async (req, res, next) => {
+    try {
+      const query = req.query;
+      const user = req.user.id;
+      const servicesFound = await Service.findServicesLaundry(user, query);
+      return res.json(servicesFound);
+    } catch (error) {
+      next(error);
+      res.status(400).json([error.message]);
+    }
+    (err, res) => {
+      // Este middleware manejará los errores generados por el validador
+      res.status(400).json({ error: err.message });
+    };
   }
-  (err, res) => {
-    // Este middleware manejará los errores generados por el validador
-    res.status(400).json({ error: err.message });
-  };
-});
+);
 
 //ruta para actualizar el servicio del lavadero
 serviceRouter.patch(
@@ -92,7 +100,7 @@ serviceRouter.patch(
       res.status(201).json(update);
     } catch (error) {
       console.error(error);
-      return res.status(500).json([ error.message]);
+      return res.status(500).json([error.message]);
     }
     (err, res) => {
       res.status(400).json({ error: err.message });
@@ -113,7 +121,7 @@ serviceRouter.delete(
       res.status(201).json(deleteService);
     } catch (error) {
       console.error(error);
-      return res.status(500).json([ error.message]);
+      return res.status(500).json([error.message]);
     }
     (err, res) => {
       res.status(400).json({ error: err.message });

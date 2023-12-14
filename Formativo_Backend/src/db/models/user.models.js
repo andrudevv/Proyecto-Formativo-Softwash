@@ -1,6 +1,6 @@
-const {Model, DataTypes} = require('sequelize');
-const {DEPARTMENT_TABLE} = require('./department.models.js');
-const { MUNICIPALITY_TABLE} = require('./municipality.models.js')
+const { Model, DataTypes } = require("sequelize");
+const { DEPARTMENT_TABLE } = require("./department.models.js");
+const { MUNICIPALITY_TABLE } = require("./municipality.models.js");
 const USER_TABLE = "users";
 
 const UserSchema = {
@@ -8,7 +8,7 @@ const UserSchema = {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   documentUser: {
     allowNull: false,
@@ -36,26 +36,26 @@ const UserSchema = {
     type: DataTypes.STRING,
   },
   recoveryToken: {
-    field: 'recovery_token',
+    field: "recovery_token",
     allowNull: true,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   role: {
     allowNull: false,
-    defaultValue: 'user',
-    type: DataTypes.STRING
+    defaultValue: "user",
+    type: DataTypes.STRING,
   },
   municipalityId: {
-    field: 'municipality_id',
+    field: "municipality_id",
     allowNull: true,
     type: DataTypes.INTEGER,
     references: {
       model: MUNICIPALITY_TABLE,
-      key: 'id'
+      key: "id",
     },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
-  }
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
+  },
   // createAt:{
   //     allowNull: false,
   //     type: DataTypes.DATE,
@@ -67,10 +67,13 @@ const UserSchema = {
 class User extends Model {
   static associate(models) {
     this.hasMany(models.Vehicle, {
-      as: 'vehicles',
-      foreignKey: 'userId'
+      as: "vehicles",
+      foreignKey: "userId",
     });
-    this.belongsTo(models.Municipality, { foreignKey:"municipalityId", as: 'Municipality' });
+    this.belongsTo(models.Municipality, {
+      foreignKey: "municipalityId",
+      as: "Municipality",
+    });
   }
   static config(sequelize) {
     return {
@@ -81,6 +84,6 @@ class User extends Model {
     };
   }
 }
-module.exports = { UserSchema,USER_TABLE, User };
+module.exports = { UserSchema, USER_TABLE, User };
 
 // export default {USER_TABLE, UserShema,User}

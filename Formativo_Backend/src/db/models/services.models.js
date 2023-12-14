@@ -1,15 +1,15 @@
-const {Model, DataTypes, Sequelize} = require('sequelize');
+const { Model, DataTypes, Sequelize } = require("sequelize");
 
-const {LAUNDRY_TABLE} = require('./laundry.models.js');
-const img ='./logoServices.jpg'
-const SERVICE_TABLE = 'services';
+const { LAUNDRY_TABLE } = require("./laundry.models.js");
+const img = "./logoServices.jpg";
+const SERVICE_TABLE = "services";
 
 const ServiceSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
   },
   name: {
     type: DataTypes.STRING,
@@ -30,48 +30,45 @@ const ServiceSchema = {
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: 'created_at',
+    field: "created_at",
     defaultValue: Sequelize.NOW,
   },
   laundryId: {
-    field: 'laundry_id',
+    field: "laundry_id",
     allowNull: true,
     type: DataTypes.INTEGER,
     references: {
       model: LAUNDRY_TABLE,
-      key: 'id'
+      key: "id",
     },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
   },
   typeVehicles: {
     type: DataTypes.STRING,
     allowNull: false,
-  }
-}
-
+  },
+};
 
 class Service extends Model {
-
   static associate(models) {
-    this.belongsTo(models.laundry, { foreignKey: 'laundryId' });
+    this.belongsTo(models.laundry, { foreignKey: "laundryId" });
     this.belongsToMany(models.Vehicle, {
-        as: 'Vehicle',
-        through: models.Appointment,
-        foreignKey: 'serviceId',
-        otherKey: 'vehicleId'
-      });
+      as: "Vehicle",
+      through: models.Appointment,
+      foreignKey: "serviceId",
+      otherKey: "vehicleId",
+    });
     // this.hasMany(models.Appointment,{foreignKey: 'serviceId'})
-      
   }
 
   static config(sequelize) {
     return {
       sequelize,
       tableName: SERVICE_TABLE,
-      modelName: 'Service',
-      timestamps: false
-    }
+      modelName: "Service",
+      timestamps: false,
+    };
   }
 }
 

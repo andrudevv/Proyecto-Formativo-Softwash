@@ -1,6 +1,5 @@
-
-const nodemailer = require('nodemailer');
-const dotenv = require('dotenv');
+const nodemailer = require("nodemailer");
+const dotenv = require("dotenv");
 dotenv.config();
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -11,13 +10,13 @@ const transporter = nodemailer.createTransport({
 });
 
 function sendEmailForgot(email, token) {
-  return new Promise((resolve, reject) => { 
-  // Envía un correo con el token
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: "Recuperación de contraseña",
-    html: `
+  return new Promise((resolve, reject) => {
+    // Envía un correo con el token
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Recuperación de contraseña",
+      html: `
   <html>
     <head>
       <style>
@@ -65,18 +64,21 @@ function sendEmailForgot(email, token) {
     </body>
   </html>
 `,
-  };
+    };
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error(error);
-      reject(error);
-    } else {
-      console.log("Correo de recuperación de contraseña enviado: " , info.response );
-      resolve(true);
-    }
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+        reject(error);
+      } else {
+        console.log(
+          "Correo de recuperación de contraseña enviado: ",
+          info.response
+        );
+        resolve(true);
+      }
+    });
   });
-} );
 }
 
 module.exports = sendEmailForgot;

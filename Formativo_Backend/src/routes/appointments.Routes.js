@@ -161,7 +161,6 @@ appointmentRouter.get(
   }
 );
 
-
 appointmentRouter.get(
   "/get-process-appointment",
   authRequiredClient,
@@ -188,7 +187,7 @@ appointmentRouter.patch(
   validatorHandler(patchAppointmentParams, "params"),
   async (req, res) => {
     try {
-      const {id} = req.params;
+      const { id } = req.params;
       const updateFinalized = await appointment.appointmentFinalized(id);
       res.status(201).json(updateFinalized);
     } catch (error) {

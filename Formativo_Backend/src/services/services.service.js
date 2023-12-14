@@ -50,14 +50,14 @@ class Services {
   async findServicesLaundry(id, query) {
     const options = {
       where: { laundry_id: id },
-    }
-    const {offset, limit = 10} = query;
+    };
+    const { offset, limit = 10 } = query;
     if (offset) {
       options.limit = parseInt(limit);
       options.offset = parseInt(limit * offset);
     }
     const findServices = await Service.findAll(options);
-    
+
     return findServices;
   }
 
@@ -85,10 +85,12 @@ class Services {
       throw new Error("no se encontro el servicio");
     }
     const findserviceWithAppointment = await Appointment.findOne({
-      where: { serviceId : findService.id}
-    })
-    if(findserviceWithAppointment){
-      throw new Error('No puede eliminar el servicio, tiene citas pendientes con el servicio');
+      where: { serviceId: findService.id },
+    });
+    if (findserviceWithAppointment) {
+      throw new Error(
+        "No puede eliminar el servicio, tiene citas pendientes con el servicio"
+      );
     }
 
     const deleted = await Service.destroy({

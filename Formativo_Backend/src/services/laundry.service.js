@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const { verifyToken } = require("../lib/jwt.js");
 const { createAccessToken } = require("../lib/jwt.js");
 const sendEmailForgot = require("../utils/clientResetPassword.js");
-const { Laundry, Municipality, Service, User } = require("../db/models/index.js");
+const { Laundry, Municipality, Service, User, } = require("../db/models/index.js");
 const MunicipalityService = require("../services/municipality.service.js");
 const { query } = require("express");
 const municipality = new MunicipalityService();
@@ -10,7 +10,6 @@ class LaundryService {
   constructor() {}
   // consulta para traer todos los lavaderos segun departamento y ciudad
   async findAllsWhere(query) {
-   
     const options = {
       attributes: [
         "id",
@@ -21,11 +20,13 @@ class LaundryService {
         "closing",
         "rutLaundry",
         "municipalityId",
-        "imageUrl"
+        "imageUrl",
       ],
-      include: [{
-        model: Municipality,
-      }],
+      include: [
+        {
+          model: Municipality,
+        },
+      ],
       where: { membership: true },
     };
 
@@ -58,7 +59,6 @@ class LaundryService {
       options.limit = parseInt(limit);
       options.offset = parseInt(limit * offset);
     }
-
 
     const where = await Laundry.findAll(options);
 
@@ -98,14 +98,11 @@ class LaundryService {
   async findLaundry(id, query) {
     const options = {
       attributes: { exclude: ["password", "membership", "recoveryToken"] },
-      include: [
-        { model: Service },
-        { model: Municipality },
-      ],
+      include: [{ model: Service }, { model: Municipality }],
 
       where: { id: id },
     };
-    const { offset, limit = 5  } = query;
+    const { offset, limit = 5 } = query;
     if (offset) {
       options.include[0].limit = parseInt(limit);
       options.include[0].offset = parseInt(limit * offset);
@@ -166,12 +163,12 @@ class LaundryService {
   }
 
   //servicio para actualizar la imagen del lavadero
-  async updateImgClient (id,img){
-    const updateImg = Laundry.update(img,{where: {id: id}})
-    if(!updateImg){
-      throw new Error('error al actualizar la imagen')
+  async updateImgClient(id, img) {
+    const updateImg = Laundry.update(img, { where: { id: id } });
+    if (!updateImg) {
+      throw new Error("error al actualizar la imagen");
     }
-    return true
+    return true;
   }
   //servicio para que el cliente actualice sus datos excepto contraseña
   async updateClient(id, changes) {

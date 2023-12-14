@@ -1,7 +1,6 @@
-
-const Jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
-const { config } = require('../config/config');
+const Jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+const { config } = require("../config/config");
 
 const authRequiredUser = (req, res, next) => {
   cookieParser()(req, res, () => {
@@ -23,7 +22,6 @@ const authRequiredUser = (req, res, next) => {
   });
 };
 
-
 const authRequiredClient = (req, res, next) => {
   cookieParser()(req, res, () => {
     const tokenClient = req.cookies.tokenClient;
@@ -43,4 +41,4 @@ const authRequiredClient = (req, res, next) => {
     // const token = req.cookies.token;
   });
 };
-module.exports = {authRequiredUser, authRequiredClient};
+module.exports = { authRequiredUser, authRequiredClient };

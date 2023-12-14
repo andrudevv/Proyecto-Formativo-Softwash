@@ -4,7 +4,7 @@ const { config } = require("../config/config.js");
 //
 const UserService = require("../services/user.service.js");
 const LaundryService = require("../services/laundry.service.js");
-const {authRequiredUser} = require("../middlewares/validateToken.js");
+const { authRequiredUser } = require("../middlewares/validateToken.js");
 const {
   updateUserShema,
   createuserShema,
@@ -38,7 +38,6 @@ userRouter.post("/forgot-password", async (req, res, next) => {
   }
 });
 
-
 //registro de usuario
 userRouter.post(
   "/register",
@@ -63,7 +62,8 @@ userRouter.post(
     } catch (error) {
       next(error);
       return res.status(500).json([error.message]);
-    }(err, res) => {
+    }
+    (err, res) => {
       // Este middleware manejará los errores generados por el validador
       res.status(400).json({ error: err.message });
     };
@@ -91,7 +91,8 @@ userRouter.post(
     } catch (error) {
       next(error);
       res.status(400).json([error.message]);
-    }(err, res) => {
+    }
+    (err, res) => {
       // Este middleware manejará los errores generados por el validador
       res.status(400).json({ error: err.message });
     };
@@ -135,7 +136,7 @@ userRouter.post("/change-password/:token", async (req, res, next) => {
 //         body.departmentId,
 //         body.municipalityId
 //       );
-      
+
 //       res.status(201).json({ message: "lavadero", rta });
 //     } catch (error) {
 //       console.error(error);
@@ -150,18 +151,17 @@ userRouter.post("/change-password/:token", async (req, res, next) => {
 //   }
 // );
 
-
 userRouter.get(
   "/profile-user",
   authRequiredUser,
   checkUser,
- 
+
   async (req, res, next) => {
     try {
       const user = req.user;
       const userFound = await service.findProfile(user.id);
       if (!userFound) return res.sendStatus(401);
-      return res.status(200).json( userFound);
+      return res.status(200).json(userFound);
     } catch (error) {
       next(error);
       res.status(400).json([error.message]);
@@ -177,7 +177,7 @@ userRouter.get(
   "/profile-user-vehicle",
   authRequiredUser,
   checkUser,
- 
+
   async (req, res, next) => {
     try {
       const user = req.user;
@@ -252,14 +252,13 @@ userRouter.get("/getDepartments", async (req, res, next) => {
     console.error(error);
 
     next(error);
-    return res.status(500).json([error.message ]);
+    return res.status(500).json([error.message]);
   }
   (err, res) => {
     // Este middleware manejará los errores generados por el validador
     res.status(400).json({ error: err.message });
   };
 });
-
 
 // ruta necesaria para que el front valide las cookies y manipule el id o el nombre o correo segun lo requiera
 userRouter.get("/verify-user", async (req, res) => {
@@ -287,15 +286,13 @@ userRouter.get("/get-municipality/:id", async (req, res, next) => {
     console.error(error);
 
     next(error);
-    return res.status(500).json([error.message ]);
+    return res.status(500).json([error.message]);
   }
   (err, res) => {
     // Este middleware manejará los errores generados por el validador
     res.status(400).json({ error: err.message });
   };
 });
-
-
 
 //actualizar la contraseña por medio de token
 userRouter.get("/reset-password/:token", async (req, res, next) => {

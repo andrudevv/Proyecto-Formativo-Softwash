@@ -29,7 +29,7 @@ export const register = async (req, res) => {
       email,
       password: passwordHash,
       city,
-      municipality, 
+      municipality,
     });
 
     const userSaved = await newUser.save();

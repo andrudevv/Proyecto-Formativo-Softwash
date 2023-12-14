@@ -1,6 +1,4 @@
-
-const {Type} = require('../db/models/index.js');
-
+const { Type } = require("../db/models/index.js");
 
 class TypeEmployeeService {
   constructor() {}
@@ -33,4 +31,4 @@ class TypeEmployeeService {
   }
 }
 
-module.exports = TypeEmployeeService ;
+module.exports = TypeEmployeeService;

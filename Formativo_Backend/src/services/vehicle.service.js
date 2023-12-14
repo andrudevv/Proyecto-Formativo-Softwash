@@ -9,26 +9,25 @@ class VehicleService {
       throw new Error("Usuario no encontrado");
     }
 
-    const newVehicle = await Vehicle.create(
-      { 
-        ...data,
-        userId: id,
-     });
+    const newVehicle = await Vehicle.create({
+      ...data,
+      userId: id,
+    });
     if (!newVehicle) {
       throw new Error("Error al crear un vehiculo");
     }
     return newVehicle;
   }
 
-
   async findVehicle(id) {
-    const vehicle = await Vehicle.findAll({ 
-      attributes:{exclude:['userId']},
-      where: {userId:id } });
+    const vehicle = await Vehicle.findAll({
+      attributes: { exclude: ["userId"] },
+      where: { userId: id },
+    });
     if (vehicle.length === 0) {
       throw new Error("No tiene vehiculos creados");
     }
-    return {vehicle};
+    return { vehicle };
   }
   async findOne(id) {
     const vehicle = await Vehicle.findOne({ where: { id: id } });
@@ -54,11 +53,11 @@ class VehicleService {
         userId: idUser,
       },
     });
-    if (updateVehicle  === 0) {
+    if (updateVehicle === 0) {
       throw new Error("no hay datos para actualizar");
     }
-   
-    return { message: "actualizado correctamente", update:true};
+
+    return { message: "actualizado correctamente", update: true };
   }
   async findByUser(id) {
     const vehicle = await Vehicle.findAll({
@@ -71,23 +70,22 @@ class VehicleService {
     return vehicle;
   }
 
-
-  async delete(user,id) {
-    const vehicle = await Vehicle.findOne({where:{id:id,userId:user}})
-    if(!vehicle){
-      throw new Error('Vehiculo no encontrado')
+  async delete(user, id) {
+    const vehicle = await Vehicle.findOne({ where: { id: id, userId: user } });
+    if (!vehicle) {
+      throw new Error("Vehiculo no encontrado");
     }
     const appointmentWithVehicle = Appointment.findOne({
-      where: {vehicleId : vehicle.id}
-    })
-    if(appointmentWithVehicle){
-      throw new Error('No puede eliminar el vehiculo, tiene cita pendiente')
+      where: { vehicleId: vehicle.id },
+    });
+    if (appointmentWithVehicle) {
+      throw new Error("No puede eliminar el vehiculo, tiene cita pendiente");
     }
-    const deleteV = await Vehicle.destroy({where:{id:id, userId:user}});
-    if(!deleteV){
-      throw new Error('Error al eliminar');
+    const deleteV = await Vehicle.destroy({ where: { id: id, userId: user } });
+    if (!deleteV) {
+      throw new Error("Error al eliminar");
     }
-    return { message: "Eliminado exitosamente", delete: true};
+    return { message: "Eliminado exitosamente", delete: true };
   }
 }
 

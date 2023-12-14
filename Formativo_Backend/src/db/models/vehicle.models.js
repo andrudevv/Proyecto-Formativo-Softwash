@@ -1,5 +1,5 @@
-const {Model, DataTypes} = require('sequelize');
-const {USER_TABLE} = require('./user.models.js');
+const { Model, DataTypes } = require("sequelize");
+const { USER_TABLE } = require("./user.models.js");
 const VEHICLE_TABLE = "vehicles";
 
 const UserVehicleSchema = {
@@ -23,20 +23,20 @@ const UserVehicleSchema = {
     type: DataTypes.STRING,
   },
   userId: {
-    field: 'user_id',
+    field: "user_id",
     allowNull: true,
     type: DataTypes.INTEGER,
     references: {
       model: USER_TABLE,
-      key: 'id'
+      key: "id",
     },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
   },
   typeVehicle: {
     allowNull: false,
     type: DataTypes.STRING,
-  }
+  },
   // createAt:{
   //     allowNull: false,
   //     type: DataTypes.DATE,
@@ -47,13 +47,12 @@ const UserVehicleSchema = {
 
 class Vehicle extends Model {
   static associate(models) {
-    this.belongsTo(models.User, { foreignKey:"userId",as: 'User' });
+    this.belongsTo(models.User, { foreignKey: "userId", as: "User" });
     this.belongsToMany(models.Service, {
-      as: 'Service',
+      as: "Service",
       through: models.Appointment, // Tabla puente
-      foreignKey: 'vehicleId', // Clave foránea en UserRole que apunta a Role
-      otherKey: 'serviceId', // Clave foránea en UserRole que apunta a User
-      
+      foreignKey: "vehicleId", // Clave foránea en UserRole que apunta a Role
+      otherKey: "serviceId", // Clave foránea en UserRole que apunta a User
     });
   }
   static config(sequelize) {

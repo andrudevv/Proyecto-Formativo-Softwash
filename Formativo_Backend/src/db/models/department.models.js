@@ -1,4 +1,4 @@
-const {Model, DataTypes} = require('sequelize');
+const { Model, DataTypes } = require("sequelize");
 const DEPARTMENT_TABLE = "Department";
 
 const DepartamentSchema = {
@@ -21,7 +21,7 @@ class Department extends Model {
       as: "municipalities",
       foreignKey: "departmentId",
     });
-    
+
     // this.hasMany(models.Laundry, {
     //   as: "laundry",
     //   foreignKey: "departmentId",

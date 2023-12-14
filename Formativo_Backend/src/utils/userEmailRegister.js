@@ -1,6 +1,5 @@
-
-const nodemailer = require('nodemailer');
-const dotenv = require('dotenv');
+const nodemailer = require("nodemailer");
+const dotenv = require("dotenv");
 dotenv.config();
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -14,13 +13,13 @@ const transporter = nodemailer.createTransport({
 //   return crypto.randomBytes(32).toString("hex");
 // };
 function register(email, name) {
-  return new Promise((resolve, reject) => { 
-  // Envía un correo con el token
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: "Registro exitoso",
-    html: `
+  return new Promise((resolve, reject) => {
+    // Envía un correo con el token
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Registro exitoso",
+      html: `
   <html>
     <head>
       <style>
@@ -68,18 +67,18 @@ function register(email, name) {
     </body>
   </html>
 `,
-  };
+    };
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error(error);
-      reject(error);
-    } else {
-      console.log("registro exitoso: " , info.response );
-      resolve(true);
-    }
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+        reject(error);
+      } else {
+        console.log("registro exitoso: ", info.response);
+        resolve(true);
+      }
+    });
   });
-} );
 }
 
-module.exports = {register};
+module.exports = { register };
