@@ -3,7 +3,7 @@ import { FaSpinner } from "react-icons/fa"; // Puedes usar cualquier icono de ca
 
 const Spinner = () => {
   return (
-    <div  className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen">
       <FaSpinner className="animate-spin text-5xl text-blue-700 " />
     </div>
   );
