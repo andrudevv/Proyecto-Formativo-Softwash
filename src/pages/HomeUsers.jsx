@@ -56,8 +56,8 @@ function HomeUsers() {
     <div className="items-center justify-start min-h-screen ">
     
       <div className="items-center justify-start">  
-        <div className="max-h-2xl rounded-mdmy-4 bg-blue-700">
-          <div className="">
+        <div className="max-h-2xl rounded-md ">
+          <div className="w-auto ">
         <div>
         <img  className="w-full h-full object-cover" src={imgtitulo} alt="titulo"/>
         </div>
@@ -77,7 +77,7 @@ function HomeUsers() {
 
 
           <div className="">
-            <h2 className="text-4xl font-Pathway Gothic One text-color text-center  mt-5">
+            <h2 className="text-4xl font-Pathway Gothic One text-black text-center  mt-5">
               Conoce lavaderos cercanos
             </h2>
 
@@ -97,7 +97,7 @@ function HomeUsers() {
             </div>
     
           </div>
-          <h1 className=" text-color text-center">SOFTWASH</h1>
+          <h1 className=" text-color text-center"></h1>
         </div>
       </div>
 
