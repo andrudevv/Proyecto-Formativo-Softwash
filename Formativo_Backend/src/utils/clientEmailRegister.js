@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 });
 
 
-function register(email, name) {
+function registerClient(email, name) {
   return new Promise((resolve, reject) => { 
   // Envía un correo con el token
   const mailOptions = {
@@ -19,7 +19,7 @@ function register(email, name) {
     to: email,
     subject: "Registro exitoso",
     html: `
-  <html>
+    <html>
     <head>
       <style>
         /* Estilos CSS normales */
@@ -31,38 +31,64 @@ function register(email, name) {
           margin: 0 auto;
           padding: 20px;
         }
-        .header {
-          background-color: #007BFF;
-          color: #ffffff;
-          text-align: center;
-          padding: 10px;
+        .header-img{
+          background-image: url('http://imgfz.com/i/5mVDtlq.png');
+        background-color: #007BFF;
+
+          height: 200px;
+      }
+      .bod {
+        color: #ffffff;
+        background-color: #007BFF;
+        background-image: url('http://imgfz.com/i/Jj6LEgN.png');
+        text-align: center;
+        /* padding: 10px; */
+        height: 250px;
+        flex-direction: column;
+
+      }
+      .title {
+        font-size: 24px;
+        margin-top: 5%;
+        font-weight: bold;
+      }
+      .link {
+        color: #00ffff;
+      }
+ 
+      .footer {
+          height: 100px;
+        background-color: #007BFF;
+        background-size: contain;
+          background-image: url('http://imgfz.com/i/TeQwUaD.png');
+        
+      }
+        .parrafo-header{
+            color: #ffffff;
+            margin-top: 0px;
         }
-        .title {
-          font-size: 24px;
-          font-weight: bold;
-          margin-top: 20px;
-        }
-        .content {
-          margin-top: 20px;
-          font-size: 16px;
-        }
-        .link {
-          color: #007BFF;
-          text-decoration: none;
+       
+        .parrafo-body{
+            margin-top: 10%;
         }
       </style>
     </head>
     <body>
-      <div class="container">
-        <div class="header">
-          <h1 class="title">Bienvenido a softwash <strong>${name}</strong></h1>
+    <div class="container">
+       <div class="header-img">
+       
         </div>
-        <div class="content">
-          <p>
-            Haga clic en este <a class="link" href="http://localhost:4000/">enlace</a> para iniciar session.
+        <div class="bod"> 
+          <p class="parrafo-header">"Innovación que brilla en cada gota. Tu lavadero, nuestra tecnología."</p>
+          <h1 class="title">Bienvenido a softwash <strong>${name}</h1> 
+          <p class="parrafo-body">
+            Haga clic en este <a class="link" href="http://localhost:5173/sing-in-client/">Enlace</a> para iniciar sesión.
+     
           </p>
-        </div>
+         </div>
+        <div class="footer">
       </div>
+    </div>
     </body>
   </html>
 `,
@@ -80,4 +106,4 @@ function register(email, name) {
 } );
 }
 
-module.exports = {register};
+module.exports = {registerClient};

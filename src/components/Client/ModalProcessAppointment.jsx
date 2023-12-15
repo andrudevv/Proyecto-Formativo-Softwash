@@ -23,7 +23,7 @@ export default function ModalProcessAppointment({ isOpen,
                             <div className='modal-content text-center mt-3 sm:mt-0 sm:ml-4 sm:text-left'>
                                 <h3 className='text-lg font-medium text-gray-900'>{title}</h3>
                                 <div className='modal-text my-2'>
-                                    <p className='text-gray-500 text-sm'>{message}</p>
+                                    <p className='text-gray-500 font-semibold text-md text-center'>{message}</p>
                                 </div>
                             </div>
                         </div>
@@ -35,7 +35,7 @@ export default function ModalProcessAppointment({ isOpen,
                                 key={index}
                                 onClick={() => button.onClick && button.onClick()}
                                 className={`${index > 0 ? 'ml-3' : ''
-                                    } w-full inline-flex justify-center rounded-md border border-gray-300 shadow-md px-4 py-2 bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-200 sm:w-auto sm:text-sm ${button.styles}`}
+                                    } w-full inline-flex justify-center rounded-md border border-gray-300 shadow-md px-4 py-2  font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-200 sm:w-auto sm:text-sm ${button.styles}`}
                             >
                                 {button.text}
                             </button>

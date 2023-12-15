@@ -200,7 +200,7 @@ class LaundryService {
     if (update === 0) {
       throw new Error("No hay datos para actualizar");
     }
-    return { message: "Actualizacion exitosa", update: true };
+    return true;
   }
 
   //servicio para que el cliente recupere la contraseña en caso de olvidarla
@@ -217,12 +217,13 @@ class LaundryService {
       rutLaundry: laundry.rutLaundry,
       clientName: laundry.name,
     });
+    const tokenT = btoa(token);
     const updateRecovery = await Laundry.update(
       { recoveryToken: token },
       { where: { id: laundry.id } }
     );
     if (updateRecovery[0] === 1) {
-      const sendEmail = await sendEmailForgot(email, token);
+      const sendEmail = await sendEmailForgot(email, tokenT);
       if (!sendEmail) {
         throw new Error("Error al enviar el correo de recuperacion");
       }
@@ -233,21 +234,22 @@ class LaundryService {
   }
   //servicio que permite cambiar la contraseña por medio de la recuperacion
   async changePassword(token, newPassword) {
-    try {
-      const payload = verifyToken(token);
-      const laundry = await Laundry.findByPk(payload.id);
+      const payload = await verifyToken(token);
+      const laundry = await Laundry.findOne({where:{ id: payload.id}});
+      console.log(laundry);
       if (laundry.recoveryToken !== token) {
-        throw new Error("no autorizado");
+        throw new Error("No autorizado, Solicite nuevamente la recuperación de la contraseña");
       }
-      const hash = await bcrypt.hash(newPassword, 10);
-      await Laundry.update(
+      const hash = await bcrypt.hash(newPassword.password, 10);
+      const newPasswordUpdate = await Laundry.update(
         { recoveryToken: null, password: hash },
         { where: { id: laundry.id } }
       );
-      return { message: "contraseña actualizada" };
-    } catch (error) {
-      throw new Error("no autorizado");
-    }
+      if(!newPasswordUpdate){
+        throw new Error('No se pudo actualizar la contraseña')
+      }
+      return true;
+   
   }
   //servicio para eliminar, por el momento no se usara
   async delete(id) {

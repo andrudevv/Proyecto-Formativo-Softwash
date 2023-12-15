@@ -29,9 +29,25 @@ export default function GenericNavbar() {
                         <FiMenu size={24} />
                     </button>
                     {menuOpen && (
-                        <div className="absolute mt-2 w-full bg-custom-pie-pagina p-4 right-0">
-                            <div className="flex flex-col space-y-2 items-center"></div>
-                            <button className="text-white"><Link to="/sign-in-user">Iniciar sesión</Link></button>
+                        <div className="absolute right-0 top-16 mt-4  p-2 w-full text-end  bg-blue-700">
+                            <ul className="bg-blue-700 p-4 text-xl shadow-md shadow-black">
+                                <li className='my-2'>
+                                    <button className=" font-Pathway Gothic One">
+                                        <Link to="/" className="font-Pathway Gothic One hover:text-cyan-400 text-white font-bold ">Inicio</Link>
+                                    </button>
+                                </li>
+                                <li className='my-2'>
+                                    <button className=" font-Pathway Gothic One">
+                                        <Link to="/sign-in-user" className="font-Pathway Gothic One hover:text-cyan-400 text-white font-bold ">Iniciar Sesión</Link>
+                                    </button>
+                                </li>
+                                <li className='my-2'>
+                                    <button className=" font-Pathway Gothic One">
+                                        <Link to="/register-user" className="font-Pathway Gothic One hover:text-cyan-400 text-white font-bold ">Registrarse</Link>
+                                    </button>
+                                </li>
+                               
+                            </ul>
                         </div>
                     )}
 

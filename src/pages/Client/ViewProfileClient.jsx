@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import ButtonAction from '../../components/ButtonAction'
 import ContentTable from '../../components/ContentTable'
 import ReusableModals from '../../components/ReusableModals'
@@ -19,8 +19,8 @@ const styleActions = ' flex justify-between items-center md:auto-cols-max sm:spa
 // ' md:grid  md:grid-flow-col table-cell md:auto-cols-max place-content-end justify-center items-center  sm:flex sm:space-y'
 const fieldsMapping = {
     "name": "Nombre",
-    "duration": "Duracion",
-    "description": "Descripcion",
+    "duration": "Duración",
+    "description": "Descripción",
     "price": "Precio COP",
     "typeVehicles": "Tipo de vehículo",
     "acciones": "Acciones"
@@ -44,7 +44,7 @@ export default function ViewProfileClient() {
     const [isModalDelete, setIsModalDelete] = useState(false);
     const [update, setUpdate] = useState(false);
     const [validateChangue, setValidateChangue] = useState(null);
-    const [ openValidateChange, setOpenValidateChangue] = useState(false);
+    const [openValidateChange, setOpenValidateChangue] = useState(false);
     const [updateProfile, setUpdateProfile] = useState(false);
     const [createService, setCreateService] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -57,7 +57,6 @@ export default function ViewProfileClient() {
     const fileInputRef = useRef(null);
     // handle para actualizar servicios
     const handleModalUpdateService = handleSubmit(async (editService) => {
-        console.log(editService);
         const { id, name, duration, description, price, typeVehicles } = editService;
         const data = {
             name,
@@ -66,20 +65,19 @@ export default function ViewProfileClient() {
             price,
             typeVehicles
         }
+        console.log(data);
         const idService = { id };
         const updateService = await updateServiceLaundry(idService.id, data)
-        if (!updateService) {
-            toast.error('Error al actualizar servicio');
-            handleModalUpdateClose();
-            return
-        }
-        getServicesLaundry();
-        toast.success(`${updateService}`, { theme: "light" });
+        console.log(updateService);
         handleModalUpdateClose();
+        getServicesLaundry();
+        if(updateService) {
+            toast.success('Servicio actualizado correctamente', {theme: 'light'});
+        }
 
 
     });
-    
+
     const handleModalUpdateOpen = (idS) => {
         const serviceToEdit = clientServices.find((service) => service.id === idS);
         setServiceSelected(serviceToEdit);
@@ -92,7 +90,7 @@ export default function ViewProfileClient() {
     }
     //   handle para crear servicios
     const handleModalCreate = handleSubmit(async (service) => {
-console.log(service);
+        console.log(service);
         const resp = await newService(service);
         if (!resp) {
             toast.error('Error al crear el servicio');
@@ -121,22 +119,18 @@ console.log(service);
 
     // modal para actualzar perfil del cliente 
     const onSubmitUpdateProfile = handleSubmit(async (dataClient) => {
-        // console.log(dataClient);
+        delete dataClient.imageUrl;
+        delete dataClient.id;
+        console.log(dataClient);
+        const response = await updateProfileClient(dataClient);
+        setUpdateProfile(false);
+        if (response) {
 
-        try {
-            delete dataClient.id;
-            const response = await updateProfileClient(dataClient);
-            if (!response) {
-                toast.error('Error al actualizar datos del cliente');
-                setUpdateProfile(false);
-                return
-            }
-            setUpdateProfile(false);
+            toast.success(`Actualizado correctamente`, { theme: 'light' });
             getProfile();
-            toast.success(`${response}`);
-        } catch (error) {
-            toast.error(`${error}`)
         }
+        getProfile();
+
     })
     const handleModalUpdateProfileOpen = () => {
         setUpdateProfile(true);
@@ -144,38 +138,37 @@ console.log(service);
     const handleModalUpdateProfileClose = () => {
         setUpdateProfile(false);
     }
-    const onclickImg = ()=>{
+    const onclickImg = () => {
         fileInputRef.current.click();
     }
-    const handleUpdateImage = async (img)=>{
+    const handleUpdateImage = async (img) => {
         // const body = {imageUrl: img}
-        setValidateChangue(null);
 
         const formD = new FormData();
-        formD.append('imageUrl',img)
+        formD.append('imageUrl', img)
         const updateImg = await updateImgProfile(formD);
-        console.log(updateImg);
-        if(updateImg){
-            await getProfile();
+        if (updateImg) {
+            getProfile();
             setOpenValidateChangue(false);
-            toast.success('Se ha cambiado la foto exitosamente', {theme: 'light'});
+            setValidateChangue(null);
+            toast.success('Se ha cambiado la foto exitosamente', { theme: 'light' });
         }
     }
-const handleFileChange = (e)=>{
-    const img= e.target.files[0];
-    if (img) {
-        const allowedTypes = ['image/png', 'image/jpeg'];
-    
-        if (allowedTypes.includes(img.type)) {
-          setValidateChangue(img);
-          setOpenValidateChangue(true);
-        } else {
-          toast.error('Solo se permiten archivos PNG y JPG.',{theme: 'light'});
+    const handleFileChange = (e) => {
+        const img = e.target.files[0];
+        if (img) {
+            const allowedTypes = ['image/png', 'image/jpeg'];
+
+            if (allowedTypes.includes(img.type)) {
+                setValidateChangue(img);
+                setOpenValidateChangue(true);
+            } else {
+                toast.error('Solo se permiten archivos PNG y JPG.', { theme: 'light' });
+            }
         }
-      }
-   
-}
-    const closeValidateChangue = ()=>{
+
+    }
+    const closeValidateChangue = () => {
         setOpenValidateChangue(false);
         setValidateChangue(null);
     }
@@ -196,7 +189,6 @@ const handleFileChange = (e)=>{
             return
         }
         getServicesLaundry();
-
         toast.success(`${deleteService}`, { theme: "light" })
         closeModalDelete();
     };
@@ -217,14 +209,9 @@ const handleFileChange = (e)=>{
     ];
     const getProfile = async () => {
         setLoading(true)
-        try {
-            const res = await getProfileClient();
-            setClientData(res);
-            setLoading(false)
-        } catch (error) {
-            toast.error(`Error al traer los datos del lavadero`, { theme: "light" })
-        }
-
+        const res = await getProfileClient();
+        setClientData(res);
+        setLoading(false);
     };
     const getServicesLaundry = async () => {
         try {
@@ -232,9 +219,9 @@ const handleFileChange = (e)=>{
                 offset: `${page}`
             }
             const servicesData = await getServices(query);
-            if(servicesData.length < 5){
+            if (servicesData.length < 5) {
                 setStyleOnMax('hidden')
-            }else{
+            } else {
                 setStyleOnMax('flex')
             }
             setClientServices(servicesData)
@@ -244,18 +231,16 @@ const handleFileChange = (e)=>{
     };
 
     useEffect(() => {
-
-
-        getServicesLaundry();
         getProfile();
+        getServicesLaundry();
         window.scrollTo(0, 0);
-    }, []);
+    }, [validateChangue,page]);
     return (
 
         <>
-             {registerErrors.map((error, i) => (
-            <ModalError isOpen={registerErrors} message={error} key={i} 
-            />))}
+            {registerErrors.map((error, i) => (
+                <ModalError isOpen={registerErrors} message={error} key={i}
+                />))}
             <ToastContainer />
 
             <div>
@@ -263,47 +248,47 @@ const handleFileChange = (e)=>{
             </div>
             <ModalUpdateProfileClient onSubmit={onSubmitUpdateProfile} setValue={setValue} reset={reset} DataUser={clientData} handleSubmit={handleSubmit} isOpen={updateProfile} title={'Actualizar datos del lavadero'} message={'Modificacion de datos'} register={register} errors={errors} buttons={[
                 {
-                    text: "Actualizar",
-                    tipo: "button",
-                    onClick: onSubmitUpdateProfile,
-                    estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
-                }, {
                     text: "Cancelar",
                     tipo: "button",
                     onClick: handleModalUpdateProfileClose,
                     estilos: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ",
-                },
+                }, {
+                    text: "Actualizar",
+                    tipo: "button",
+                    onClick: onSubmitUpdateProfile,
+                    estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
+                }
             ]} />
-             <ReusableModals
-                    isOpen={openValidateChange}
-                    onClose={closeValidateChangue}
-                    title="Actualizar foto"
-                    message={'¿Seguro que quieres cambiar la foto?'}
-                    buttons={[
-                        {
-                            text: 'Cancelar',
-                           onClick: closeValidateChangue,
-                            styles: 'bg-red-500 hover:bg-red-600 text-black font-bold',
-                        },
-                        {
-                            text: 'Cambiar',
-                            onClick: () => handleUpdateImage(validateChangue),
-                            styles: 'bg-gray-300 hover:bg-gray-400 text-gray-800',
-                        }
-                    ]}
-                />
+            <ReusableModals
+                isOpen={openValidateChange}
+                onClose={closeValidateChangue}
+                title="Actualizar foto"
+                message={'¿Seguro que quieres cambiar la foto?'}
+                buttons={[
+                    {
+                        text: 'Cancelar',
+                        onClick: closeValidateChangue,
+                        styles: 'bg-red-500 hover:bg-red-600 text-white font-bold',
+                    },
+                    {
+                        text: 'Cambiar',
+                        onClick: () => handleUpdateImage(validateChangue),
+                        styles: 'bg-blue-500 hover:bg-blue-700 text-white',
+                    }
+                ]}
+            />
             <ModalUpdateService onSubmit={handleModalUpdateService} setValue={setValue} reset={reset} editingService={serviceSelected} handleSubmit={handleSubmit} isOpen={update} title={'Editar Servicio'} register={register} errors={errors} buttons={[
                 {
-                    text: "Editar",
-                    tipo: "button",
-                    onClick: handleModalUpdateService,
-                    estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
-                }, {
                     text: "Cancelar",
                     tipo: "button",
                     onClick: handleModalUpdateClose,
                     estilos: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ",
-                },
+                },{
+                    text: "Editar",
+                    tipo: "button",
+                    onClick: handleModalUpdateService,
+                    estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
+                }, 
             ]} />
             <ServiceRegistrationModal onSubmit={onsubmit} isOpen={createService}
                 title="Crear servicio"
@@ -311,16 +296,16 @@ const handleFileChange = (e)=>{
                 message={"Ingrese datos del servicio"}
                 buttons={[
                     {
-                        text: "Crear",
-                        tipo: "button",
-                        onClick: handleModalCreate,
-                        estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
-                    }, {
                         text: "Cancelar",
                         tipo: "button",
                         onClick: handleModalCreateClose,
                         estilos: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ",
-                    },
+                    },{
+                        text: "Crear",
+                        tipo: "button",
+                        onClick: handleModalCreate,
+                        estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
+                    }, 
                 ]}
                 errors={errors}
                 register={register}
@@ -329,8 +314,7 @@ const handleFileChange = (e)=>{
 
 
 
-
-            <div>
+            <div className='mx-20'>
                 {/* <DivContent className={styles}> */}
                 <h1 className="flex justify-center text-2xl font-bold mt-8 mb-6">MIS SERVICIOS</h1>
                 <ButtonAction estilos={'flex  bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-4 w-auto justify-end'}
@@ -340,7 +324,7 @@ const handleFileChange = (e)=>{
                     stylesTable={stylesTable} stylesThead={stylesThead} stylesTbody={stylesTbody}
                     styleActions={styleActions} />
                 {/* </DivContent> */}
-                <NavPagination styles={'flex justify-center'}  styleOnMax={styleOnMax} page={page} setPage={setPage}/>
+                <NavPagination styles={'flex justify-center'} styleOnMax={styleOnMax} page={page} setPage={setPage} />
                 <ReusableModals
                     isOpen={isModalDelete}
                     onClose={closeModalDelete}
@@ -348,15 +332,17 @@ const handleFileChange = (e)=>{
                     message={'¿Seguro que quiere eliminar el Servicio?'}
                     buttons={[
                         {
-                            text: 'Eliminar',
-                            onClick: () => handleEliminarClick(selectedServiceId),
-                            styles: 'bg-red-500 hover:bg-red-600 text-black font-bold',
-                        },
-                        {
                             text: 'Cancelar',
                             onClick: closeModalDelete,
-                            styles: 'bg-gray-300 hover:bg-gray-400 text-gray-800',
+                            styles: 'bg-red-500 hover:bg-red-600 text-white font-bold',
+                        },
+                        {
+                            text: 'Eliminar',
+                            onClick: () => handleEliminarClick(selectedServiceId),
+                            styles: 'bg-blue-500 hover:bg-blue-700 text-white',
+
                         }
+                        
                     ]}
                 />
 

@@ -8,12 +8,13 @@ import ModelRegister from "../../components/ModalRegister";
 import ModalError from "../../components/ModalError";
 function RegisterUser() {
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const { signup, registerErrors } = useAuth()
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [departments, setDepartments] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
+ 
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (values) => {
@@ -66,6 +67,7 @@ function RegisterUser() {
     }
    
   }
+  
   const getMunicipalities = (id) => {
     Axios.get(`http://localhost:4000/api/users/get-municipality/${id}`)
       .then((Response) => {
@@ -148,17 +150,18 @@ function RegisterUser() {
                     )}</div>
 
                   <div className="col-span-2 relative">
-                    <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Nombre <span className="text-red-500">*</span></label>
+                    <label className="w-full mb-2  font-semibold text-black  px-4 py-2 rounded-md">Nombre <span className="text-red-500">*</span></label>
 
-                    <input type="text" {...register('name', { required: true })} className="w-10/12 mb-2 text-black  px-4 py-2 rounded-md" placeholder="Nombre" />
+                    <input type="text" {...register('name', { required: true })} className="w-10/12 mb-2 text-black  px-4 py-2 capitalize rounded-md" placeholder="Nombre" />
                     {errors.name && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}
+
                   </div>
 
                   <div className="col-span-2 relative">
                     <label className="w-full mb-2  font-semibold text-black px-4 py-2 rounded-md">Apellidos <span className="text-red-500">*</span></label>
-                    <input type="text" {...register('lastName', { required: true })} className="w-10/12  mb-2 text-black px-4 py-2 rounded-md" placeholder="Apellidos" />
+                    <input type="text"  {...register('lastName', { required: true  })}  className="w-10/12  capitalize mb-2 text-black px-4 py-2 rounded-md" placeholder="Apellidos" />
                     {errors.lastName && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}

@@ -9,15 +9,15 @@ export default function ModelRegister({ isOpen, title }) {
 
         <div className='modal-space-container hidden sm:inline-block sm:align-middle sm:h-screen'></div>
 
-        <div id='modal-container' className='modal-container inline-block align-bottom  bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-2/5'>
-          <div className='modal-wrapper bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4'>
-            <div className='modal-wrapper-flex  h-24 items-center flex justify-center  '>
-              <div class="w-12 h-12 bg-gray-500 rounded-full flex items-center justify-center">
+        <div id='modal-container' className='modal-container inline-block align-bottom  bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-4/5'>
+          <div className='modal-wrapper bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 '>
+            <div className='modal-wrapper-flex  h-28 items-center flex justify-center '>
+              <div class="w-12 h-12  rounded-full flex items-center justify-center mr-4">
                 <img src={img} alt="success" />
 
               </div>
 
-              <div className='modal-content text-center mt-3 sm:mt-0 sm:ml-4 sm:text-left'>
+              <div className='modal-content text-center mt-3 w-2/3 sm:mt-0  sm:text-left'>
 
                 <div className='modal-text my-2'>
                   <h3 className='text-2xl font-medium text-center flex justify-center text-gray-900'>{title}</h3>

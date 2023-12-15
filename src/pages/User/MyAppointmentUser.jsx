@@ -82,7 +82,7 @@ export default function MyAppointmentUser() {
                     <div>{loading ? <Spinner /> : (
                         <div>
                             {dat.length > 0 ? (
-                                <div className='flex justify-center'>
+                                <div className='flex justify-center mx-20'>
                                     <ContentTable fields={fields} fieldsMapping={fieldsMapping} data={dat} stylesThead={stylesThead} stylesTable={stylesTable} />
                                 </div>
                             ) : (

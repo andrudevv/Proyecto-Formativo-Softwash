@@ -54,9 +54,9 @@ export default function ModalUpdateProfileUser({
       Object.keys(DataUser).forEach((key) => {
         setValue(key, DataUser[key]);
       });
-    }
-    // else{
-    //   reset()
+  }
+    //else{
+    // reset()
       
     // } 
   }, [DataUser, setValue,reset]);
@@ -121,23 +121,8 @@ export default function ModalUpdateProfileUser({
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}
                   </div>
-                  <div className="col-span-2 relative ">
-                    <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Municipio <span className="text-red-500">*</span></label>
-                    <select {...register('municipalityId', { required: true })} className="font-Pathway Gothic One w-10/12 p-2 bg-white rounded-md border border-gray-300 focus:ring" placeholder="Municipio">
-                      <option >Municipio</option>
-                      {municipalities.map((department) => (
-                        <option
-                          key={department.id}
-                          value={department.id}
-                          style={{ width: "100%" }}
-                        >
 
-                          {department.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
+                  
                   <div className="col-span-2 relative">
                     <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Departamento <span className="text-red-500">*</span></label>
                     <select
@@ -160,9 +145,25 @@ export default function ModalUpdateProfileUser({
                     </select>
                   </div>
 
+                  
+                  <div className="col-span-2 relative ">
+                    <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Municipio <span className="text-red-500">*</span></label>
+                    <select {...register('municipalityId', { required: true })} className="font-Pathway Gothic One w-10/12 p-2 bg-white rounded-md border border-gray-300 focus:ring" placeholder="Municipio">
+                      <option >Municipio</option>
+                      {municipalities.map((department) => (
+                        <option
+                          key={department.id}
+                          value={department.id}
+                          style={{ width: "100%" }}
+                        >
 
+                          {department.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                 
 
-                  {/* Fin de campos de registro de vehículo */}
                 </form>
               </div>
             </div>

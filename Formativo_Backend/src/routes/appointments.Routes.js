@@ -16,8 +16,13 @@ const {
   patchAppointment,
   patchAppointmentState,
 } = require("../schemas/appointments.schema.js");
+
 const { validatorHandler } = require("../middlewares/validator.handler.js");
 const { checkUser, checkLaundry } = require("../middlewares/auth.handler.js");
+const {
+  userRememberAppointment,
+} = require("../utils/userRememberAppointment.js");
+const { userNotifyFinalized } = require("../utils/userNotifyFinalized.js");
 const {
   authRequiredClient,
   authRequiredUser,
@@ -50,7 +55,16 @@ appointmentRouter.post(
         });
       body.time = hourFomatted;
       const rta = await appointment.saveAppointment(body, user);
-      res.status(201).json({ message: "Registro de cita exitoso ", rta });
+      const email = rta.findApp.Vehicle.User.email;
+      const dat = rta.findApp.date;
+      const plate = rta.findApp.Vehicle.plate;
+      const hour = rta.findApp.time;
+      const nameService = rta.findApp.Service.name;
+      const address = rta.findApp.Service.laundry.address;
+      if (rta) {
+        userRememberAppointment(email, dat, hour, plate, nameService, address);
+      }
+      res.status(201).json({ message: "Registro de cita exitoso " });
     } catch (error) {
       console.error(error);
       return res.status(500).json([error.message]);
@@ -68,18 +82,9 @@ appointmentRouter.get(
   checkUser,
   async (req, res) => {
     try {
-      // const date = validador();
       const userId = req.user.id;
       const myappointments = await appointment.findMyAppointments(userId);
-      // const rt = await appointment.getCitas(date);
 
-      // console.log(formattedResult);
-
-      // const dt = rt.date;
-      // const time = rt.time;
-      // const Vehicle = rt.Vehicle.plate;
-      // const useremail = rt.Vehicle.User.email;
-      // console.log(dt, time, Vehicle, useremail);
       res.status(200).json(myappointments);
     } catch (error) {
       console.error(error);
@@ -161,15 +166,18 @@ appointmentRouter.get(
   }
 );
 
-
 appointmentRouter.get(
-  "/get-process-appointment",
+  "/get-process-appointment/",
   authRequiredClient,
   checkLaundry,
+  validatorHandler(getByQuery, "query"),
+
   async (req, res) => {
     try {
+      const query = req.query; 
+      const body = req.body;
       const id = req.user.id;
-      const appointmentProcess = await appointment.findProcessAppointments(id);
+      const appointmentProcess = await appointment.findProcessAppointments(id,query);
       res.status(201).json(appointmentProcess);
     } catch (error) {
       console.error(error);
@@ -188,7 +196,11 @@ appointmentRouter.patch(
   validatorHandler(patchAppointmentParams, "params"),
   async (req, res) => {
     try {
-      const {id} = req.params;
+      const { id } = req.params;
+      const findAppointment = await appointment.foundAppointment(id);
+      const plate = findAppointment.Vehicle.plate;
+      const email = findAppointment.Vehicle.User.email;
+      userNotifyFinalized(email, plate);
       const updateFinalized = await appointment.appointmentFinalized(id);
       res.status(201).json(updateFinalized);
     } catch (error) {
@@ -206,26 +218,19 @@ appointmentRouter.get(
   "/get-appointment-reschedule/:id",
   authRequiredClient,
   checkLaundry,
-  // validatorHandler(getByQuery, "query"),
-  // validatorHandler(getAbilitySchema, "params"),
+
   async (req, res) => {
     try {
       const { id } = req.params;
       const idClient = req.user.id;
       console.log(idClient, id);
-      // validateDate(date);
-      // if (!validateDate)
-      //   return res.status(404).json({
-      //     message:
-      //       "error en el formato de fecha por favor ingrese una fecha valida o proxima fecha a partir de la fecha actual ",
-      //   });
+
       const findAppointment = await appointment.findAppointmentForReschedule(
         id,
         idClient
       );
       res.status(200).json(findAppointment);
     } catch (error) {
-      console.error(error);
       return res.status(500).json([error.message]);
     }
     (err, res) => {
@@ -291,7 +296,7 @@ appointmentRouter.get(
 appointmentRouter.patch(
   "/my-appointments/:id",
   authRequiredClient,
-  // checkUser,
+  checkLaundry,
   validatorHandler(patchAppointmentParams, "params"),
   validatorHandler(patchAppointmentState, "body"),
   async (req, res) => {
@@ -299,26 +304,12 @@ appointmentRouter.patch(
       const { id } = req.params;
       const userId = req.user.id;
       const body = req.body;
-      // const dateValidated = validateDate(body.date);
-      // if (!dateValidated)
-      //   return res.status(404).json({
-      //     message:
-      //       "error en el formato de fecha por favor ingrese una fecha valida o proxima fecha a partir de la fecha actual ",
-      //   });
-      // body.date = dateValidated;
-      // const hourFomatted = validateHour12(body.time);
-      // if (!hourFomatted)
-      //   return res.status(404).json({
-      //     message:
-      //       "error en el formato de hora por favor ingrese una hora valida ",
-      //   });
-      // body.time = hourFomatted;
-      const updateMyppointmentsState =
-        await appointment.updateMyAppointmentState(id, userId, body);
+
+      const updateMyppointmentsState = await appointment.updateMyAppointmentState(id, userId, body);
       res.status(201).json(updateMyppointmentsState);
     } catch (error) {
       console.error(error);
-      return res.status(500).json([error.message]);
+      return res.status(400).json([error.message]);
     }
     (err, res) => {
       res.status(400).json({ error: err.message });
@@ -389,30 +380,5 @@ appointmentRouter.delete(
     };
   }
 );
-// appointmentRouter.patch(
-//   "/my-appointments/:id",
-//   authRequiredClient,
-//   checkUser,
-//   validatorHandler(patchAppointmentParams, "params"),
-//   validatorHandler(patchAppointment, "body"),
-//   async (req, res) => {
-//     try {
-//       const { id } = req.params;
-//       const userId = req.user.id;
-//       const body = req.body;
-//       const updateMyppointments = await appointment.updateMyAppointment(
-//         userId,
-//         id,
-//         body
-//       );
-//       res.status(200).json(updateMyppointments);
-//     } catch (error) {
-//       console.error(error);
-//       return res.status(500).json([error.message]);
-//     }
-//     (err, res) => {
-//       res.status(400).json({ error: err.message });
-//     };
-//   }
-// );
+
 module.exports = appointmentRouter;

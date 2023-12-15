@@ -16,7 +16,7 @@ const styleActions = ' flex justify-between items-center md:auto-cols-max sm:spa
 const fieldsMapping = {
     "date": "Fecha",
     "time": "Hora",
-    "observations": "Observaciones",
+    "observations": "Observaciónes",
     "state": "Estado",
     "Vehicle.plate": "Placa",
     "Service.name": "Nombre del Servicio",
@@ -47,8 +47,8 @@ export default function AppointmentsClient() {
         }
     }
     const handleModalProccess = (id) => {
-        setProcess(true);
         setIdProcess(id)
+        setProcess(true);
         // console.log('proceso', id);
     }
     const closeModalProcess = () => {
@@ -133,12 +133,12 @@ export default function AppointmentsClient() {
                 <h2>Control De Citas Diario</h2>
             </div>
 
-            {loading ? <Spinner /> : appointments.length > 0 ? (<div>
+            {loading ? <Spinner /> : appointments.length > 0 ? <div className='mx-20'>
                 <ContentTableAppointment fields={fields} data={appointments} fieldsMapping={fieldsMapping}
                     buttonActions={(id) => customButtons.map((button, index) => (<ButtonAction key={index} {...button} onClick={() => button.onClick(id)} />))}
                     stylesTable={stylesTable} stylesThead={stylesThead} stylesTbody={stylesTbody}
                     styleActions={styleActions} />
-            </div>) : (<><div className='flex justify-center items-center bg-blue-100 h-52 mt-6 text-2xl'>
+            </div> : (<><div className='flex justify-center items-center  bg-blue-100 h-52 mt-6 text-2xl'>
                 <h2 className='font-semibold'>No tienes mas citas para este día</h2>
             </div></>)}
 
@@ -155,12 +155,12 @@ export default function AppointmentsClient() {
                     {
                         text: 'Cancelar',
                         onClick: closeModalProcess,
-                        styles: 'bg-red-500 hover:bg-red-700 text-gray-800',
+                        styles: 'bg-red-500 hover:bg-red-700 text-white',
                     },
                     {
                         text: 'Enviar a proceso',
                         onClick: () => handleUpdateProcess(idProcess),
-                        styles: 'bg-green-500 hover:bg-green-600 text-black font-bold',
+                        styles: 'bg-green-500 hover:bg-green-700 text-white font-bold',
                     }
                 ]}
             />
@@ -175,11 +175,11 @@ export default function AppointmentsClient() {
                     {
                         text: 'Cancelar',
                         onClick: closeModalAbsence,
-                        styles: 'bg-red-500 hover:bg-red-700 text-gray-800',
+                        styles: 'bg-red-500 hover:bg-red-700 text-white',
                     }, {
                         text: 'Confirmar inasistencia',
                         onClick: () => handleUpdateAbsence(idProcess),
-                        styles: 'bg-blue-500 hover:bg-blue-600 text-black font-bold',
+                        styles: 'bg-blue-500 hover:bg-blue-600 text-white font-bold',
                     }
                 ]}
             />

@@ -33,15 +33,9 @@ export const verifyTokenRequest = () => Axios.get(`${API}/users/verify-user`);
 //ruta para actualzar datos del usuario
 export const updateUser = (userUpdate) => Axios.patch(`${API}/users/`, userUpdate)
 
-export const resetPassword = (data) =>
-  Axios.post(`${API}/users/forgot-password`, data)
-    .then((Response) => {
-      return Response;
-    })
-    .catch((error) => {
-      console.log(error);
-      throw error;
-    });
+// ruta para cambiar la contraseña con el token
+export const updatePasswordUser = (token, newPassword) => Axios.post(`${API}/users/new-password-user/${token}`, newPassword)
+
 
 // ruta para crear la cita    
 export const registerAppointment = (appointment) => Axios.post(`${API}/appointment/create-appointment` , appointment)
@@ -54,6 +48,7 @@ export const getProfileWithServices = (id,query) => Axios.get(`${API}/users/view
 // /actualizar para recuperar clave en el usuario
 
 // /restablecer  ruta para correo restablecer ingresando correo
+export const resetPassword = (email) => Axios.post(`${API}/users/forgot-password-user`, email)
 
 // export const verifyTokenRequest = () => Axios.get(`${API}/verify`);
 // export const logoutRequest = () => Axios.post(`${API}/logout`);
@@ -92,17 +87,9 @@ export const deleteService = (id) => Axios.delete(`${API}/service/${id}`);
 export const updateClient = (dataClient) => Axios.patch(`${API}/client`, dataClient);
 export const clientVerifyTokenRequest = () => Axios.get(`${API}/client/verify`);
 
-export const resetPasswordClient = (data) =>
-  Axios.post(`${API}/client/forgot-password`, data)
-    .then((Response) => {
-      console.log("correo enviado ", Response);
-      return Response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-      throw error;
-    });
-
+export const resetPasswordClient = (email) => Axios.post(`${API}/client/forgot-password-client`, email)
+    
+export const updateNewPassword = (token, newPassword) => Axios.post(`${API}/client/new-password-client/${token}`, newPassword)
 
 
 
@@ -129,7 +116,7 @@ export const FindLaundry = (queryFind) => Axios.get(`${API}/client/`,{ params: q
 
 
 //ruta para traer las citas que el cliente envia a proceso
-export const getProcessAppointments =() => Axios.get(`${API}/appointment/get-process-appointment`);
+export const getProcessAppointments = (query) => Axios.get(`${API}/appointment/get-process-appointment/`, {params: query});
 //ruta para actualizar o reagendar la cita 
 export const updateAndReschedule = (idAppointment,appointment) => Axios.patch(`${API}/appointment/update-appointment/${idAppointment}`,appointment)
 

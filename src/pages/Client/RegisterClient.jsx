@@ -116,14 +116,14 @@ function RegisterClient() {
     const handleHourOpen = (e) => {
         const dt = `${e.target.value}`;
         const date = new Date(`2000-01-01 ${dt}`);
-        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase().replace(/\./g, '');
         setHourOpen(`${formattedTime}`)
         console.log(hourOpen);
     }
     const handleHourClosing = (e) => {
         const input = e.target.value;
         const date = new Date(`2000-01-01 ${input}`);
-        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }).toUpperCase().replace(/\./g, '');
         setHourClosing(`${formattedTime}`);
         console.log(hourClosing);
     }

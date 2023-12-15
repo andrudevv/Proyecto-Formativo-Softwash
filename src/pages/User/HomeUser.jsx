@@ -64,7 +64,7 @@ export default function HomeUser() {
     
     <div className="items-center justify-start">  
       <div className="max-h-2xl rounded-md ">
-        <div className="w-auto -mx-24">
+        <div className="w-auto ">
       <div>
       <img  className=" h-full object-cover" src={imgtitulo} alt="titulo"/>
       </div>

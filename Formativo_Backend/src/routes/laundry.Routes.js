@@ -5,7 +5,7 @@ const { checkLaundry, checkUser } = require("../middlewares/auth.handler.js");
 const { authRequiredClient } = require("../middlewares/validateToken.js");
 const { createAccessToken } = require("../lib/jwt.js");
 const path = require("path");
-const { register } = require("../utils/clientEmailRegister.js");
+const { registerClient } = require("../utils/clientEmailRegister.js");
 const fs = require("node:fs");
 const jwt = require("jsonwebtoken");
 const { config } = require("../config/config.js");
@@ -29,6 +29,7 @@ laundryRouter.post(
     try {
       const body = req.body;
       const newClient = await Laundry.regiterClient(body);
+      registerClient(newClient.email, newClient.name);
       const token = await createAccessToken({
         id: newClient.id,
         rut: newClient.rutLaundry,
@@ -169,8 +170,9 @@ laundryRouter.patch(
       const update = await Laundry.updateClient(user.id, body);
       return res.status(201).json(update);
     } catch (error) {
-      res.json([error.message]);
+      
       next(error);
+      res.status(400).json([error.message]);
       // return res.status(400).json([error.message]);
     }
     (err, res) => {
@@ -206,9 +208,8 @@ laundryRouter.patch(
       const updateImg = await Laundry.updateImgClient(user, img);
       return res.status(201).json(updateImg);
     } catch (error) {
-      res.json([error.message]);
       next(error);
-      // return res.status(400).json([error.message]);
+     res.status(400).json([error.message]);
     }
     (err, res) => {
       // Este middleware manejará los errores generados por el validador
@@ -217,25 +218,29 @@ laundryRouter.patch(
   }
 );
 //ruta para tomar el correo de restablecer contraseña
-laundryRouter.post("/forgot-password", async (req, res, next) => {
+laundryRouter.post("/forgot-password-client", async (req, res, next) => {
   try {
-    const { email } = req.body;
-    const send = await Laundry.sendEmailForgot(email);
+    const  bod = req.body;
+    const send = await Laundry.sendEmailForgot(bod.email);
     res.status(201).json(send);
   } catch (error) {
     next(error);
+    res.status(400).json([error.message]);
+
   }
 });
 //ruta para cambiar contraseña por medio de la redireccion en el correo
-laundryRouter.post("/change-password/:token", async (req, res, next) => {
+laundryRouter.post("/new-password-client/:token", async (req, res, next) => {
   try {
     const { token } = req.params;
     // const user = await service.reset(token);
-    const { newPassword } = req.body;
-    const rta = await Laundry.changePassword(token, newPassword);
-    res.json(rta);
+    const bodyNewPassword  = req.body;
+    const rta = await Laundry.changePassword(token, bodyNewPassword);
+    res.status(201).json(rta);
   } catch (error) {
     next(error);
+    res.status(400).json([error.message]);
+
   }
 });
 

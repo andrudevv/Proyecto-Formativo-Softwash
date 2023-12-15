@@ -173,7 +173,7 @@ export default function () {
             </div>
             </div>) : dataAbsence.length === 0 ? <div className='flex justify-center items-center bg-blue-100 h-52 mt-6 text-2xl'>
                 <h2 className='font-semibold'>No hay resultados</h2>
-            </div> : <> <div>
+            </div> : <> <div className='mx-20'>
                 <ContentTableAppointment fields={fields} data={dataAbsence} fieldsMapping={fieldsMapping}
                     buttonActions={(id) => customButtons.map((button, index) => (<ButtonAction key={index} {...button} onClick={() => button.onClick(id)} />))}
                     stylesTable={stylesTable} stylesThead={stylesThead} stylesTbody={stylesTbody}

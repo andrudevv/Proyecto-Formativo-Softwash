@@ -92,20 +92,15 @@ class AppointmentService {
         serviceId: data.serviceId,
       },
     });
-    if (existingAppointment && existingAppointment.state === "pendiente" || existingAppointment.state === "no asitió" ) {
+    if (
+      (existingAppointment && existingAppointment.state === "pendiente")
+    ) {
       throw new Error(
         "No puedes agendar esta cita porque ya hay una cita pendiente para este vehículo y servicio."
       );
     }
-    if(existingAppointment && existingAppointment.state === 'finalizado'){
-      let updateData = {
-        ...data,
-        state:'pendiente'
-      }
-      const appointment= await Appointment.update(updateData,{where:{id:existingAppointment.id }});
-      return { message: "Cita agendada con exito", appointment}
-    }
-    
+   
+
     const canregister = await this.search(data, user);
     if (!canregister) {
       throw new Error("Error al guardar");
@@ -113,8 +108,31 @@ class AppointmentService {
     const save = await Appointment.create(data);
     if (save[0] === 0) {
       throw new Error("Error al guardar");
-    }
-    return { message: "Cita agendada con exito", save };
+    } 
+    const findApp = await Appointment.findOne({
+      include: [{
+        model:Vehicle, 
+        attributes:['plate'],
+        include:[{
+          model:User,as :'User',
+          attributes:['email']
+        }]
+
+      },{
+        model: Service,
+        attributes:['name'],
+        include:[{
+          model:Laundry,
+          attributes:['address']
+        }],
+      }
+    ],
+      where: {
+        vehicleId: data.vehicleId,
+        serviceId: data.serviceId,
+      },
+    })
+    return { message: "Cita agendada con exito", findApp };
   }
 
   // servicio para que el usuario busque las citas que tiene agendadas en cualquier lavadero
@@ -237,13 +255,7 @@ class AppointmentService {
           model: Service,
           attributes: ["name"],
           where: { laundryId: id },
-          // include: [
-          //   {
-          //     model: Laundry,
-          //     attributes: [],
-          //     where: { id: id },
-          //   },
-          // ],
+        
         },
       ],
       where: { date: date },
@@ -255,9 +267,9 @@ class AppointmentService {
     }
     const { state } = query;
     if (state) {
-      options.where.state = state ;
+      options.where.state = state;
     }
-   
+
     const findAppointments = await Appointment.findAll(options);
 
     return findAppointments;
@@ -273,15 +285,13 @@ class AppointmentService {
           model: Service,
           attributes: ["name"],
           where: { laundryId: id },
-         
         },
       ],
-      
     };
 
     const { date } = query;
     if (date) {
-      options.where = {...options.where , date:date };
+      options.where = { ...options.where, date: date };
     }
     const { limit = 5, offset } = query;
     if (limit && offset) {
@@ -290,11 +300,11 @@ class AppointmentService {
     }
     const { state } = query;
     if (state) {
-      options.where =  {...options.where, state: state} ;
+      options.where = { ...options.where, state: state };
     }
     const { plate } = query;
     if (plate) {
-      options.include[0].where = {plate: plate};
+      options.include[0].where = { plate: plate };
     }
     const findAppointments = await Appointment.findAll(options);
     return findAppointments;
@@ -312,8 +322,6 @@ class AppointmentService {
       throw new Error("No hay horarios disponibles para este dia");
     }
     return findhour;
-
- 
   }
 
   // una parte de buscar disponibilidad junto con el otro servicio findAllAvilityByDate
@@ -353,15 +361,7 @@ class AppointmentService {
           model: Service,
           attributes: [],
           where: { laundryId: id },
-          // include: [
-          //   {
-          //     model: Laundry,
-          //     attributes: [],
-          //     where: {
-          //       id: id, // Filtra por el ID del lavadero
-          //     },
-          //   },
-          // ],
+        
         },
       ],
       where: { date: date },
@@ -388,24 +388,30 @@ class AppointmentService {
 
     return findAppointments;
   }
-//servicio para traer las citas que tiene el proceso y en el lavado
-  async findProcessAppointments(id){
-    
-    const findProcess = await Appointment.findAll({
-      include:[{
-        model:Service,
-        where: { laundryId: id}
+  //servicio para traer las citas que tiene el proceso y en el lavado
+  async findProcessAppointments(id,query) {
+    const options = {
+      include: [
+        {
+          model: Service,
+          where: { laundryId: id },
+        },
+        {
+          model: Vehicle,
+        },
+      ],
+      where: {
+        state: "en proceso",
       },
-    {
-      model: Vehicle,
-    }],
-      where:{
-        state:'en proceso'
-      }
-    });
+    }
+    const { limit = 5, offset } = query;
+    if (limit && offset) {
+      options.limit = parseInt(limit);
+      options.offset = parseInt(limit * offset);
+    }
+    const findProcess = await Appointment.findAll(options);
 
     return findProcess;
-
   }
 
   async updateMyAppointmentState(idAppointment, idClient, newState) {
@@ -420,7 +426,6 @@ class AppointmentService {
       ],
       where: { id: idAppointment },
     });
-    console.log(findAppointment);
     if (!findAppointment) {
       throw new Error("La cita no se encontró");
     }
@@ -430,19 +435,30 @@ class AppointmentService {
     if (updateAppointment === 0) {
       throw new Error("Error al actualizar el estado de la cita");
     }
-    console.log(updateAppointment);
     return true;
   }
-  //servicio para actualizar la cita a finalizada
-  async appointmentFinalized(id){
-    const state = {state:'finalizado'};
-    const updateA = await Appointment.update(state,{
-      where: {id: id}
+  //servicio para buscar la cita y regresar la placa para el correo
+  async foundAppointment(id){
+    const find = Appointment.findOne({
+      include:[{
+        model: Vehicle,
+        include:[{
+          attributes:['email'],
+          model: User, as: 'User'
+        }],
+      }],
+      where:{ id: id}
     })
-    if(updateA=== 0){
-      throw new Error('error al actualizar')
-    }
-    return true
+    return find;
+
+  }
+  //servicio para eliminar la cita  finalizada
+  async appointmentFinalized(id) {
+    const appointment = Appointment.findOne({
+      where: { id: id },
+    });
+    await appointment.destroy();
+    return true;
   }
   //servicio para actualizar la cita con todos los datos
   async rescheduleAppointment(idAppointment, idClient, newData) {
@@ -465,21 +481,23 @@ class AppointmentService {
     }
     return true;
   }
-  async deleteAppointment(idAppointment, idClient){
+  async deleteAppointment(idAppointment, idClient) {
     const options = {
-      include: [{
-        model: Service,
-        where: { laundryId: idClient },
-      }],
-      where: { id: idAppointment }
+      include: [
+        {
+          model: Service,
+          where: { laundryId: idClient },
+        },
+      ],
+      where: { id: idAppointment },
+    };
+    const deleted = Appointment.findOne(options);
+    if (!deleted) {
+      throw new Error("No se encontro la cita");
     }
-    const deleted = Appointment.findOne(options)
-    if(!deleted){
-      throw new Error('No se encontro la cita');
-    }
-    const deleteAppointment = await Appointment.destroy(options)
-    if(deleteAppointment === 0){
-      throw new Error('No se pudo eliminar la cita');
+    const deleteAppointment = await Appointment.destroy(options);
+    if (deleteAppointment === 0) {
+      throw new Error("No se pudo eliminar la cita");
     }
     return true;
   }

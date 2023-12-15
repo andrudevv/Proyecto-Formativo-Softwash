@@ -46,8 +46,8 @@ userRouter.post(
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newUser = await service.registerUser(body);
-      // await register(newUser.email, newUser.name);
+      const newUser = await service.registerUser(body); 
+      register(newUser.email, newUser.name);
       const token = await createAccessToken({
         id: newUser.id,
         document: newUser.documentUser,
@@ -120,34 +120,7 @@ userRouter.post("/change-password/:token", async (req, res, next) => {
   }
 });
 
-// buscar todos los lavaderos segun el usuario realize el filtro
-// userRouter.get(
-//   "/getlaundrys",
-//   authRequiredUser,
-//   checkUser,
-//   validatorHandler(getLaundrysSchema, "body"),
-//   async (req, res, next) => {
-//     try {
-//       const body = req.body;
 
-//       const rta = await Laundry.findAllsWhere(
-//         body.departmentId,
-//         body.municipalityId
-//       );
-      
-//       res.status(201).json({ message: "lavadero", rta });
-//     } catch (error) {
-//       console.error(error);
-
-//       next(error);
-//       return res.status(500).json({ message: error.message });
-//     }
-//     (err, res) => {
-//       // Este middleware manejará los errores generados por el validador
-//       res.status(400).json({ error: err.message });
-//     };
-//   }
-// );
 
 
 userRouter.get(
@@ -197,16 +170,15 @@ userRouter.get(
 userRouter.patch(
   "/",
   authRequiredUser,
-  // checkLaundry,
+  checkUser,
   validatorHandler(updateUserShema, "body"),
   async (req, res, next) => {
     try {
       const body = req.body;
-      const user = req.user;
-      const update = await service.updateUser(user.id, body);
+      const user = req.user.id;
+      const update = await service.updateUser(user, body);
       res.status(201).json(update);
     } catch (error) {
-      // res.json([error.message]);
       next(error);
       res.status(400).json([error.message]);
     }
@@ -294,20 +266,29 @@ userRouter.get("/get-municipality/:id", async (req, res, next) => {
   };
 });
 
+// ruta para enviar correo de recuperacion
+userRouter.post("/forgot-password-user", async (req, res, next) => {
+  try {
+    const  bod = req.body;
+    const send = await Laundry.sendEmailForgot(bod.email);
+    res.status(201).json(send);
+  } catch (error) {
+    next(error);
+    return res.status(400).json([error.message]);
+  }
+});
 
 
 //actualizar la contraseña por medio de token
-userRouter.get("/reset-password/:token", async (req, res, next) => {
+userRouter.post("/new-password-user/:token", async (req, res, next) => {
   try {
-    const { tokenUser } = req.params;
-    const { newPassword } = req.body;
-    const user = await service.changePassword(tokenUser, newPassword);
+    const { token } = req.params;
+    const bod = req.body;
+    const user = await service.changePassword(token, bod.newPassword);
     res.status(201).json(user);
   } catch (error) {
-    console.error(error);
-
     next(error);
-    return res.status(500).json([error.message]);
+    return res.status(400).json([error.message]);
   }
   (err, res) => {
     // Este middleware manejará los errores generados por el validador

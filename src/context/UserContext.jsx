@@ -13,6 +13,7 @@ import { registerRequest,
     availabilityFound,
     registerAppointment,
     getProfileWithServices,
+    updatePasswordUser,
     deleteVehicleUser } from "../services/api/auth";
 import Cookies from "js-cookie";
 export const AuthUserContext = createContext()
@@ -118,7 +119,7 @@ export const AuthUserProvider = ({ children }) => {
     const updateUserProfile = async (upUser) =>{
         try {
             const response = await updateUser(upUser);
-            return response.data.message;
+            return response.data;
         } catch (error) {
             setRegisterErrors(error.response.data)
         }
@@ -150,8 +151,7 @@ export const AuthUserProvider = ({ children }) => {
     const deleteVehicle = async (id) =>{
         try {
              const response = await deleteVehicleUser(id);
-             return response.data.message;
-            //  setSuccessMessage(response.data.message)
+             return response.data;
 
         } catch (error) {
             setRegisterErrors(error.response.data)
@@ -159,7 +159,8 @@ export const AuthUserProvider = ({ children }) => {
     }
     const updateVehicle = async (id,vehicle) =>{
         try {
-            await updateVehicleRequest(id,vehicle);
+            const updateV = await updateVehicleRequest(id,vehicle);
+            return updateV.data;
         } catch (error) {
             setRegisterErrors(error.response.data)
             
@@ -170,12 +171,22 @@ export const AuthUserProvider = ({ children }) => {
         setUser(null);
         setIsAuthenticatedUser(false);
     };
+    const newPasswordUser =async (token, email)=>{
+        try {
+            const newPassword = await updatePasswordUser(token, email);
+            return newPassword.data.message;
+            
+        } catch (error) {
+            setRegisterErrors(error.response.data);
+        }
+
+    }
     const resetEmail = async (email) => {
         try {
             const res = await resetPassword(email);
-            return res
+            return res.data.message;
         } catch (error) {
-            console.log(error.response);
+            setRegisterErrors(error.response.data);
         }
     }
     useEffect(() => {
@@ -227,6 +238,7 @@ export const AuthUserProvider = ({ children }) => {
             getAppointmentsUser,
             getProfile,
             resetEmail,
+            newPasswordUser
            
         }}>
             {children}

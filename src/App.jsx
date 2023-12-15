@@ -28,7 +28,7 @@ import CreateAppointment from "./pages/User/CreateAppointment";
 import RescheduleAppointmens from "./pages/Client/RescheduleAppointmens";
 import AppointmentsClient from "./pages/Client/AppointmentsClient";
 import UpdateAppointment from "./pages/Client/UpdateAppointment";
-
+import NewPasswordClient from "./utils/NewPasswordClient";
 function App() {
   return (
 
@@ -42,15 +42,19 @@ function App() {
               <Route path="/sign-in-user"  element={ <LoginUser />} />
               <Route path="/register-user" element={ <RegisterUser />} />
               <Route path="/ensayo" element={<ModalRegisterVehicle />} />
-              <Route path="/*" element={<NotFound404 />} />
               <Route path="/reset-password-user" element={ <UserEmailReset />} />
+              <Route path="/register-client" element={ <RegisterClient />}  />
+              <Route path="/sign-in-client" element={<LoginClient />} />
+              <Route path="/reset-password-client" element={ <ClientEmailReset />}/>
+<Route path="/new-password-client/:token" element={ <NewPasswordClient />}/>
+<Route path="/new-password-user/:token" element={ <NewPasswordClient />}/>
+              <Route path="/*" element={<NotFound404 />} />
 
               {/* <Route path="/my-vehicles" element={<MyVehicles/>} /> */}
               // rutas protegidas usuario
               <Route element={<ProtectedRoutesUser />}>
                 <Route path="view-profile-user" element={<ViewProfile />} />
                 <Route path="home-user" element={<HomeUser />} />
-                <Route path="logout" element={<h1>hasta pronto </h1>} />
                 <Route path="search" element={<FindLaundry/>} />
                 <Route path="my-appointments" element={<MyAppointmentUser />} />
               <Route path="profile-laundry/:id" element={<ViewProfileLaundry/>} />
@@ -58,9 +62,6 @@ function App() {
               </Route>
 
 
-              <Route path="/register-client" element={ <RegisterClient />}  />
-              <Route path="/sign-in-client" element={<LoginClient />} />
-              <Route path="/reset-password-client" element={ <ClientEmailReset />}/>
 
               // rutas protegidas cliente
               <Route element={<ProtectedRoutesClient />}>
@@ -69,7 +70,6 @@ function App() {
                 <Route path="/view-appointments" element={<AppointmentsClient/>} />
                 <Route path="/missed-appointments" element={<RescheduleAppointmens/>} />
                 <Route path="/reschedule-appointment/:id" element={<UpdateAppointment/>}  />
-                <Route path="/logout" element={<h1>hasta pronto </h1>} />
               </Route>
             </Routes>
           </main>

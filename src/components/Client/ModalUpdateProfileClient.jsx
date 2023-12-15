@@ -132,33 +132,17 @@ export default function ModalUpdateProfileUser({
                   </div>
                   <div className='col-span-2 flex flex-col relative'>
                     <label className='font-semibold text-gray-700'>Hora Apertura</label>
-                    <input type="text" {...register('aperture', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="07:00 AM" />
+                    <input type="time" {...register('aperture', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="07:00 AM" />
                     {errors.aperture && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}
                   </div>
                   <div className='col-span-2 flex flex-col relative'>
                     <label className='font-semibold text-gray-700'>Hora Cierre</label>
-                    <input type="text" {...register('closing', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="05:00 PM" />
+                    <input type="time" {...register('closing', { required: true })} className="mt-1 p-2 border border-gray-300 rounded-md" placeholder="05:00 PM" />
                     {errors.closing && (
                       <p className="absolute right-0 top-0  text-red-500">&#9888;requerido</p>
                     )}
-                  </div>
-                  <div className="col-span-2 relative ">
-                    <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Municipio <span className="text-red-500">*</span></label>
-                    <select  {...register('municipalityId', { required: true })} className="font-Pathway Gothic One w-10/12 p-2 bg-white rounded-md border border-gray-300 focus:ring" placeholder="Municipio">
-                      <option >Municipio</option>
-                      {municipalities.map((department) => (
-                        <option
-                          key={department.id}
-                          value={department.id}
-                          style={{ width: "100%" }}
-                        >
-
-                          {department.name}
-                        </option>
-                      ))}
-                    </select>
                   </div>
 
                   <div className="col-span-2 relative">
@@ -183,9 +167,24 @@ export default function ModalUpdateProfileUser({
                     </select>
                   </div>
 
+                  <div className="col-span-2 relative ">
+                    <label className="w-full  font-semibold text-black px-4 py-2 rounded-md">Municipio <span className="text-red-500">*</span></label>
+                    <select  {...register('municipalityId', { required: true })} className="font-Pathway Gothic One w-10/12 p-2 bg-white rounded-md border border-gray-300 focus:ring" placeholder="Municipio">
+                      <option >Municipio</option>
+                      {municipalities.map((department) => (
+                        <option
+                          key={department.id}
+                          value={department.id}
+                          style={{ width: "100%" }}
+                        >
+
+                          {department.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
 
-                  {/* Fin de campos de registro de vehículo */}
                 </form>
               </div>
             </div>
@@ -196,8 +195,7 @@ export default function ModalUpdateProfileUser({
               <button
                 key={index}
                 onClick={() => button.onClick && button.onClick()}
-                className={`${index > 0 ? 'ml-3' : ''
-                  } w-full inline-flex justify-center rounded-md border border-gray-300 shadow-md px-4 py-2  font-medium text-gray-700  focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto sm:text-sm ${button.estilos}`}
+                className={` w-full inline-flex justify-center rounded-md border border-gray-300 shadow-md px-4 py-2  font-medium text-gray-700  focus:outline-none focus:ring-2 focus:ring-offset-2 sm:w-auto sm:text-sm ${button.estilos}`}
               >
                 {button.text}
               </button>

@@ -51,7 +51,7 @@ class Services {
     const options = {
       where: { laundry_id: id },
     }
-    const {offset, limit = 10} = query;
+    const {offset, limit = 5} = query;
     if (offset) {
       options.limit = parseInt(limit);
       options.offset = parseInt(limit * offset);
@@ -73,7 +73,7 @@ class Services {
       throw new Error("no hay datos para actualizar");
     }
 
-    return { message: "Servicio actualizado ", update: true };
+    return true ;
   }
 
   async deleteService(idService, idClient) {
@@ -88,7 +88,7 @@ class Services {
       where: { serviceId : findService.id}
     })
     if(findserviceWithAppointment){
-      throw new Error('No puede eliminar el servicio, tiene citas pendientes con el servicio');
+      throw new Error('No puede eliminar el servicio, tiene citas pendientes aún.');
     }
 
     const deleted = await Service.destroy({
@@ -99,33 +99,7 @@ class Services {
     }
     return { message: "Servicio eliminado exitosamente ", deleted: true };
   }
-  // async find(query) {
-  //   const options = {
-  //     include: ["category"],
-  //     where: {},
-  //   };
-  //   const { limit, offset } = query;
-  //   if (limit && offset) {
-  //     options.limit = limit;
-  //     options.offset = offset;
-  //   }
-
-  //   const { price } = query;
-  //   if (price) {
-  //     options.where.price = price;
-  //   }
-
-  //   const { price_min, price_max } = query;
-  //   if (price_min && price_max) {
-  //     options.where.price = {
-  //       [Op.gte]: price_min,
-  //       [Op.lte]: price_max,
-  //     };
-  //   }
-  //   const products = await Service.findAll(options);
-  //   return products;
-  // }
-
+ 
   async findOne(id) {
     const service = Service.find((item) => item.id === id);
     if (!service) {

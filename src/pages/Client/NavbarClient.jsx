@@ -13,7 +13,7 @@ export default function NavbarClient() {
   const [modalLogout, setModalLogout] = useState(false);
   const [openLogout, setOpenLogout] = useState(false);
 
-  const closeModalDelete = () => {
+  const closeModalOpen = () => {
     setOpenLogout(false);
   }
   const openModalClose = () => {
@@ -36,13 +36,13 @@ export default function NavbarClient() {
     <>
       <ReusableModals
         isOpen={openLogout}
-        onClose={closeModalDelete}
+        onClose={closeModalOpen}
         title="Cerrar Sesión"
         message={'¿Seguro que quieres cerrar sesión?'}
         buttons={[
           {
             text: 'Cancelar',
-            onClick: closeModalDelete,
+            onClick: closeModalOpen,
             styles: 'bg-red-500 hover:bg-red-600 text-white ml-4',
           },
           {
@@ -57,7 +57,7 @@ export default function NavbarClient() {
         <div className="flex items-center">
           <img className="text-white rounded-md w-16 ml-6" src={img} alt="logo" />
           <div className="ml-4 md:ml-6">
-            <p className="text-white font-Pathway Gothic One text-2xl mx-6">SoftWash</p>
+            <p className="text-white font-bold text-2xl mx-4">SoftWash</p>
           </div>
         </div>
         <div className="flex items-center mt-2 md:mt-0 md:ml-6">
@@ -66,7 +66,7 @@ export default function NavbarClient() {
             <button className="text-white hover:text-cyan-400"><Link to="/view-appointments" className="font-Pathway Gothic One font-bold mx-4">Citas Para Hoy</Link></button>
             <button className="text-white hover:text-cyan-400"><Link to="/missed-appointments" className="font-Pathway Gothic One font-bold mx-4">Reagendar</Link></button>
             <button className="text-white hover:text-cyan-400"><Link to="/view-profile-client" className="font-Pathway Gothic One font-bold mx-4">Perfil</Link></button>
-            <span className="text-white rounded-md  shadow-md shadow-cyan-200 px-6 font-bold ">!Hola {client.name}</span>
+            <span className="text-white rounded-md  shadow-md shadow-cyan-200 px-6 font-bold ">Hola {client.name}</span>
             <button className="text-white hover:text-cyan-400" onClick={openModalClose}><Link to="/" className="font-Pathway font-bold Gothic One mr-4">Cerrar Sesión</Link></button>
           </div>
           <div className="md:hidden ml-auto">
@@ -74,14 +74,14 @@ export default function NavbarClient() {
               <FiMenu size={24} />
             </button>
             {menuOpen && (
-              <div className="absolute right-0 top-16 mt-2  p-2 w-full text-end bg-blue-700">
-                <ul className="bg-blue-700 p-4 text-xl">
+              <div className="absolute right-0 top-16 mt-4  p-2 w-full text-end bg-blue-700">
+                <ul className="bg-blue-700 p-4 text-xl shadow-md shadow-black">
                   <li className="cursor-pointer mb-4 text-center font-bold text-2xl">
-                    <span className="hover:text-SoftRed font-Pathway text-white Gothic One">!Hola {client.name}</span>
+                    <span className="font-Pathway text-white Gothic One">Hola {client.name}</span>
                   </li>
 
                   <li className='my-2'>
-                    <button className="hover:text-SoftRed font-Pathway Gothic One">
+                    <button className=" font-Pathway Gothic One">
                       <Link to="/home-client" className="font-Pathway Gothic One hover:text-cyan-400 text-white font-bold ">Inicio</Link>
                     </button>
                   </li>
@@ -92,20 +92,20 @@ export default function NavbarClient() {
 
                   </li>
                   <li className='my-2'>
-                    <button className="hover:text-SoftRed font-Pathway Gothic One">
+                    <button className=" font-Pathway Gothic One">
                       <Link to="/missed-appointments" className="font-Pathway Gothic One hover:text-cyan-400 text-white font-bold ">Reagendar</Link>
                     </button>
 
                   </li>
                   <li className='my-2'>
-                    <button className="hover:text-SoftRed font-Pathway Gothic One">
+                    <button className=" font-Pathway Gothic One">
                       <Link to="/view-profile-client" className="font-Pathway Gothic One hover:text-cyan-400 text-white font-bold ">Perfil</Link>
                     </button>
 
                   </li>
                   <li >
 
-                    <button className="hover:text-SoftRed font-Pathway Gothic One" onClick={openModalClose}>
+                    <button className=" font-Pathway Gothic One" onClick={openModalClose}>
                       <Link to="/" className="font-Pathway Gothic One text-white hover:text-cyan-400 font-bold">Cerrar Sesión</Link>
                     </button>
                   </li>

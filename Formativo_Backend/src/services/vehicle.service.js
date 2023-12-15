@@ -58,7 +58,7 @@ class VehicleService {
       throw new Error("no hay datos para actualizar");
     }
    
-    return { message: "actualizado correctamente", update:true};
+    return true;
   }
   async findByUser(id) {
     const vehicle = await Vehicle.findAll({
@@ -73,15 +73,17 @@ class VehicleService {
 
 
   async delete(user,id) {
+    console.log(user, id);
     const vehicle = await Vehicle.findOne({where:{id:id,userId:user}})
     if(!vehicle){
       throw new Error('Vehiculo no encontrado')
     }
-    const appointmentWithVehicle = Appointment.findOne({
+    const appointmentWithVehicle = await Appointment.findOne({
       where: {vehicleId : vehicle.id}
     })
+    console.log(appointmentWithVehicle);
     if(appointmentWithVehicle){
-      throw new Error('No puede eliminar el vehiculo, tiene cita pendiente')
+      throw new Error('No puede eliminar el vehículo, tiene cita pendiente')
     }
     const deleteV = await Vehicle.destroy({where:{id:id, userId:user}});
     if(!deleteV){

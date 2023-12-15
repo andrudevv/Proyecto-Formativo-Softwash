@@ -92,12 +92,13 @@ class UserService {
       username: user.name,
       role: user.role,
     });
+    const tokenEnc = btoa(token);
     const updateRecovery = await User.update(
       { recoveryToken: token }, 
       { where: { id: user.id } } 
       );
     if(updateRecovery[0] === 1){
-      const sendEmail = sendEmailForgot(email, token);
+      const sendEmail = sendEmailForgot(email, tokenEnc);
       if(!sendEmail){
         throw new Error('Error al enviar el correo de recuperacion');
       }
@@ -108,18 +109,18 @@ class UserService {
 
 //servicio para cambiar la contraseña por medio de token enviado al correo
   async changePassword(token, newPassword){
-    try {
       const payload = verifyToken(token);
-      const user = await User.findByPk(payload.id);
+      const user = await User.findOne({where:{id: payload.id}});
       if (user.recoveryToken !== token) {
-        throw new Error('no autorizado')
+        throw new Error('No autorizado, Solicite nuevamente la recuperación de la contraseña')
       }
       const hash = await bcrypt.hash(newPassword, 10);
-      await User.update({recoveryToken: null, password: hash},{where : {id: user.id}});
-      return { message: 'contraseña actualizada' };
-    } catch (error) {
-      throw new Error('no autorizado')
-    }
+      const updatePassword = await User.update({recoveryToken: null, password: hash},{where : {id: user.id}});
+      if(!updatePassword){
+        throw new Error('Error al actualizar la contraseña')
+      }
+      return {message: 'La contraseña ha sido actualizada, Puedes iniciar sesión'};
+    
   }
 
 
@@ -145,10 +146,9 @@ class UserService {
       throw new Error("El usuario no existe");
     }
     if(user.dataValues.email !== changes.email){
-      const existingEmail = User.findOne({
-        where:{email:changes.email}
+      const existingEmail = await User.findOne({
+        where:{email: changes.email}
       })
-
       if(existingEmail){
         throw new Error('Correo electronico en uso');
       }
@@ -161,7 +161,7 @@ class UserService {
     if (Update === 0) {
       throw new Error("no hay datos para actualizar");
     } 
-    return {message: "Actualizacion exitosa", update:true};
+    return true;
   }
 
 

@@ -92,7 +92,7 @@ serviceRouter.patch(
       res.status(201).json(update);
     } catch (error) {
       console.error(error);
-      return res.status(500).json([ error.message]);
+      return res.status(400).json([ error.message]);
     }
     (err, res) => {
       res.status(400).json({ error: err.message });

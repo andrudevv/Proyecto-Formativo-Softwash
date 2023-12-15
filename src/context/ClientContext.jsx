@@ -18,7 +18,8 @@ import { registerClientRequest,
     appointmentDeleted,
     getProcessAppointments,
     sendFinalizedAppointment,
-    changuePhotoClient
+    changuePhotoClient,
+    updateNewPassword
  } from "../services/api/auth";
 import Cookies from "js-cookie";
 
@@ -117,9 +118,9 @@ export const AuthClientProvider = ({ children }) => {
             setRegisterErrors(error.response.data);
         }
     }
-    const getProcessAppointment = async()=>{
+    const getProcessAppointment = async(page)=>{
         try {   
-            const getToProcess = await getProcessAppointments();
+            const getToProcess = await getProcessAppointments(page);
             return getToProcess.data;
             
         } catch (error) {
@@ -193,7 +194,7 @@ export const AuthClientProvider = ({ children }) => {
     const updateServiceLaundry = async (id, serviceToUpdate) =>{
          try {
             const serviceUpdate = await updateService(id, serviceToUpdate)
-            return serviceUpdate.data.message;
+            return serviceUpdate.data;
          } catch (error) {
             setRegisterErrors(error.response.data)
          }
@@ -209,7 +210,7 @@ export const AuthClientProvider = ({ children }) => {
     const updateProfileClient = async (dataClient) =>{
         try {
             const resp = await updateClient(dataClient);
-            return resp.data.message;
+            return resp.data;
         } catch (error) {
             setRegisterErrors(error.response.data);
         }
@@ -223,12 +224,20 @@ export const AuthClientProvider = ({ children }) => {
             
         }
     }
-    const resetEmail = async (email) => {
+    const newPasswordClient = async (token, newPassword) =>{
+        try {
+            const updatePassword = await updateNewPassword(token, newPassword);
+            return updatePassword.data.message;
+        } catch (error) {
+            setRegisterErrors(error.response.data)
+        }
+    } 
+    const resetPassword = async (email) => {
         try {
             const res = await resetPasswordClient(email);
-            return res
+            return res.data.message;
         } catch (error) {
-            console.log(error.response);
+            setRegisterErrors(error.response.data)
         }
     }
     useEffect(() => {
@@ -271,7 +280,6 @@ export const AuthClientProvider = ({ children }) => {
             signIn,
             logout,
             loading,
-            resetEmail,
             getAppointments,
             sendProcess,
             sendAbsence,
@@ -282,7 +290,9 @@ export const AuthClientProvider = ({ children }) => {
             deleteAppointment,
             getProcessAppointment,
             finalizedProcess,
-            updateImgProfile
+            updateImgProfile,
+            resetPassword,
+            newPasswordClient
             
         }}>
             {children}

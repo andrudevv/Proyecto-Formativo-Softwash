@@ -58,7 +58,7 @@ export default function ModalUpdateService({
               
 
               <div className='modal-content text-center mt-3 sm:mt-0 sm:ml-4 sm:text-left'>
-                <h3 className='text-lg font-medium text-center mb-10 text-gray-900'>{title}</h3>
+                <h3 className='text-xl font-medium text-center mb-10 text-gray-900'>{title}</h3>
                 <div className='modal-text my-2'>
                 </div>
                 <form onSubmit={handleSubmit((values) => onSubmit(values, editingService))}>

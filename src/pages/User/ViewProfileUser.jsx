@@ -25,7 +25,7 @@ const fieldsMapping = {
     "typeVehicle": "Tipo de Vehículo",
     "acciones": "Acciones"
 };
-const fields = ["plate", "model", "color", "typeVehicle", "acciones"];
+const fields = [ "plate", "model", "color", "typeVehicle", "acciones"];
 
 
 export default function MyVehicles() {
@@ -53,24 +53,18 @@ export default function MyVehicles() {
     // perfil
     // handle para enviar al request de actualizacion de datos del usuario
     const onSubmitProfile = handleSubmit(async (userValue) => {
-        try {
             delete userValue.Municipality;
             delete userValue.role;
             delete userValue.id;
             const response = await updateUserProfile(userValue);
-            if (!response) {
-                toast.error(`Error al actualizar los datos.`, { theme: "light" });
-                setUpdateProfile(false);
-                return
-            }
             setUpdateProfile(false);
+            if (response) {
+                toast.success('Datos actualizados correctamente', { theme: "light" });
+            }
             const dataProfile = await getProfile();
             setUserData(dataProfile);
-            toast.success(`${response}`, { theme: "light" });
 
-        } catch (error) {
-            console.log(error);
-        }
+        
 
 
     })
@@ -85,13 +79,12 @@ export default function MyVehicles() {
 
     const handleEliminar = async (id) => {
         const response = await deleteVehicle(id);
-        if (!response) {
-            toast.error(`Error al eliminar`, { theme: "light" })
-        }
-        toast.success(`${response}`, { theme: "light" });
-        const res = await getVehicles();
-        setUserVehicles(res);
         closeModalDelete();
+        if (response) {
+            const res = await getVehicles();
+            setUserVehicles(res);
+            toast.success('Se ha eliminado Correctamente', { theme: "light" })
+        }
     };
 
     const handleModalDelete = (id) => {
@@ -110,19 +103,24 @@ export default function MyVehicles() {
     const handleModalUpdate = handleSubmit(async (vehicle) => {
         const id = vehicle.id;
         delete vehicle.id;
-        const rt = await updateVehicle(id, vehicle);
-        if (!rt) {
-            toast.error(`Error al actualizar los datos.`, { theme: "light" });
+        const { plate, typeVehicle, model, color} = vehicle;
+        const UpdateV = {
+        plate, typeVehicle, model, color
         }
-        toast.success(`${rt}`, { theme: "light" });
-        const response = await getVehicles();
-        setUserVehicles(response);
+        const rt = await updateVehicle(id, UpdateV);
         setUpdate(false);
         setEditingVehicle(null);
+        if(rt){
+
+            const response = await getVehicles();
+            setUserVehicles(response);
+            toast.success('Vehículo actualizado correctamente.', { theme: "light" });
+        }
+       
 
     })
     const handleModalUpdateOpen = (idV) => {
-        const vehicleToEdit = userVehicles.find((vehicle) => vehicle.id === idV);
+       const vehicleToEdit = userVehicles.find((vehicle) => vehicle.id === idV);
         setEditingVehicle(vehicleToEdit);
         setUpdate(true);
     }
@@ -201,7 +199,7 @@ export default function MyVehicles() {
         getUser();
         fetchData();
         window.scrollTo(0, 0);
-    }, []);
+    }, [updateProfile]);
     return (
         <>
 
@@ -209,33 +207,33 @@ export default function MyVehicles() {
 {registerErrors.map((error, i) => (
             <ModalError isOpen={registerErrors} message={error} key={i} 
             />))}
-            <ModalUpdateProfileUser onSubmit={onSubmitProfile} reset={reset} handleSubmit={handleSubmit} DataUser={userData} setValue={setValue} isOpen={updateProfile} title={'Editar Datos del usuario'}
+            <ModalUpdateProfileUser onSubmit={onSubmitProfile} reset={reset} handleSubmit={handleSubmit} DataUser={userData} setValue={setValue} isOpen={updateProfile} title={'Editar Datos del Usuario'}
                 register={register} errors={errors} buttons={[
                     {
-                        text: "Actualizar",
-                        tipo: "button",
-                        onClick: onSubmitProfile,
-                        estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
-                    }, {
                         text: "Cancelar",
                         tipo: "button",
                         onClick: handleModalUpdateCloseProfile,
                         estilos: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ",
-                    },
+                    },{
+                        text: "Actualizar",
+                        tipo: "button",
+                        onClick: onSubmitProfile,
+                        estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
+                    }, 
                 ]} />
             <ModalUpdateVehicle
-                onSubmit={handleModalUpdate} setValue={setValue} reset={reset} editingVehicle={editingVehicle} handleSubmit={handleSubmit} isOpen={update} title={'Editar vehiculo'}
+                onSubmit={handleModalUpdate} setValue={setValue} reset={reset} editingVehicle={editingVehicle} handleSubmit={handleSubmit} isOpen={update} title={'Editar vehículo'}
                 register={register} errors={errors} buttons={[
-                    {
-                        text: "Editar",
-                        tipo: "button",
-                        onClick: handleModalUpdate,
-                        estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
-                    }, {
+                     {
                         text: "Cancelar",
                         tipo: "button",
                         onClick: handleModalUpdateClose,
                         estilos: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ",
+                    },{
+                        text: "Editar",
+                        tipo: "button",
+                        onClick: handleModalUpdate,
+                        estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
                     },
                 ]} />
             <VehicleRegistrationModal onSubmit={onsubmit} isOpen={create}
@@ -244,15 +242,15 @@ export default function MyVehicles() {
 
                 buttons={[
                     {
-                        text: "Registrar",
-                        tipo: "button",
-                        onClick: handleModalCreate,
-                        estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
-                    }, {
                         text: "Cancelar",
                         tipo: "button",
                         onClick: handleModalCreateClose,
                         estilos: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ",
+                    }, {
+                        text: "Registrar",
+                        tipo: "button",
+                        onClick: handleModalCreate,
+                        estilos: "bg-blue-500 hover:bg-blue-700 text-white font-bold h-auto py-1  px-2 rounded ",
                     },
                 ]}
                 errors={errors}
@@ -269,7 +267,7 @@ export default function MyVehicles() {
                     {loading ? (
                         <Spinner />
                     ) : (
-                        <div>
+                        <div className='mx-20' >
 
                             <h1 className="flex justify-center text-2xl font-bold mb-4">MIS VEHíCULOS</h1>
                             <ButtonAction estilos={'flex w-24 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-4 w-auto justify-end'} text={'Añadir Vehículo'} onClick={handleModalCreateOpen} />
@@ -284,16 +282,16 @@ export default function MyVehicles() {
                                 title="Eliminar vehículo"
                                 message={'¿Seguro que quiere eliminar el vehículo?'}
                                 buttons={[
-                                    {
-                                        text: 'Eliminar',
-                                        onClick: () => handleEliminar(selectedVehicleId),
-                                        styles: 'bg-red-500 hover:bg-red-600 text-black font-bold',
-                                    },
+                                   
                                     {
                                         text: 'Cancelar',
                                         onClick: closeModalDelete,
-                                        styles: 'bg-gray-300 hover:bg-gray-400 text-gray-800',
-                                    }
+                                        styles: 'bg-red-500 hover:bg-red-700 text-white',
+                                    } ,{
+                                        text: 'Eliminar',
+                                        onClick: () => handleEliminar(selectedVehicleId),
+                                        styles: 'bg-blue-500 hover:bg-blue-700 text-white font-bold',
+                                    },
                                 ]}
                             />
                         </div>
